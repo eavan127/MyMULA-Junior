@@ -1,98 +1,125 @@
 <!DOCTYPE html>
 
-<html class="light" lang="en"><head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>SME Registration List - MyMULA Junior</title>
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
-<script>
-      tailwind.config = {
-        darkMode: "class",
-        theme: {
-          extend: {
-            colors: {
-              "primary": "#0a66c2",
-              "background-light": "#f5f7f8",
-              "background-dark": "#101922",
-            },
-            fontFamily: {
-              "display": ["Public Sans"]
-            },
-            borderRadius: {"DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px"},
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>SME Registration List - MyMULA Junior</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;700&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#0a66c2",
+            "background-light": "#f5f7f8",
+            "background-dark": "#101922",
           },
+          fontFamily: {
+            "display": ["Public Sans"]
+          },
+          borderRadius: { "DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px" },
         },
-      }
-    </script>
-<style>
-        .material-symbols-outlined {
-            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
-            font-size: 24px;
-        }
-    </style>
-<style>
+      },
+    }
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      font-size: 24px;
+    }
+  </style>
+  <style>
     body {
       min-height: max(884px, 100dvh);
     }
   </style>
-  </head>
+</head>
+
 <body class="bg-background-light dark:bg-background-dark font-display">
-<div class="relative mx-auto flex h-auto min-h-screen w-full max-w-md flex-col bg-white dark:bg-background-dark group/design-root overflow-x-hidden">
-<!-- Top App Bar -->
-<div class="sticky top-0 z-10 flex items-center justify-between bg-white dark:bg-background-dark px-4 py-3">
-<div class="flex items-center justify-center text-gray-800 dark:text-gray-200">
-<span class="material-symbols-outlined text-2xl">arrow_back_ios_new</span>
-</div>
-<h1 class="flex-1 text-center text-lg font-bold text-gray-900 dark:text-white">SME Registration / Pendaftaran PKS</h1>
-<div class="w-6"></div>
-</div>
-<div class="flex-grow p-4">
-<div class="flex flex-col gap-4">
-<!-- List Item: Sole Proprietorship -->
-<div class="flex cursor-pointer items-center gap-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-sm transition-shadow hover:shadow-md">
-<div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20 text-primary dark:text-blue-300">
-<span class="material-symbols-outlined">person</span>
-</div>
-<div class="flex flex-1 flex-col justify-center">
-<p class="text-base font-medium text-gray-900 dark:text-white">Sole Proprietorship</p>
-<p class="text-sm font-normal text-gray-500 dark:text-gray-400">Fastest registration for individual owners.</p>
-<p class="text-sm font-normal text-gray-500 dark:text-gray-400">Requires Guardian Approval.</p>
-</div>
-<div class="shrink-0 text-gray-400 dark:text-gray-500">
-<span class="material-symbols-outlined text-2xl">chevron_right</span>
-</div>
-</div>
-<!-- List Item: Partnership -->
-<div class="flex cursor-pointer items-center gap-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-sm transition-shadow hover:shadow-md">
-<div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20 text-primary dark:text-blue-300">
-<span class="material-symbols-outlined">group</span>
-</div>
-<div class="flex flex-1 flex-col justify-center">
-<p class="text-base font-medium text-gray-900 dark:text-white">Partnership</p>
-<p class="text-sm font-normal text-gray-500 dark:text-gray-400">For two or more owners.</p>
-<p class="text-sm font-normal text-gray-500 dark:text-gray-400">Requires Guardian Approval.</p>
-</div>
-<div class="shrink-0 text-gray-400 dark:text-gray-500">
-<span class="material-symbols-outlined text-2xl">chevron_right</span>
-</div>
-</div>
-<!-- List Item: Company (Sdn Bhd) -->
-<div class="flex cursor-pointer items-center gap-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-sm transition-shadow hover:shadow-md">
-<div class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20 text-primary dark:text-blue-300">
-<span class="material-symbols-outlined">apartment</span>
-</div>
-<div class="flex flex-1 flex-col justify-center">
-<p class="text-base font-medium text-gray-900 dark:text-white">Company (Sdn Bhd)</p>
-<p class="text-sm font-normal text-gray-500 dark:text-gray-400">Private limited company.</p>
-<p class="text-sm font-normal text-gray-500 dark:text-gray-400">Guardian Approval Not Applicable.</p>
-</div>
-<div class="shrink-0 text-gray-400 dark:text-gray-500">
-<span class="material-symbols-outlined text-2xl">chevron_right</span>
-</div>
-</div>
-</div>
-</div>
-</div>
-</body></html>
+  <div
+    class="relative mx-auto flex h-auto min-h-screen w-full max-w-md flex-col bg-white dark:bg-background-dark group/design-root overflow-x-hidden">
+    <!-- Top App Bar -->
+    <div class="sticky top-0 z-10 flex items-center justify-between bg-white dark:bg-background-dark px-4 py-3">
+      <div class="flex items-center justify-center text-gray-800 dark:text-gray-200">
+        <span class="material-symbols-outlined text-2xl">arrow_back_ios_new</span>
+      </div>
+      <h1 class="flex-1 text-center text-lg font-bold text-gray-900 dark:text-white">SME Registration / Pendaftaran PKS
+      </h1>
+      <div class="w-6"></div>
+    </div>
+    <div class="flex-grow p-4">
+      <div class="flex flex-col gap-4">
+        <!-- List Item: Sole Proprietorship -->
+        <div onclick="window.location.href='SME_Application_Requirements.html'"
+          class="flex cursor-pointer items-center gap-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-sm transition-shadow hover:shadow-md">
+          <div
+            class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20 text-primary dark:text-blue-300">
+            <span class="material-symbols-outlined">person</span>
+          </div>
+          <div class="flex flex-1 flex-col justify-center">
+
+            <p class="text-base font-medium text-gray-900 dark:text-white">Sole Proprietorship</p>
+            <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Fastest registration for individual owners.
+            </p>
+            <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Requires Guardian Approval.</p>
+          </div>
+          <div class="shrink-0 text-gray-400 dark:text-gray-500">
+            <span class="material-symbols-outlined text-2xl">chevron_right</span>
+          </div>
+        </div>
+        <!-- List Item: Partnership -->
+        <div
+          class="flex cursor-pointer items-center gap-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-sm transition-shadow hover:shadow-md">
+          <div
+            class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20 text-primary dark:text-blue-300">
+            <span class="material-symbols-outlined">group</span>
+          </div>
+          <div class="flex flex-1 flex-col justify-center">
+            <p class="text-base font-medium text-gray-900 dark:text-white">Partnership</p>
+            <p class="text-sm font-normal text-gray-500 dark:text-gray-400">For two or more owners.</p>
+            <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Requires Guardian Approval.</p>
+          </div>
+          <div class="shrink-0 text-gray-400 dark:text-gray-500">
+            <span class="material-symbols-outlined text-2xl">chevron_right</span>
+          </div>
+        </div>
+        <!-- List Item: Company (Sdn Bhd) -->
+        <div
+          class="flex cursor-pointer items-center gap-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-4 shadow-sm transition-shadow hover:shadow-md">
+          <div
+            class="flex size-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 dark:bg-primary/20 text-primary dark:text-blue-300">
+            <span class="material-symbols-outlined">apartment</span>
+          </div>
+          <div class="flex flex-1 flex-col justify-center">
+            <p class="text-base font-medium text-gray-900 dark:text-white">Company (Sdn Bhd)</p>
+            <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Private limited company.</p>
+            <p class="text-sm font-normal text-gray-500 dark:text-gray-400">Guardian Approval Not Applicable.</p>
+          </div>
+          <div class="shrink-0 text-gray-400 dark:text-gray-500">
+            <span class="material-symbols-outlined text-2xl">chevron_right</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Reset SME Demo State when entering the list
+    localStorage.removeItem('sme_guardian_approved');
+    localStorage.removeItem('sme_application_submitted');
+    console.log("SME Demo Reset");
+  </script>
+</body>
+
+</html>

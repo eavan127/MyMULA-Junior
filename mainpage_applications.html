@@ -117,7 +117,7 @@
       </div>
 
       <!-- CARD 2: SME (Always Visible) -->
-      <div class="flex flex-col gap-4 rounded-xl bg-white dark:bg-black/20 p-4 shadow-sm cursor-pointer">
+      <!-- <div class="flex flex-col gap-4 rounded-xl bg-white dark:bg-black/20 p-4 shadow-sm cursor-pointer">
         <div class="flex items-center gap-4">
           <div
             class="text-[#1E1E1E] dark:text-white/90 flex items-center justify-center rounded-lg bg-black/5 dark:bg-white/10 shrink-0 size-12">
@@ -135,6 +135,13 @@
           <div class="mr-1.5 size-2 rounded-full bg-[#007BFF]"></div>
           Guardian Approval Needed
         </div>
+      </div> -->
+
+      <!-- Find the SME Card (Card 2) and update the Badge part -->
+      <div id="sme-status-badge"
+        class="inline-flex items-center justify-center self-start rounded-full bg-[#007BFF]/20 px-3 py-1.5 text-xs font-medium text-[#0054a8] dark:text-[#66b2ff]">
+        <div id="sme-status-dot" class="mr-1.5 size-2 rounded-full bg-[#007BFF]"></div>
+        <span id="sme-status-text">Guardian Approval Needed</span>
       </div>
 
       <!-- Empty State Message (With ID 'empty-msg') -->
@@ -169,29 +176,31 @@
 
   </div>
 
-  <!-- THE CRITICAL SCRIPT -->
-  <script>
-    // 1. Ask the browser: "Did the user submit?"
-    const isSubmitted = localStorage.getItem('application_submitted');
-
-    // Debugging line (Check Console)
-    console.log("Checking storage... Value is: " + isSubmitted);
-
-    if (isSubmitted === 'true') {
-      // 2. Unhide the Card
-      const card = document.getElementById('pesp-card');
-      if (card) {
-        card.classList.remove('hidden');
-        console.log("Card revealed!");
-      } else {
-        console.error("Error: Could not find element with id 'pesp-card'");
-      }
-
-      // 3. Hide the 'Empty' message
-      const msg = document.getElementById('empty-msg');
-      if (msg) msg.classList.add('hidden');
+  <<script>
+    // 1. Check PESP (Existing code)
+    const isPespSubmitted = localStorage.getItem('application_submitted');
+    if (isPespSubmitted === 'true') {
+    const card = document.getElementById('pesp-card');
+    if (card) card.classList.remove('hidden');
+    const msg = document.getElementById('empty-msg');
+    if (msg) msg.classList.add('hidden');
     }
-  </script>
+
+    // 2. Check SME (NEW CODE)
+    const isSmeSubmitted = localStorage.getItem('sme_application_submitted');
+    if (isSmeSubmitted === 'true') {
+    // Change Badge Color to Yellow (Processing)
+    const badge = document.getElementById('sme-status-badge');
+    badge.className = "inline-flex items-center justify-center self-start rounded-full bg-[#FFC107]/20 px-3 py-1.5
+    text-xs font-medium text-[#B8860B] dark:text-[#FFD700]";
+
+    // Change Dot Color
+    document.getElementById('sme-status-dot').className = "mr-1.5 size-2 rounded-full bg-[#FFC107]";
+
+    // Change Text
+    document.getElementById('sme-status-text').innerText = "Processing";
+    }
+    </script>
 </body>
 
 </html>
