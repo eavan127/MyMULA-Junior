@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>MyMULA - Adult Registration</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d7ff2",
+                        "accent": "#4CA9FF",
+                        "background-light": "#F7F9FC",
+                        "background-dark": "#0f1923",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "12px",
+                        "xl": "16px",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        body {
+            min-height: max(884px, 100dvh);
+        }
+
+        .bounce-on-tap:active {
+            transform: scale(0.95);
+            transition: transform 0.1s ease-in-out;
+        }
+
+        /* Signature Pad Styles */
+        .signature-pad {
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            background: #f8fafc;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        .signature-pad:hover {
+            border-color: #0d7ff2;
+        }
+
+        .document-card {
+            transition: all 0.2s ease;
+        }
+
+        .document-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .document-card.scanned {
+            border-color: #22c55e;
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        }
+
+        .status-badge {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-display bg-background-light dark:bg-background-dark">
+    <div
+        class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+
+        <!-- Header -->
+        <header class="flex items-center bg-white dark:bg-gray-800 p-4 shadow-sm">
+            <button onclick="window.location.href='index.html'"
+                class="mr-3 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <span class="material-symbols-outlined text-[#333] dark:text-white">arrow_back</span>
+            </button>
+            <div class="flex-1">
+                <h1 class="text-xl font-bold text-[#111418] dark:text-white">MyMULA Registration</h1>
+                <p class="text-sm text-[#60758a] dark:text-gray-400">Complete your identity verification</p>
+            </div>
+            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
+                <span class="material-symbols-outlined text-primary">shield</span>
+            </div>
+        </header>
+
+        <!-- Progress Indicator -->
+        <div class="px-4 py-3 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
+            <div class="flex items-center justify-between mb-2">
+                <span class="text-sm font-medium text-[#333] dark:text-white">Verification Progress</span>
+                <span id="progressText" class="text-sm font-bold text-primary">0/6 Documents</span>
+            </div>
+            <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                <div id="progressBar"
+                    class="bg-gradient-to-r from-primary to-accent h-2 rounded-full transition-all duration-500"
+                    style="width: 0%"></div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="flex-1 px-4 py-4 overflow-y-auto">
+            <div class="flex flex-col gap-4">
+
+                <!-- Section: Document Scanning -->
+                <div class="mb-2">
+                    <h2 class="text-lg font-bold text-[#333] dark:text-white mb-1">📄 Required Documents</h2>
+                    <p class="text-sm text-[#60758a] dark:text-gray-400">Tap each card to scan your documents</p>
+                </div>
+
+                <!-- 1. IC Card -->
+                <div id="icCard"
+                    class="document-card flex items-center gap-4 rounded-xl bg-white dark:bg-gray-800 p-4 shadow-md cursor-pointer border-2 border-transparent"
+                    onclick="scanDocument('ic')">
+                    <div
+                        class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-blue-100 dark:bg-blue-900/30">
+                        <span class="material-symbols-outlined text-3xl text-blue-600 dark:text-blue-400">badge</span>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-[#101418] dark:text-white text-base font-bold">Identity Card (IC / MyKad)</p>
+                        <p class="text-[#5e758d] dark:text-gray-400 text-sm">Front and back of your IC</p>
+                        <div id="icStatus" class="mt-1 hidden">
+                            <span
+                                class="inline-flex items-center gap-1 text-xs font-medium text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
+                                <span class="material-symbols-outlined text-sm">check_circle</span> Scanned
+                            </span>
+                        </div>
+                    </div>
+                    <span class="material-symbols-outlined text-[#5e758d] dark:text-gray-400">photo_camera</span>
+                </div>
+
+                <!-- 2. Birth Certificate -->
+                <div id="birthCard"
+                    class="document-card flex items-center gap-4 rounded-xl bg-white dark:bg-gray-800 p-4 shadow-md cursor-pointer border-2 border-transparent"
+                    onclick="scanDocument('birth')">
+                    <div
+                        class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-purple-100 dark:bg-purple-900/30">
+                        <span
+                            class="material-symbols-outlined text-3xl text-purple-600 dark:text-purple-400">article</span>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-[#101418] dark:text-white text-base font-bold">Birth Certificate</p>
+                        <p class="text-[#5e758d] dark:text-gray-400 text-sm">Proof of birth registration</p>
+                        <div id="birthStatus" class="mt-1 hidden">
+                            <span
+                                class="inline-flex items-center gap-1 text-xs font-medium text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
+                                <span class="material-symbols-outlined text-sm">check_circle</span> Scanned
+                            </span>
+                        </div>
+                    </div>
+                    <span class="material-symbols-outlined text-[#5e758d] dark:text-gray-400">photo_camera</span>
+                </div>
+
+                <!-- 3. Payslip -->
+                <div id="payslipCard"
+                    class="document-card flex items-center gap-4 rounded-xl bg-white dark:bg-gray-800 p-4 shadow-md cursor-pointer border-2 border-transparent"
+                    onclick="scanDocument('payslip')">
+                    <div
+                        class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-green-100 dark:bg-green-900/30">
+                        <span
+                            class="material-symbols-outlined text-3xl text-green-600 dark:text-green-400">payments</span>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-[#101418] dark:text-white text-base font-bold">Payslip / Income Statement</p>
+                        <p class="text-[#5e758d] dark:text-gray-400 text-sm">Latest 3 months payslip</p>
+                        <div id="payslipStatus" class="mt-1 hidden">
+                            <span
+                                class="inline-flex items-center gap-1 text-xs font-medium text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
+                                <span class="material-symbols-outlined text-sm">check_circle</span> Scanned
+                            </span>
+                        </div>
+                    </div>
+                    <span class="material-symbols-outlined text-[#5e758d] dark:text-gray-400">photo_camera</span>
+                </div>
+
+                <!-- 4. Income Tax -->
+                <div id="taxCard"
+                    class="document-card flex items-center gap-4 rounded-xl bg-white dark:bg-gray-800 p-4 shadow-md cursor-pointer border-2 border-transparent"
+                    onclick="scanDocument('tax')">
+                    <div
+                        class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-orange-100 dark:bg-orange-900/30">
+                        <span
+                            class="material-symbols-outlined text-3xl text-orange-600 dark:text-orange-400">receipt_long</span>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-[#101418] dark:text-white text-base font-bold">Income Tax Statement (LHDN)</p>
+                        <p class="text-[#5e758d] dark:text-gray-400 text-sm">EA Form or tax assessment</p>
+                        <div id="taxStatus" class="mt-1 hidden">
+                            <span
+                                class="inline-flex items-center gap-1 text-xs font-medium text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
+                                <span class="material-symbols-outlined text-sm">check_circle</span> Scanned
+                            </span>
+                        </div>
+                    </div>
+                    <span class="material-symbols-outlined text-[#5e758d] dark:text-gray-400">photo_camera</span>
+                </div>
+
+                <!-- 5. Family Status -->
+                <div id="familyCard"
+                    class="document-card flex items-center gap-4 rounded-xl bg-white dark:bg-gray-800 p-4 shadow-md cursor-pointer border-2 border-transparent"
+                    onclick="scanDocument('family')">
+                    <div
+                        class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-pink-100 dark:bg-pink-900/30">
+                        <span
+                            class="material-symbols-outlined text-3xl text-pink-600 dark:text-pink-400">family_restroom</span>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-[#101418] dark:text-white text-base font-bold">Family Status Document</p>
+                        <p class="text-[#5e758d] dark:text-gray-400 text-sm">Marriage cert / Single declaration</p>
+                        <div id="familyStatus" class="mt-1 hidden">
+                            <span
+                                class="inline-flex items-center gap-1 text-xs font-medium text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
+                                <span class="material-symbols-outlined text-sm">check_circle</span> Scanned
+                            </span>
+                        </div>
+                    </div>
+                    <span class="material-symbols-outlined text-[#5e758d] dark:text-gray-400">photo_camera</span>
+                </div>
+
+                <!-- Section: Signature -->
+                <div class="mt-4 mb-2">
+                    <h2 class="text-lg font-bold text-[#333] dark:text-white mb-1">✍️ Digital Signature</h2>
+                    <p class="text-sm text-[#60758a] dark:text-gray-400">Draw your signature in the box below</p>
+                </div>
+
+                <!-- 6. Signature Pad -->
+                <div id="signatureSection"
+                    class="rounded-xl bg-white dark:bg-gray-800 p-4 shadow-md border-2 border-transparent">
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-2">
+                            <div
+                                class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100 dark:bg-indigo-900/30">
+                                <span
+                                    class="material-symbols-outlined text-2xl text-indigo-600 dark:text-indigo-400">draw</span>
+                            </div>
+                            <div>
+                                <p class="text-[#101418] dark:text-white text-base font-bold">Your Signature</p>
+                                <p id="signatureLabel" class="text-[#5e758d] dark:text-gray-400 text-xs">Not signed yet
+                                </p>
+                            </div>
+                        </div>
+                        <button onclick="clearSignature()"
+                            class="text-sm text-primary font-medium hover:underline flex items-center gap-1">
+                            <span class="material-symbols-outlined text-lg">refresh</span> Clear
+                        </button>
+                    </div>
+                    <canvas id="signaturePad" class="signature-pad w-full h-40"></canvas>
+                    <p class="text-xs text-center text-[#60758a] dark:text-gray-400 mt-2">Use your finger or stylus to
+                        sign above</p>
+                </div>
+
+            </div>
+        </main>
+
+        <!-- Submit Button -->
+        <div
+            class="sticky bottom-0 p-4 bg-gradient-to-t from-background-light via-background-light to-transparent dark:from-background-dark dark:via-background-dark">
+            <button id="submitBtn" onclick="submitRegistration()"
+                class="w-full rounded-xl bg-gradient-to-r from-primary to-accent py-4 font-bold text-white shadow-lg transition-all hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                disabled>
+                <span class="material-symbols-outlined">verified</span>
+                Complete Registration
+            </button>
+            <p class="text-xs text-center text-[#60758a] dark:text-gray-400 mt-2">All documents are encrypted and
+                securely stored</p>
+        </div>
+    </div>
+
+    <!-- Scanning Modal -->
+    <div id="scanModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div
+            class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl transform transition-all">
+            <div class="p-6 text-center">
+                <div
+                    class="w-20 h-20 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center animate-pulse">
+                    <span class="material-symbols-outlined text-4xl text-primary">document_scanner</span>
+                </div>
+                <h3 id="modalTitle" class="text-xl font-bold text-[#333] dark:text-white mb-2">Scanning Document...</h3>
+                <p id="modalDesc" class="text-[#60758a] dark:text-gray-400 text-sm mb-4">Please hold your document
+                    steady</p>
+                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-4">
+                    <div id="scanProgress" class="bg-primary h-2 rounded-full transition-all duration-300"
+                        style="width: 0%"></div>
+                </div>
+                <button onclick="closeScanModal()" class="text-primary font-medium hover:underline">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal"
+        class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl">
+            <div class="p-6 text-center">
+                <div class="w-24 h-24 mx-auto mb-4 rounded-full bg-green-100 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-5xl text-green-600">check_circle</span>
+                </div>
+                <h3 class="text-2xl font-bold text-[#333] dark:text-white mb-2">Registration Complete!</h3>
+                <p class="text-[#60758a] dark:text-gray-400 text-sm mb-6">Your identity has been verified successfully.
+                    Welcome to MyMULA!</p>
+                <button onclick="window.location.href='index.html'"
+                    class="w-full rounded-xl bg-gradient-to-r from-green-500 to-green-600 py-3 font-bold text-white shadow-lg">
+                    Continue to MyMULA
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Track scanned documents
+        const scannedDocs = {
+            ic: false,
+            birth: false,
+            payslip: false,
+            tax: false,
+            family: false,
+            signature: false
+        };
+
+        // Signature pad setup
+        const canvas = document.getElementById('signaturePad');
+        const ctx = canvas.getContext('2d');
+        let isDrawing = false;
+        let hasSignature = false;
+
+        // Set canvas size
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            ctx.strokeStyle = '#1e40af';
+            ctx.lineWidth = 3;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Drawing functions
+        function getPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            if (e.touches) {
+                return {
+                    x: e.touches[0].clientX - rect.left,
+                    y: e.touches[0].clientY - rect.top
+                };
+            }
+            return {
+                x: e.clientX - rect.left,
+                y: e.clientY - rect.top
+            };
+        }
+
+        function startDrawing(e) {
+            isDrawing = true;
+            const pos = getPos(e);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+            e.preventDefault();
+        }
+
+        function draw(e) {
+            if (!isDrawing) return;
+            const pos = getPos(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+            hasSignature = true;
+            e.preventDefault();
+        }
+
+        function stopDrawing() {
+            if (isDrawing && hasSignature) {
+                scannedDocs.signature = true;
+                document.getElementById('signatureLabel').textContent = 'Signature captured ✓';
+                document.getElementById('signatureLabel').classList.remove('text-[#5e758d]');
+                document.getElementById('signatureLabel').classList.add('text-green-600');
+                document.getElementById('signatureSection').classList.add('border-green-500');
+                updateProgress();
+            }
+            isDrawing = false;
+        }
+
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDrawing);
+        canvas.addEventListener('mouseout', stopDrawing);
+        canvas.addEventListener('touchstart', startDrawing);
+        canvas.addEventListener('touchmove', draw);
+        canvas.addEventListener('touchend', stopDrawing);
+
+        function clearSignature() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            hasSignature = false;
+            scannedDocs.signature = false;
+            document.getElementById('signatureLabel').textContent = 'Not signed yet';
+            document.getElementById('signatureLabel').classList.add('text-[#5e758d]');
+            document.getElementById('signatureLabel').classList.remove('text-green-600');
+            document.getElementById('signatureSection').classList.remove('border-green-500');
+            updateProgress();
+        }
+
+        // Document scanning simulation
+        function scanDocument(docType) {
+            if (scannedDocs[docType]) return;
+
+            const modal = document.getElementById('scanModal');
+            const progress = document.getElementById('scanProgress');
+            const titles = {
+                ic: 'Scanning IC / MyKad...',
+                birth: 'Scanning Birth Certificate...',
+                payslip: 'Scanning Payslip...',
+                tax: 'Scanning Tax Statement...',
+                family: 'Scanning Family Document...'
+            };
+
+            document.getElementById('modalTitle').textContent = titles[docType];
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            let progressValue = 0;
+            const interval = setInterval(() => {
+                progressValue += 10;
+                progress.style.width = progressValue + '%';
+
+                if (progressValue >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        closeScanModal();
+                        markAsScanned(docType);
+                    }, 300);
+                }
+            }, 150);
+        }
+
+        function closeScanModal() {
+            const modal = document.getElementById('scanModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            document.getElementById('scanProgress').style.width = '0%';
+        }
+
+        function markAsScanned(docType) {
+            scannedDocs[docType] = true;
+
+            const cardId = docType + 'Card';
+            const statusId = docType + 'Status';
+
+            document.getElementById(cardId).classList.add('scanned', 'border-green-500');
+            document.getElementById(statusId).classList.remove('hidden');
+
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const total = Object.keys(scannedDocs).length;
+            const completed = Object.values(scannedDocs).filter(v => v).length;
+            const percentage = (completed / total) * 100;
+
+            document.getElementById('progressBar').style.width = percentage + '%';
+            document.getElementById('progressText').textContent = completed + '/' + total + ' Documents';
+
+            // Enable submit button when all docs are scanned
+            const submitBtn = document.getElementById('submitBtn');
+            if (completed === total) {
+                submitBtn.disabled = false;
+                submitBtn.classList.add('animate-pulse');
+            } else {
+                submitBtn.disabled = true;
+                submitBtn.classList.remove('animate-pulse');
+            }
+        }
+
+        function submitRegistration() {
+            const allScanned = Object.values(scannedDocs).every(v => v);
+            if (!allScanned) {
+                alert('Please complete all document scans and signature before submitting.');
+                return;
+            }
+
+            document.getElementById('successModal').classList.remove('hidden');
+            document.getElementById('successModal').classList.add('flex');
+        }
+    </script>
+</body>
+
+</html>
