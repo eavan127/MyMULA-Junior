@@ -289,16 +289,15 @@
       const dentalRequests = requests.filter(r => r.type === 'dental');
       const rejectedRequest = dentalRequests.find(r => r.status === 'rejected');
 
-      if (rejectedRequest) {
-        // Show rejected status
-        updateProcedureConsentToRejected();
-        return; // Don't check for approval if rejected
-      }
-
-      // Check Guardian Approval status
+      // PRIORITY: Approval flag takes precedence over rejection history
       const guardianApproved = sessionStorage.getItem('dental_guardian_approved');
+
       if (guardianApproved === 'true') {
+        // Approval takes priority - show verified even if there's rejection history
         updateProcedureConsentToApproved();
+      } else if (rejectedRequest) {
+        // Show rejected status only if NOT approved
+        updateProcedureConsentToRejected();
       }
 
       // Check Medical History status
