@@ -1,0 +1,40 @@
+[
+  {
+    "title": "Scholarships / Biasiswa",
+    "description": "Find and apply for educational funding.",
+    "icon": "school",
+    "link": "scholarship_application.html",
+    "tags": [
+      { "text": "Guardian Approval Required", "type": "default" }
+    ]
+  },
+  {
+    "title": "SME Registration / Pendaftaran PKS",
+    "description": "Register your small or medium enterprise.",
+    "icon": "business_center",
+    "link": "#",
+    "tags": [
+      { "text": "Guardian Approval Required", "type": "default" },
+      { "text": "Ages 16+", "type": "default" }
+    ]
+  },
+  {
+    "title": "Healthcare / Penjagaan Kesihatan",
+    "description": "Access public healthcare services.",
+    "icon": "health_and_safety",
+    "link": "#",
+    "tags": [
+      { "text": "Popular", "type": "success" }
+    ]
+  },
+  {
+    "title": "Online Safety / Keselamatan Talian",
+    "description": "Stay protected with age verification.",
+    "icon": "verified_user",
+    "link": "#",
+    "tags": [
+      { "text": "Guardian Approval Required", "type": "default" },
+      { "text": "Act 2025", "type": "default" }
+    ]
+  }
+]
