@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Interactive Onboarding - MyMULA Junior</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;700;900&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+
+  <!-- Tailwind Configuration -->
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#0054A6",
+            "primary-light": "#E6F0FF",
+            "background-light": "#ffffff",
+            "background-dark": "#0f1923",
+          },
+          fontFamily: {
+            "display": ["Public Sans"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          animation: {
+            'float-1': 'float 6s ease-in-out infinite',
+            'float-2': 'float 7s ease-in-out infinite',
+            'float-3': 'float 8s ease-in-out infinite',
+            'float-4': 'float 9s ease-in-out infinite',
+            'bounce-soft': 'bounce-soft 2s ease-in-out infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-20px)' },
+            },
+            'bounce-soft': {
+              '0%, 100%': { transform: 'translateY(-2%)' },
+              '50%': { transform: 'translateY(0)' },
+            }
+          }
+        },
+      },
+    }
+  </script>
+
+  <!-- Custom Styles -->
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+
+    body {
+      min-height: 100dvh;
+      background-color: #f7faff;
+      /* Ensure minimum height for scrolling */
+      min-height: max(884px, 100dvh);
+    }
+
+    .dark body {
+      background-color: #0f1923;
+    }
+
+    .fingerprint-icon {
+      animation: pulse-fingerprint 2s infinite;
+    }
+
+    @keyframes pulse-fingerprint {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.1);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .scroll-snap-x-mandatory {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .scroll-snap-x-mandatory::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-900 dark:text-white">
+
+  <div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-hidden">
+
+    <!-- Header -->
+    <header class="flex items-center bg-transparent p-4 justify-between sticky top-0 z-10 w-full">
+      <div class="flex size-12 shrink-0 items-center justify-start">
+        <!-- Logo could go here -->
+      </div>
+      <div class="flex items-center justify-end">
+        <button
+          class="text-gray-500 dark:text-gray-400 text-sm font-bold leading-normal tracking-[0.015em] shrink-0 bg-white/50 dark:bg-black/20 px-3 py-1.5 rounded-full">
+          EN / BM
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex flex-col grow px-4">
+      <div class="flex-grow flex flex-col items-center justify-center text-center">
+
+        <!-- Hero Animation Section -->
+        <div class="relative w-full max-w-xs flex items-center justify-center py-8">
+          <!-- Background Glow -->
+          <div
+            class="absolute inset-0 bg-gradient-to-tr from-blue-100/50 via-blue-50/50 to-white/0 blur-3xl rounded-full dark:from-primary/20 dark:via-primary/10">
+          </div>
+
+          <!-- Floating Icons -->
+          <div class="absolute top-0 left-0 w-full h-full">
+            <div class="absolute top-[10%] left-[5%] animate-float-1">
+              <div class="flex items-center justify-center w-12 h-12 bg-white dark:bg-slate-800 rounded-full shadow-lg">
+                <span class="material-symbols-outlined text-primary text-2xl">school</span>
+              </div>
+            </div>
+            <div class="absolute top-[20%] right-[2%] animate-float-2">
+              <div class="flex items-center justify-center w-14 h-14 bg-white dark:bg-slate-800 rounded-full shadow-lg">
+                <span class="material-symbols-outlined text-primary text-3xl">health_and_safety</span>
+              </div>
+            </div>
+            <div class="absolute bottom-[25%] left-0 animate-float-3">
+              <div class="flex items-center justify-center w-12 h-12 bg-white dark:bg-slate-800 rounded-full shadow-lg">
+                <span class="material-symbols-outlined text-primary text-2xl">storefront</span>
+              </div>
+            </div>
+            <div class="absolute bottom-[10%] right-[8%] animate-float-4">
+              <div class="flex items-center justify-center w-16 h-16 bg-white dark:bg-slate-800 rounded-full shadow-lg">
+                <span class="material-symbols-outlined text-primary text-4xl">verified_user</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Central ID Card -->
+          <div class="relative w-48 h-auto animate-bounce-soft">
+            <div
+              class="relative bg-primary-light dark:bg-primary/30 rounded-2xl aspect-[54/86] p-2 shadow-lg overflow-hidden">
+              <div class="absolute top-2 left-2 w-5 h-5 bg-yellow-400 rounded-md"></div>
+              <div class="absolute top-2 right-2 text-primary dark:text-blue-200 text-xs font-bold">MY</div>
+              <div class="flex flex-col items-center justify-center h-full pt-4">
+                <div class="w-16 h-16 bg-primary dark:bg-blue-300 rounded-full flex items-center justify-center">
+                  <span class="material-symbols-outlined text-white dark:text-primary text-4xl">badge</span>
+                </div>
+                <div class="w-full h-1 mt-3 bg-primary/20"></div>
+                <div class="w-10/12 h-1 mt-1 bg-primary/20"></div>
+                <div class="w-full h-1 mt-1 bg-primary/20"></div>
+              </div>
+              <div
+                class="absolute bottom-2 right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center border-2 border-white dark:border-slate-800">
+                <span class="material-symbols-outlined text-white text-base">check</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- End Hero Animation -->
+
+        <h1 class="text-gray-900 dark:text-white tracking-tight text-[32px] font-bold leading-tight pt-4 pb-2">MyMULA
+          Junior</h1>
+        <p class="text-gray-600 dark:text-gray-300 text-base font-normal leading-normal">Smart Identity for Malaysian
+          Youth</p>
+        <p class="text-gray-600 dark:text-gray-300 text-base font-normal leading-normal">Secure Access with Guardian
+          Support</p>
+      </div>
+
+      <!-- Feature Carousel -->
+      <div class="py-8 w-full">
+        <div class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 scroll-snap-x-mandatory">
+          <!-- Card 1: Scholarships -->
+          <div class="flex-shrink-0 w-[85%] sm:w-80 snap-center">
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-md text-left flex items-center gap-4">
+              <div
+                class="flex-shrink-0 w-12 h-12 bg-primary-light dark:bg-primary/20 rounded-lg flex items-center justify-center">
+                <span class="material-symbols-outlined text-primary text-3xl">school</span>
+              </div>
+              <div>
+                <h3 class="font-bold text-gray-800 dark:text-white">Scholarships</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Apply without paperwork</p>
+              </div>
+            </div>
+          </div>
+          <!-- Card 2: SME -->
+          <div class="flex-shrink-0 w-[85%] sm:w-80 snap-center">
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-md text-left flex items-center gap-4">
+              <div
+                class="flex-shrink-0 w-12 h-12 bg-primary-light dark:bg-primary/20 rounded-lg flex items-center justify-center">
+                <span class="material-symbols-outlined text-primary text-3xl">storefront</span>
+              </div>
+              <div>
+                <h3 class="font-bold text-gray-800 dark:text-white">SME</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Start your business with parental approval</p>
+              </div>
+            </div>
+          </div>
+          <!-- Card 3: Safety -->
+          <div class="flex-shrink-0 w-[85%] sm:w-80 snap-center">
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-xl shadow-md text-left flex items-center gap-4">
+              <div
+                class="flex-shrink-0 w-12 h-12 bg-primary-light dark:bg-primary/20 rounded-lg flex items-center justify-center">
+                <span class="material-symbols-outlined text-primary text-3xl">verified_user</span>
+              </div>
+              <div>
+                <h3 class="font-bold text-gray-800 dark:text-white">Safety</h3>
+                <p class="text-sm text-gray-500 dark:text-gray-400">Age verification &amp; spending control</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pagination Dots -->
+        <div class="flex justify-center items-center gap-2 pt-2">
+          <div class="w-2 h-2 rounded-full bg-primary"></div>
+          <div class="w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+          <div class="w-2 h-2 rounded-full bg-gray-300 dark:bg-gray-600"></div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex justify-center pb-8 pt-4">
+        <div class="flex w-full flex-1 gap-4 max-w-[480px] flex-col items-stretch">
+
+          <!-- Button 1: Continue with Smart ID (With Loading Effect) -->
+          <button
+            onclick="this.innerHTML='<span class=\'material-symbols-outlined animate-spin\'>progress_activity</span> Verifying...'; this.classList.add('opacity-75', 'cursor-not-allowed'); setTimeout(() => { window.location.href='mainpage_home.html' }, 1500);"
+            class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 px-5 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] w-full gap-2 transition hover:shadow-lg hover:shadow-primary/40 active:scale-[0.98]">
+            <span class="material-symbols-outlined text-2xl fingerprint-icon">fingerprint</span>
+            <span class="truncate">Continue with Smart ID</span>
+          </button>
+
+          <!-- Button 2: Link Guardian (Optional - Alert for demo) -->
+          <button onclick="alert('This feature would open a QR scanner to pair with a parent device.')"
+            class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 px-5 bg-primary-light dark:bg-white/10 text-primary dark:text-white text-base font-bold leading-normal tracking-[0.015em] w-full gap-2 transition hover:bg-blue-200/60 dark:hover:bg-white/20 active:scale-[0.98]">
+            <span class="material-symbols-outlined text-2xl">group</span>
+            <span class="truncate">Link Guardian</span>
+          </button>
+
+        </div>
+      </div>
+    </main>
+  </div>
+
+</body>
+
+</html>

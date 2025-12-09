@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Profile - MyMULA Junior</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;900&amp;display=swap"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#0054A6",
+            accent: "#4CA9FF",
+            "background-light": "#F7F9FC",
+            "background-dark": "#0f1923",
+          },
+          fontFamily: {
+            display: ["Public Sans", "sans-serif"],
+          },
+          borderRadius: {
+            DEFAULT: "0.25rem",
+            lg: "12px",
+            xl: "16px",
+            full: "9999px",
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+    }
+
+    .material-symbols-outlined.fill {
+      font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
+    }
+
+    body {
+      min-height: max(884px, 100dvh);
+    }
+
+    .bounce-on-tap:active {
+      transform: scale(0.95);
+      transition: transform 0.1s ease-in-out;
+    }
+  </style>
+  <style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  <style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+</head>
+
+<body class="font-display bg-background-light">
+  <div
+    class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+    <div class="flex items-center bg-transparent dark:bg-background-dark p-4 justify-between">
+      <div class="flex items-center gap-3 w-12"></div>
+      <h1 class="text-[#333333] dark:text-white text-xl font-bold leading-tight tracking-[-0.015em] flex-1 text-center">
+        Profile
+      </h1>
+      <div class="flex w-12 items-center justify-end relative">
+        <button
+          class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 w-10 bg-transparent text-[#333333] dark:text-white gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
+          <span class="material-symbols-outlined !text-3xl">notifications</span>
+        </button>
+        <div class="absolute top-1 right-1 h-2.5 w-2.5 rounded-full bg-red-500 border-2 border-background-light"></div>
+      </div>
+    </div>
+    <div class="flex flex-col items-center flex-grow p-4">
+      <div class="flex flex-col items-center">
+        <img alt="Ali's avatar" class="h-[100px] w-[100px] rounded-full object-cover border-2 border-primary shadow-lg"
+          src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsYcXFkFsFledf_qaRhclLFxukFFj7_RpSh9rCzy78mBo-x0GF7vKE_S91r-iJBE-H4ycYLv-s2-9Vd6p0huSFXTg-ZLbFHKzINUXDEDGq_OVHbTPMzOs96CZ7hMZnjsfA2bV37BrgOQxMb979KFt1kIb63ZoAJXZtE9VuJbAfDQ36MemKQbLx8DBjF5-mavhrhE7v7cyC2WNBEce6mmCCGVV7nOEznLYlcQIWdUOiqO4k_o1-JM8O8q7PhwPwc9EvnCu94vVXQss" />
+        <div class="mt-6 text-center">
+          <p class="text-xl font-bold text-gray-900 dark:text-white">Ali</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            ******-**-1234
+          </p>
+        </div>
+      </div>
+      <div class="w-full max-w-md mt-8 space-y-4">
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-4 flex items-center justify-between shadow-sm">
+          <div class="flex items-center gap-4">
+            <div class="bg-gray-100 dark:bg-gray-700 rounded-full p-2">
+              <span class="material-symbols-outlined text-primary !text-2xl">verified_user</span>
+            </div>
+            <div>
+              <p class="font-semibold text-gray-900 dark:text-white">
+                Linked Guardian
+              </p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">
+                Mother: Sarah Tan
+              </p>
+            </div>
+          </div>
+          <span class="material-symbols-outlined text-gray-400">lock</span>
+        </div>
+        <button class="w-full bg-primary text-white font-bold py-3 px-4 rounded-xl shadow-md bounce-on-tap">
+          Manage Permissions
+        </button>
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
+          <div class="p-4 flex items-center justify-between border-b border-gray-200 dark:border-gray-700">
+            <div class="flex items-center gap-4">
+              <div class="bg-gray-100 dark:bg-gray-700 rounded-full p-2">
+                <span class="material-symbols-outlined text-primary !text-2xl">language</span>
+              </div>
+              <p class="font-semibold text-gray-900 dark:text-white">Language</p>
+            </div>
+            <div class="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 p-1 rounded-full">
+              <button class="px-3 py-1 text-sm font-semibold text-white bg-primary rounded-full">
+                EN
+              </button>
+              <button class="px-3 py-1 text-sm font-semibold text-gray-500 dark:text-gray-400">
+                BM
+              </button>
+            </div>
+          </div>
+          <div class="p-4 flex items-center justify-between">
+            <div class="flex items-center gap-4">
+              <div class="bg-gray-100 dark:bg-gray-700 rounded-full p-2">
+                <span class="material-symbols-outlined text-primary !text-2xl">help_outline</span>
+              </div>
+              <p class="font-semibold text-gray-900 dark:text-white">
+                Help &amp; Security
+              </p>
+            </div>
+            <span class="material-symbols-outlined text-gray-400">chevron_right</span>
+          </div>
+        </div>
+        <div class="pt-4 text-center">
+          <button class="text-red-500 font-bold">Log Out</button>
+        </div>
+      </div>
+    </div>
+    <div class="sticky bottom-0">
+      <div
+        class="flex h-[72px] justify-around border-t border-[#f0f2f5] bg-white/80 px-4 pb-3 pt-2 dark:border-gray-700 dark:bg-background-dark/80 backdrop-blur-lg">
+
+        <!-- 1. HOME BUTTON -->
+       <a class="flex flex-1 flex-col items-center justify-end gap-1 text-[#6c757d] dark:text-gray-400 hover:text-primary transition-colors"
+          href="mainpage_home.html">
+          <div class="flex h-8 items-center justify-center">
+            <span class="material-symbols-outlined">home</span>
+          </div>
+          <p class="text-xs font-semibold leading-normal tracking-[0.015em]">Home</p>
+        </a>
+
+        <!-- 2. MY APPLICATIONS BUTTON -->
+        <a class="flex flex-1 flex-col items-center justify-end gap-1 text-[#6c757d] dark:text-gray-400 hover:text-primary transition-colors"
+          href="mainpage_applications.html">
+          <div class="flex h-8 items-center justify-center">
+            <span class="material-symbols-outlined">description</span>
+          </div>
+          <p class="text-xs font-semibold leading-normal tracking-[0.015em]">My Applications</p>
+        </a>
+
+        <!-- 3. PROFILE BUTTON -->
+        <a class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full text-primary"
+          href="mainpage_profile.html">
+          <div class="flex h-8 items-center justify-center">
+            <span class="material-symbols-outlined fill">account_circle</span>
+          </div>
+          <p class="text-primary text-xs font-semibold leading-normal tracking-[0.015em]">Profile</p>
+        </a>
+
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
