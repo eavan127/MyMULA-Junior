@@ -215,7 +215,7 @@
         <!-- BOTTOM BUTTONS -->
         <div class="flex w-full flex-col gap-2">
           <!-- ASK PARENT BUTTON -->
-          <button id="btn-ask-parent" onclick="window.location.href='SME_Guardian_Approval.html'"
+          <button id="btn-ask-parent" onclick="createSmeParentRequest()"
             class="flex h-12 w-full items-center justify-center gap-x-2 rounded-xl bg-primary px-6 text-base font-bold text-white shadow-lg shadow-primary/20 hover:bg-primary/90">
             <span class="material-symbols-outlined">family_restroom</span>
             Ask Parent for Permission
@@ -253,27 +253,27 @@
     const DRAFT_KEY = 'draft_sme';
 
     function saveDraft() {
-      const isSmeApproved = localStorage.getItem('sme_guardian_approved');
-      if (localStorage.getItem('sme_application_submitted') !== 'true') {
+      const isSmeApproved = sessionStorage.getItem('sme_guardian_approved');
+      if (sessionStorage.getItem('sme_application_submitted') !== 'true') {
         const draftData = {
           lastModified: new Date().toISOString(),
           progress: isSmeApproved === 'true' ? 'Guardian Approved - Ready to Submit' : 'Documents verified - Awaiting guardian',
           guardianApproved: isSmeApproved === 'true',
           step: isSmeApproved === 'true' ? 2 : 1
         };
-        localStorage.setItem(DRAFT_KEY, JSON.stringify(draftData));
+        sessionStorage.setItem(DRAFT_KEY, JSON.stringify(draftData));
         console.log('SME Draft saved:', draftData);
       }
     }
 
     function clearDraft() {
-      localStorage.removeItem(DRAFT_KEY);
-      localStorage.removeItem('resuming_sme');
+      sessionStorage.removeItem(DRAFT_KEY);
+      sessionStorage.removeItem('resuming_sme');
       console.log('SME Draft cleared - application submitted');
     }
 
     // Check if the "Guardian Signature" is saved for SME
-    const isSmeApproved = localStorage.getItem('sme_guardian_approved');
+    const isSmeApproved = sessionStorage.getItem('sme_guardian_approved');
 
     if (isSmeApproved === 'true') {
       // --- UPDATE FORM A TO GREEN ---
@@ -331,13 +331,46 @@
       submitBtn.addEventListener('click', (e) => {
         e.preventDefault();
         clearDraft();
-        localStorage.setItem('sme_application_submitted', 'true');
+        sessionStorage.setItem('sme_application_submitted', 'true');
         window.location.href = 'SME_Application_Progress_Tracker.html';
       });
     }
 
     // Save draft on page load
     saveDraft();
+
+    // === CREATE PARENT REQUEST FOR SME ===
+    function createSmeParentRequest() {
+      // Create a unique request for the parent/guardian
+      const requestId = 'req_sme_' + Date.now();
+      const newRequest = {
+        id: requestId,
+        type: 'sme',
+        title: 'SME Sole Proprietorship - Business Registration',
+        childName: 'Ali',
+        timestamp: new Date().toISOString(),
+        status: 'pending'
+      };
+
+      // Get existing requests or create empty array
+      const existingRequests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+
+      // Add new request
+      existingRequests.push(newRequest);
+      sessionStorage.setItem('child_requests', JSON.stringify(existingRequests));
+
+      // Store current request ID for approval flow
+      sessionStorage.setItem('current_approval_request', requestId);
+
+      // Save draft before leaving
+      saveDraft();
+
+      // Show notification and navigate
+      alert('SME Registration request sent to your parent/guardian! They will need to approve using Face ID and signature.');
+
+      // Go back to home (simulating "request sent" state)
+      window.location.href = 'mainpage_home.html';
+    }
   </script>
 </body>
 

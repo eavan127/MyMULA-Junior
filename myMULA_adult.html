@@ -152,13 +152,15 @@
                         <p class="text-[#101418] dark:text-white text-base font-bold">Identity Card (IC / MyKad)</p>
                         <p class="text-[#5e758d] dark:text-gray-400 text-sm">Front and back of your IC</p>
                         <div id="icStatus" class="mt-1 hidden">
-                            <span
-                                class="inline-flex items-center gap-1 text-xs font-medium text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
-                                <span class="material-symbols-outlined text-sm">check_circle</span> Scanned
+                            <span id="icStatusBadge"
+                                class="inline-flex items-center gap-1 text-xs font-medium text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">
+                                <span class="material-symbols-outlined text-sm animate-spin">sync</span> Awaiting
+                                Verification
                             </span>
                         </div>
                     </div>
-                    <span class="material-symbols-outlined text-[#5e758d] dark:text-gray-400">photo_camera</span>
+                    <span id="icIcon"
+                        class="material-symbols-outlined text-[#5e758d] dark:text-gray-400">photo_camera</span>
                 </div>
 
                 <!-- 2. Birth Certificate -->
@@ -174,9 +176,10 @@
                         <p class="text-[#101418] dark:text-white text-base font-bold">Birth Certificate</p>
                         <p class="text-[#5e758d] dark:text-gray-400 text-sm">Proof of birth registration</p>
                         <div id="birthStatus" class="mt-1 hidden">
-                            <span
-                                class="inline-flex items-center gap-1 text-xs font-medium text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
-                                <span class="material-symbols-outlined text-sm">check_circle</span> Scanned
+                            <span id="birthStatusBadge"
+                                class="inline-flex items-center gap-1 text-xs font-medium text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">
+                                <span class="material-symbols-outlined text-sm animate-spin">sync</span> Awaiting
+                                Verification
                             </span>
                         </div>
                     </div>
@@ -196,9 +199,10 @@
                         <p class="text-[#101418] dark:text-white text-base font-bold">Payslip / Income Statement</p>
                         <p class="text-[#5e758d] dark:text-gray-400 text-sm">Latest 3 months payslip</p>
                         <div id="payslipStatus" class="mt-1 hidden">
-                            <span
-                                class="inline-flex items-center gap-1 text-xs font-medium text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
-                                <span class="material-symbols-outlined text-sm">check_circle</span> Scanned
+                            <span id="payslipStatusBadge"
+                                class="inline-flex items-center gap-1 text-xs font-medium text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">
+                                <span class="material-symbols-outlined text-sm animate-spin">sync</span> Awaiting
+                                Verification
                             </span>
                         </div>
                     </div>
@@ -218,9 +222,10 @@
                         <p class="text-[#101418] dark:text-white text-base font-bold">Income Tax Statement (LHDN)</p>
                         <p class="text-[#5e758d] dark:text-gray-400 text-sm">EA Form or tax assessment</p>
                         <div id="taxStatus" class="mt-1 hidden">
-                            <span
-                                class="inline-flex items-center gap-1 text-xs font-medium text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
-                                <span class="material-symbols-outlined text-sm">check_circle</span> Scanned
+                            <span id="taxStatusBadge"
+                                class="inline-flex items-center gap-1 text-xs font-medium text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">
+                                <span class="material-symbols-outlined text-sm animate-spin">sync</span> Awaiting
+                                Verification
                             </span>
                         </div>
                     </div>
@@ -240,9 +245,10 @@
                         <p class="text-[#101418] dark:text-white text-base font-bold">Family Status Document</p>
                         <p class="text-[#5e758d] dark:text-gray-400 text-sm">Marriage cert / Single declaration</p>
                         <div id="familyStatus" class="mt-1 hidden">
-                            <span
-                                class="inline-flex items-center gap-1 text-xs font-medium text-green-600 bg-green-100 px-2 py-0.5 rounded-full">
-                                <span class="material-symbols-outlined text-sm">check_circle</span> Scanned
+                            <span id="familyStatusBadge"
+                                class="inline-flex items-center gap-1 text-xs font-medium text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">
+                                <span class="material-symbols-outlined text-sm animate-spin">sync</span> Awaiting
+                                Verification
                             </span>
                         </div>
                     </div>
@@ -298,26 +304,126 @@
         </div>
     </div>
 
-    <!-- Scanning Modal -->
-    <div id="scanModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div
-            class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-sm overflow-hidden shadow-2xl transform transition-all">
-            <div class="p-6 text-center">
-                <div
-                    class="w-20 h-20 mx-auto mb-4 rounded-full bg-primary/10 flex items-center justify-center animate-pulse">
-                    <span class="material-symbols-outlined text-4xl text-primary">document_scanner</span>
+    <!-- Camera Scanner Modal -->
+    <div id="scanModal" class="fixed inset-0 bg-black z-50 hidden flex-col">
+        <!-- Camera Header -->
+        <div class="flex items-center justify-between p-4 bg-black/50 backdrop-blur-sm">
+            <button onclick="closeScanModal()" class="p-2 rounded-full bg-white/10 text-white">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+            <h3 id="modalTitle" class="text-white font-bold text-lg">Scan IC / MyKad</h3>
+            <div class="w-10"></div>
+        </div>
+
+        <!-- Camera Viewfinder -->
+        <div class="flex-1 relative flex items-center justify-center overflow-hidden">
+            <!-- Simulated Camera Background -->
+            <div class="absolute inset-0 bg-gradient-to-b from-gray-800 via-gray-700 to-gray-800"></div>
+
+            <!-- Document Frame -->
+            <div id="scanFrame" class="relative w-80 h-52 border-4 border-white/80 rounded-xl overflow-hidden">
+                <!-- Scan Line Animation -->
+                <div id="scanLine"
+                    class="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary to-transparent animate-scan">
                 </div>
-                <h3 id="modalTitle" class="text-xl font-bold text-[#333] dark:text-white mb-2">Scanning Document...</h3>
-                <p id="modalDesc" class="text-[#60758a] dark:text-gray-400 text-sm mb-4">Please hold your document
-                    steady</p>
-                <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mb-4">
-                    <div id="scanProgress" class="bg-primary h-2 rounded-full transition-all duration-300"
-                        style="width: 0%"></div>
+
+                <!-- Corner Markers -->
+                <div class="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-primary rounded-tl-lg"></div>
+                <div class="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-primary rounded-tr-lg"></div>
+                <div class="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-primary rounded-bl-lg"></div>
+                <div class="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-primary rounded-br-lg"></div>
+
+                <!-- Simulated Document -->
+                <div id="docPreview" class="hidden absolute inset-4 bg-white rounded-lg shadow-lg p-3">
+                    <div class="h-2 w-20 bg-gray-300 rounded mb-2"></div>
+                    <div class="h-2 w-32 bg-gray-200 rounded mb-4"></div>
+                    <div class="flex gap-3">
+                        <div class="h-16 w-14 bg-gray-200 rounded"></div>
+                        <div class="flex-1 space-y-2">
+                            <div class="h-2 w-full bg-gray-200 rounded"></div>
+                            <div class="h-2 w-3/4 bg-gray-200 rounded"></div>
+                            <div class="h-2 w-1/2 bg-gray-200 rounded"></div>
+                        </div>
+                    </div>
                 </div>
-                <button onclick="closeScanModal()" class="text-primary font-medium hover:underline">Cancel</button>
             </div>
         </div>
+
+        <!-- AI Detection Status -->
+        <div class="p-6 bg-black/80 backdrop-blur-sm">
+            <div id="scanStatus" class="text-center mb-4">
+                <p id="statusText" class="text-white font-medium mb-2">Position document within frame</p>
+                <div class="flex items-center justify-center gap-2">
+                    <span id="statusIcon"
+                        class="material-symbols-outlined text-primary animate-pulse">photo_camera</span>
+                    <span id="statusDetail" class="text-gray-400 text-sm">Waiting for document...</span>
+                </div>
+            </div>
+
+            <!-- AI Detection Progress -->
+            <div id="aiProgress" class="hidden mb-4">
+                <div class="flex items-center gap-3 mb-3">
+                    <span class="material-symbols-outlined text-primary">smart_toy</span>
+                    <span class="text-white font-medium">AI Document Analysis</span>
+                </div>
+                <div class="space-y-2">
+                    <div class="flex items-center gap-2">
+                        <span id="step1Icon"
+                            class="material-symbols-outlined text-gray-500 text-lg">radio_button_unchecked</span>
+                        <span id="step1Text" class="text-gray-400 text-sm">Detecting document type...</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span id="step2Icon"
+                            class="material-symbols-outlined text-gray-500 text-lg">radio_button_unchecked</span>
+                        <span id="step2Text" class="text-gray-400 text-sm">Analyzing document details...</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span id="step3Icon"
+                            class="material-symbols-outlined text-gray-500 text-lg">radio_button_unchecked</span>
+                        <span id="step3Text" class="text-gray-400 text-sm">Extracting information...</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Extracted Data Preview -->
+            <div id="extractedData" class="hidden bg-white/10 rounded-xl p-4 mb-4">
+                <p class="text-primary text-sm font-bold mb-2">✓ Data Extracted Successfully</p>
+                <div id="dataFields" class="space-y-1 text-sm">
+                    <!-- Will be populated by JS -->
+                </div>
+            </div>
+
+            <!-- Capture Button -->
+            <button id="captureBtn" onclick="startCapture()"
+                class="w-full py-4 rounded-xl bg-primary text-white font-bold flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined">photo_camera</span>
+                Capture Document
+            </button>
+        </div>
     </div>
+
+    <style>
+        @keyframes scan {
+            0% {
+                top: 0;
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                top: calc(100% - 4px);
+                opacity: 1;
+            }
+        }
+
+        .animate-scan {
+            animation: scan 2s ease-in-out infinite;
+        }
+    </style>
+
 
     <!-- Success Modal -->
     <div id="successModal"
@@ -330,23 +436,23 @@
                 <h3 class="text-2xl font-bold text-[#333] dark:text-white mb-2">Registration Complete!</h3>
                 <p class="text-[#60758a] dark:text-gray-400 text-sm mb-6">Your identity has been verified successfully.
                     Welcome to MyMULA!</p>
-                <button onclick="window.location.href='index.html'"
+                <button onclick="window.location.href='adult_home.html'"
                     class="w-full rounded-xl bg-gradient-to-r from-green-500 to-green-600 py-3 font-bold text-white shadow-lg">
-                    Continue to MyMULA
+                    Go to Dashboard
                 </button>
             </div>
         </div>
     </div>
 
     <script>
-        // Track scanned documents
-        const scannedDocs = {
-            ic: false,
-            birth: false,
-            payslip: false,
-            tax: false,
-            family: false,
-            signature: false
+        // Track document states: null=not scanned, 'scanning'=in progress, 'awaiting'=awaiting verification, 'verified'=done
+        const docStates = {
+            ic: null,
+            birth: null,
+            payslip: null,
+            tax: null,
+            family: null,
+            signature: null
         };
 
         // Signature pad setup
@@ -402,11 +508,14 @@
 
         function stopDrawing() {
             if (isDrawing && hasSignature) {
-                scannedDocs.signature = true;
-                document.getElementById('signatureLabel').textContent = 'Signature captured ✓';
-                document.getElementById('signatureLabel').classList.remove('text-[#5e758d]');
-                document.getElementById('signatureLabel').classList.add('text-green-600');
-                document.getElementById('signatureSection').classList.add('border-green-500');
+                docStates.signature = 'awaiting';
+                updateDocumentUI('signature', 'awaiting');
+                // Auto-verify signature after 5 seconds
+                setTimeout(() => {
+                    docStates.signature = 'verified';
+                    updateDocumentUI('signature', 'verified');
+                    updateProgress();
+                }, 5000);
                 updateProgress();
             }
             isDrawing = false;
@@ -423,91 +532,212 @@
         function clearSignature() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             hasSignature = false;
-            scannedDocs.signature = false;
+            docStates.signature = null;
             document.getElementById('signatureLabel').textContent = 'Not signed yet';
             document.getElementById('signatureLabel').classList.add('text-[#5e758d]');
-            document.getElementById('signatureLabel').classList.remove('text-green-600');
-            document.getElementById('signatureSection').classList.remove('border-green-500');
+            document.getElementById('signatureLabel').classList.remove('text-green-600', 'text-orange-500');
+            document.getElementById('signatureSection').classList.remove('border-green-500', 'border-orange-400');
             updateProgress();
         }
 
-        // Document scanning simulation
-        function scanDocument(docType) {
-            if (scannedDocs[docType]) return;
+        // Update document UI based on state
+        function updateDocumentUI(docType, state) {
+            if (docType === 'signature') {
+                const label = document.getElementById('signatureLabel');
+                const section = document.getElementById('signatureSection');
+                if (state === 'awaiting') {
+                    label.innerHTML = '<span class="animate-pulse">⏳ Awaiting Verification...</span>';
+                    label.classList.remove('text-[#5e758d]', 'text-green-600');
+                    label.classList.add('text-orange-500');
+                    section.classList.add('border-orange-400');
+                } else if (state === 'verified') {
+                    label.innerHTML = '✓ Verified by Government';
+                    label.classList.remove('text-[#5e758d]', 'text-orange-500');
+                    label.classList.add('text-green-600');
+                    section.classList.remove('border-orange-400');
+                    section.classList.add('border-green-500');
+                }
+                return;
+            }
 
+            const statusEl = document.getElementById(docType + 'Status');
+            const badgeEl = document.getElementById(docType + 'StatusBadge');
+            const cardEl = document.getElementById(docType + 'Card');
+
+            if (!statusEl) return;
+            statusEl.classList.remove('hidden');
+
+            if (state === 'awaiting') {
+                badgeEl.className = 'inline-flex items-center gap-1 text-xs font-medium text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full';
+                badgeEl.innerHTML = '<span class="material-symbols-outlined text-sm animate-spin">sync</span> Awaiting Verification';
+                cardEl.classList.add('border-orange-400');
+                cardEl.classList.remove('border-green-500', 'border-transparent');
+            } else if (state === 'verified') {
+                badgeEl.className = 'inline-flex items-center gap-1 text-xs font-medium text-green-600 bg-green-100 px-2 py-0.5 rounded-full';
+                badgeEl.innerHTML = '<span class="material-symbols-outlined text-sm">verified</span> Verified by Government';
+                cardEl.classList.remove('border-orange-400');
+                cardEl.classList.add('border-green-500', 'scanned');
+            }
+        }
+
+        // Document data for AI extraction simulation
+        const docData = {
+            ic: { name: 'AHMAD BIN ABDULLAH', ic: '850612-10-5234', dob: '12 JUN 1985', address: 'NO 123, TAMAN SRI...' },
+            birth: { name: 'AHMAD BIN ABDULLAH', regNo: 'BC-2023-12345', dob: '12 JUN 1985', birthPlace: 'HOSPITAL KUALA LUMPUR' },
+            payslip: { employer: 'SYARIKAT ABC SDN BHD', month: 'NOVEMBER 2024', gross: 'RM 4,500.00', net: 'RM 3,850.00' },
+            tax: { year: '2023', taxNo: 'SG-12345678', income: 'RM 54,000.00', taxPaid: 'RM 2,430.00' },
+            family: { status: 'MARRIED', spouse: 'SARAH BINTI AHMAD', children: '2', regDate: '15 MAR 2010' }
+        };
+
+        let currentDocType = null;
+
+        // Document scanning - opens camera scanner
+        function scanDocument(docType) {
+            if (docStates[docType]) return; // Already processing
+
+            currentDocType = docType;
             const modal = document.getElementById('scanModal');
-            const progress = document.getElementById('scanProgress');
             const titles = {
-                ic: 'Scanning IC / MyKad...',
-                birth: 'Scanning Birth Certificate...',
-                payslip: 'Scanning Payslip...',
-                tax: 'Scanning Tax Statement...',
-                family: 'Scanning Family Document...'
+                ic: 'Scan IC / MyKad',
+                birth: 'Scan Birth Certificate',
+                payslip: 'Scan Payslip',
+                tax: 'Scan Tax Statement',
+                family: 'Scan Family Document'
             };
 
             document.getElementById('modalTitle').textContent = titles[docType];
+
+            // Reset UI
+            document.getElementById('scanStatus').classList.remove('hidden');
+            document.getElementById('aiProgress').classList.add('hidden');
+            document.getElementById('extractedData').classList.add('hidden');
+            document.getElementById('docPreview').classList.add('hidden');
+            document.getElementById('captureBtn').classList.remove('hidden');
+            document.getElementById('statusText').textContent = 'Position document within frame';
+            document.getElementById('statusDetail').textContent = 'Waiting for document...';
+
+            // Reset AI steps
+            ['step1', 'step2', 'step3'].forEach(step => {
+                document.getElementById(step + 'Icon').textContent = 'radio_button_unchecked';
+                document.getElementById(step + 'Icon').className = 'material-symbols-outlined text-gray-500 text-lg';
+            });
+
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-
-            let progressValue = 0;
-            const interval = setInterval(() => {
-                progressValue += 10;
-                progress.style.width = progressValue + '%';
-
-                if (progressValue >= 100) {
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        closeScanModal();
-                        markAsScanned(docType);
-                    }, 300);
-                }
-            }, 150);
         }
 
         function closeScanModal() {
             const modal = document.getElementById('scanModal');
             modal.classList.add('hidden');
             modal.classList.remove('flex');
-            document.getElementById('scanProgress').style.width = '0%';
+            currentDocType = null;
+        }
+
+        // Start capture with AI detection simulation
+        function startCapture() {
+            const captureBtn = document.getElementById('captureBtn');
+            captureBtn.classList.add('hidden');
+
+            // Show document preview
+            document.getElementById('docPreview').classList.remove('hidden');
+            document.getElementById('statusText').textContent = 'Document detected!';
+            document.getElementById('statusDetail').textContent = 'Analyzing with AI...';
+            document.getElementById('scanStatus').classList.add('hidden');
+            document.getElementById('aiProgress').classList.remove('hidden');
+
+            // AI Detection Step 1 - Detecting document type
+            setTimeout(() => {
+                document.getElementById('step1Icon').textContent = 'check_circle';
+                document.getElementById('step1Icon').className = 'material-symbols-outlined text-green-500 text-lg';
+                document.getElementById('step1Text').textContent = 'Document type detected ✓';
+            }, 800);
+
+            // AI Detection Step 2 - Analyzing details
+            setTimeout(() => {
+                document.getElementById('step2Icon').textContent = 'check_circle';
+                document.getElementById('step2Icon').className = 'material-symbols-outlined text-green-500 text-lg';
+                document.getElementById('step2Text').textContent = 'Details analyzed ✓';
+            }, 1600);
+
+            // AI Detection Step 3 - Extracting information
+            setTimeout(() => {
+                document.getElementById('step3Icon').textContent = 'check_circle';
+                document.getElementById('step3Icon').className = 'material-symbols-outlined text-green-500 text-lg';
+                document.getElementById('step3Text').textContent = 'Information extracted ✓';
+            }, 2400);
+
+            // Show extracted data
+            setTimeout(() => {
+                document.getElementById('aiProgress').classList.add('hidden');
+                document.getElementById('extractedData').classList.remove('hidden');
+
+                // Populate extracted data fields
+                const data = docData[currentDocType];
+                const fieldsHtml = Object.entries(data).map(([key, value]) =>
+                    `<div class="flex justify-between"><span class="text-gray-400">${key.toUpperCase()}:</span><span class="text-white font-medium">${value}</span></div>`
+                ).join('');
+                document.getElementById('dataFields').innerHTML = fieldsHtml;
+            }, 3000);
+
+            // Complete and close
+            setTimeout(() => {
+                const docTypeToMark = currentDocType; // Save before closing
+                closeScanModal();
+                markAsScanned(docTypeToMark); // Use saved value
+            }, 4000);
         }
 
         function markAsScanned(docType) {
-            scannedDocs[docType] = true;
-
-            const cardId = docType + 'Card';
-            const statusId = docType + 'Status';
-
-            document.getElementById(cardId).classList.add('scanned', 'border-green-500');
-            document.getElementById(statusId).classList.remove('hidden');
-
+            // Set to awaiting verification
+            docStates[docType] = 'awaiting';
+            updateDocumentUI(docType, 'awaiting');
             updateProgress();
+
+            // Auto-verify after 5 seconds (simulating government verification)
+            setTimeout(() => {
+                docStates[docType] = 'verified';
+                updateDocumentUI(docType, 'verified');
+                updateProgress();
+            }, 5000);
         }
 
         function updateProgress() {
-            const total = Object.keys(scannedDocs).length;
-            const completed = Object.values(scannedDocs).filter(v => v).length;
-            const percentage = (completed / total) * 100;
+            const total = Object.keys(docStates).length;
+            const verified = Object.values(docStates).filter(v => v === 'verified').length;
+            const awaiting = Object.values(docStates).filter(v => v === 'awaiting').length;
+            const percentage = (verified / total) * 100;
 
             document.getElementById('progressBar').style.width = percentage + '%';
-            document.getElementById('progressText').textContent = completed + '/' + total + ' Documents';
+            document.getElementById('progressText').textContent = verified + '/' + total + ' Verified';
 
-            // Enable submit button when all docs are scanned
+            // Enable submit button when all docs are verified
             const submitBtn = document.getElementById('submitBtn');
-            if (completed === total) {
+            if (verified === total) {
                 submitBtn.disabled = false;
                 submitBtn.classList.add('animate-pulse');
+                submitBtn.innerHTML = '<span class="material-symbols-outlined">verified</span> Complete Registration';
+            } else if (awaiting > 0) {
+                submitBtn.disabled = true;
+                submitBtn.classList.remove('animate-pulse');
+                submitBtn.innerHTML = '<span class="material-symbols-outlined animate-spin">sync</span> Verifying with Government...';
             } else {
                 submitBtn.disabled = true;
                 submitBtn.classList.remove('animate-pulse');
+                submitBtn.innerHTML = '<span class="material-symbols-outlined">verified</span> Complete Registration';
             }
         }
 
         function submitRegistration() {
-            const allScanned = Object.values(scannedDocs).every(v => v);
-            if (!allScanned) {
-                alert('Please complete all document scans and signature before submitting.');
+            const allVerified = Object.values(docStates).every(v => v === 'verified');
+            if (!allVerified) {
+                alert('Please wait for all documents to be verified.');
                 return;
             }
+
+            // Save registration status (sessionStorage clears when browser closes)
+            sessionStorage.setItem('adult_registered', 'true');
+            sessionStorage.setItem('adult_name', 'Ahmad');
+            sessionStorage.setItem('adult_documents', JSON.stringify(docStates));
 
             document.getElementById('successModal').classList.remove('hidden');
             document.getElementById('successModal').classList.add('flex');

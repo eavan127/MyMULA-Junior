@@ -438,31 +438,29 @@
     function handleLogout() {
       // Show confirmation
       if (confirm('Are you sure you want to log out? Your application drafts will be saved.')) {
-        // Clear session data BUT preserve draft applications
-        const draftsToPreserve = [];
-        ['draft_scholarship', 'draft_sme', 'draft_dental'].forEach(key => {
-          const draft = localStorage.getItem(key);
-          if (draft) {
-            draftsToPreserve.push({ key, value: draft });
-          }
+        // Preserve all important sessionStorage data
+        const dataToPreserve = {};
+        const keysToPreserve = [
+          'adult_registered', 'adult_name', 'adult_documents',  // Adult registration
+          'child_requests',                                       // Child requests
+          'draft_scholarship', 'draft_sme', 'draft_dental',      // Application drafts
+          'guardian_approved', 'sme_guardian_approved'           // Guardian approval status
+        ];
+
+        keysToPreserve.forEach(key => {
+          const value = sessionStorage.getItem(key);
+          if (value) dataToPreserve[key] = value;
         });
 
         // Clear sessionStorage (session-specific data)
         sessionStorage.clear();
 
-        // Clear localStorage session data (but NOT drafts)
-        localStorage.removeItem('guardian_approved');
-        localStorage.removeItem('application_submitted');
-        localStorage.removeItem('guardian_status');
-        localStorage.removeItem('sme_application_submitted');
-        localStorage.removeItem('junior_logged_in');
-
-        // Restore drafts
-        draftsToPreserve.forEach(item => {
-          localStorage.setItem(item.key, item.value);
+        // Restore preserved data
+        Object.entries(dataToPreserve).forEach(([key, value]) => {
+          sessionStorage.setItem(key, value);
         });
 
-        console.log('Logged out. Drafts preserved:', draftsToPreserve.length);
+        console.log('Logged out. Data preserved:', Object.keys(dataToPreserve).length);
 
         // Redirect to index/login page
         window.location.href = 'index.html';

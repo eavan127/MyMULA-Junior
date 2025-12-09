@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Home - MyMULA</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d7ff2",
+                        "accent": "#4CA9FF",
+                        "background-light": "#F7F9FC",
+                        "background-dark": "#0f1923",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        body {
+            min-height: 100dvh;
+        }
+    </style>
+</head>
+
+<body class="font-display bg-background-light dark:bg-background-dark">
+    <div
+        class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden">
+
+        <!-- Header -->
+        <div class="flex items-center bg-white dark:bg-gray-800 p-4 justify-between shadow-sm">
+            <div class="flex items-center gap-3">
+                <div
+                    class="h-12 w-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-bold text-xl">
+                    A
+                </div>
+                <div>
+                    <h1 id="userName" class="text-[#333333] dark:text-white text-xl font-bold leading-tight">Hi, Ahmad!
+                    </h1>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Welcome back</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-2">
+                <button class="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                    <span class="material-symbols-outlined text-[#333] dark:text-white text-2xl">notifications</span>
+                    <div id="notificationBadge"
+                        class="hidden absolute top-1 right-1 h-3 w-3 rounded-full bg-red-500 border-2 border-white">
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats Cards -->
+        <div class="px-4 py-4">
+            <div class="grid grid-cols-2 gap-3">
+                <!-- Linked Children -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div
+                            class="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-primary">child_care</span>
+                        </div>
+                        <div>
+                            <p class="text-2xl font-bold text-[#333] dark:text-white">1</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Linked Child</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Pending Requests -->
+                <div onclick="window.location.href='adult_requests.html'"
+                    class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm cursor-pointer hover:shadow-md transition-shadow">
+                    <div class="flex items-center gap-3 mb-2">
+                        <div
+                            class="h-10 w-10 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center">
+                            <span class="material-symbols-outlined text-orange-500">pending_actions</span>
+                        </div>
+                        <div>
+                            <p id="pendingCount" class="text-2xl font-bold text-[#333] dark:text-white">0</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Pending Requests</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Linked Children Section -->
+        <div class="px-4 pb-2">
+            <h2 class="text-lg font-bold text-[#333] dark:text-white mb-3 flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">family_restroom</span>
+                Linked Children
+            </h2>
+
+            <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm">
+                <div class="flex items-center gap-4">
+                    <img alt="Ali's avatar"
+                        class="h-14 w-14 rounded-full object-cover border-2 border-primary shadow-md"
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPCkPYpsFrKyuL2q0wKCKpuzOi4pehvyVUPD_CyjBd3x6ml3D8IsF04UqGyXjYwha3tEJyz65UrQLJxhQoL5CT6ZxCYLaLmh6o3ZFrivlVBRZLnjzp0xw422ehXkulea3qL4He8lkwYMIKXmP-pTwIvdQ4rZ0SF1jYIiPX0bnyLaiTBeLnnCNWt9_oD6if7UddAmxHabrhqvNTMH1tCRpjsFZeaAtofbK1-NPQXfO4hmlvYib9UxO6Oto6udXG1K0j5_DWpiEd6Ik" />
+                    <div class="flex-1">
+                        <p class="text-base font-bold text-[#333] dark:text-white">Ali</p>
+                        <p class="text-sm text-gray-500 dark:text-gray-400">Age 16 • MyMULA Junior</p>
+                        <div class="flex items-center gap-1 mt-1">
+                            <span class="material-symbols-outlined text-green-500 text-sm">verified</span>
+                            <span class="text-xs text-green-600">Linked</span>
+                        </div>
+                    </div>
+                    <span class="material-symbols-outlined text-gray-400">chevron_right</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Activity Section -->
+        <div class="px-4 py-4 flex-1">
+            <h2 class="text-lg font-bold text-[#333] dark:text-white mb-3 flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary">history</span>
+                Recent Activity
+            </h2>
+
+            <div id="activityList" class="flex flex-col gap-3">
+                <!-- Activity items will be loaded here -->
+                <div class="text-center py-8 text-gray-400">
+                    <span class="material-symbols-outlined text-5xl mb-2">inbox</span>
+                    <p>No recent activity</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bottom Navigation -->
+        <div class="sticky bottom-0">
+            <div
+                class="flex h-[72px] justify-around border-t border-[#f0f2f5] bg-white/80 px-4 pb-3 pt-2 dark:border-gray-700 dark:bg-background-dark/80 backdrop-blur-lg">
+
+                <!-- Home Button (Active) -->
+                <a class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full text-primary"
+                    href="adult_home.html">
+                    <div class="flex h-8 items-center justify-center">
+                        <span class="material-symbols-outlined fill">home</span>
+                    </div>
+                    <p class="text-primary text-xs font-semibold">Home</p>
+                </a>
+
+                <!-- Child Requests Button -->
+                <a class="flex flex-1 flex-col items-center justify-end gap-1 text-[#6c757d] dark:text-gray-400 hover:text-primary transition-colors relative"
+                    href="adult_requests.html">
+                    <div class="flex h-8 items-center justify-center relative">
+                        <span class="material-symbols-outlined">pending_actions</span>
+                        <div id="navBadge"
+                            class="hidden absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">
+                            0</div>
+                    </div>
+                    <p class="text-xs font-semibold">Requests</p>
+                </a>
+
+                <!-- Profile Button -->
+                <a class="flex flex-1 flex-col items-center justify-end gap-1 text-[#6c757d] dark:text-gray-400 hover:text-primary transition-colors"
+                    href="adult_profile.html">
+                    <div class="flex h-8 items-center justify-center">
+                        <span class="material-symbols-outlined">account_circle</span>
+                    </div>
+                    <p class="text-xs font-semibold">Profile</p>
+                </a>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Load pending requests count
+            loadPendingRequests();
+            loadRecentActivity();
+        });
+
+        function loadPendingRequests() {
+            const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+            const pending = requests.filter(r => r.status === 'pending');
+
+            document.getElementById('pendingCount').textContent = pending.length;
+
+            // Update nav badge
+            const navBadge = document.getElementById('navBadge');
+            const notificationBadge = document.getElementById('notificationBadge');
+            if (pending.length > 0) {
+                navBadge.classList.remove('hidden');
+                navBadge.textContent = pending.length;
+                notificationBadge.classList.remove('hidden');
+            }
+        }
+
+        function loadRecentActivity() {
+            const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+            const container = document.getElementById('activityList');
+
+            if (requests.length === 0) return;
+
+            container.innerHTML = requests.slice(0, 3).map(req => `
+        <div class="flex items-center gap-4 bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm">
+          <div class="h-10 w-10 rounded-full ${req.status === 'approved' ? 'bg-green-100' : 'bg-orange-100'} flex items-center justify-center">
+            <span class="material-symbols-outlined ${req.status === 'approved' ? 'text-green-500' : 'text-orange-500'}">
+              ${req.status === 'approved' ? 'check_circle' : 'pending'}
+            </span>
+          </div>
+          <div class="flex-1">
+            <p class="text-sm font-bold text-[#333] dark:text-white">${req.title}</p>
+            <p class="text-xs text-gray-500">From: ${req.childName}</p>
+          </div>
+          <span class="text-xs px-2 py-1 rounded-full ${req.status === 'approved' ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600'}">${req.status}</span>
+        </div>
+      `).join('');
+        }
+    </script>
+</body>
+
+</html>

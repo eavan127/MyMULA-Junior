@@ -86,7 +86,7 @@
             <p class="text-base text-[#60758a] dark:text-gray-400">Full National Digital Identity and Financial
               Services.</p>
           </div>
-          <button onclick="window.location.href='myMULA_adult.html'"
+          <button onclick="launchAdultApp()"
             class="mt-4 w-full rounded-lg bg-primary py-3 font-semibold text-white shadow-sm transition-all hover:bg-primary/90">Launch
             MyMULA</button>
         </div>
@@ -110,6 +110,21 @@
       </div>
     </main>
   </div>
+
+  <script>
+    function launchAdultApp() {
+      // Check if user is already registered (sessionStorage clears when browser closes)
+      const isRegistered = sessionStorage.getItem('adult_registered') === 'true';
+
+      if (isRegistered) {
+        // Already registered - go directly to adult home
+        window.location.href = 'adult_home.html';
+      } else {
+        // Not registered - go to registration page
+        window.location.href = 'myMULA_adult.html';
+      }
+    }
+  </script>
 
 </body>
 

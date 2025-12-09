@@ -150,16 +150,28 @@
 
     <script>
         function signAndApprove() {
-            // --- THE MAGIC LINE ---
-            // This saves "true" to the browser's memory. 
-            // Even if you close the window, it remembers.
-            localStorage.setItem('guardian_approved', 'true');
+            // Mark guardian as approved (for junior app)
+            sessionStorage.setItem('guardian_approved', 'true');
 
-            // Show a quick alert (Optional, good for demo)
-            // alert("Signature Applied Successfully!");
+            // Update the request status in child_requests
+            const requestId = sessionStorage.getItem('current_approval_request');
+            if (requestId) {
+                const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+                const updatedRequests = requests.map(req => {
+                    if (req.id === requestId) {
+                        return { ...req, status: 'approved', approvedAt: new Date().toISOString() };
+                    }
+                    return req;
+                });
+                sessionStorage.setItem('child_requests', JSON.stringify(updatedRequests));
+                sessionStorage.removeItem('current_approval_request');
+            }
 
-            // Go back to the requirements page
-            window.location.href = 'scholarship_requirements.html';
+            // Show success feedback
+            alert('Application approved! Your child can now submit their application.');
+
+            // Go to adult home page
+            window.location.href = 'adult_home.html';
         }
     </script>
 </body>

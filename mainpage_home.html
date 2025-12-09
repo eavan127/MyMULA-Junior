@@ -325,7 +325,7 @@
       // Check each application type for drafts
       Object.keys(APP_TYPES).forEach(type => {
         const draftKey = `draft_${type}`;
-        const draft = localStorage.getItem(draftKey);
+        const draft = sessionStorage.getItem(draftKey);
 
         if (draft) {
           try {
@@ -392,13 +392,13 @@
     function resumeDraft(type) {
       const config = APP_TYPES[type];
       // Mark that we're resuming a draft
-      localStorage.setItem(`resuming_${type}`, 'true');
+      sessionStorage.setItem(`resuming_${type}`, 'true');
       window.location.href = config.resumeUrl;
     }
 
     function discardDraft(type) {
       if (confirm('Are you sure you want to discard this application? All saved progress will be lost.')) {
-        localStorage.removeItem(`draft_${type}`);
+        sessionStorage.removeItem(`draft_${type}`);
         loadDraftApplications(); // Refresh the list
       }
     }
