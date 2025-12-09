@@ -139,7 +139,28 @@
         </div>
       </div>
 
-
+      <!-- CARD 3: DENTAL (Initially Hidden) -->
+      <div id="dental-card" onclick="window.location.href='Dental_Progress_Tracker.html'"
+        class="hidden flex flex-col gap-4 rounded-xl bg-white dark:bg-black/20 p-4 shadow-sm cursor-pointer">
+        <div class="flex items-center gap-4">
+          <div
+            class="text-[#1E1E1E] dark:text-white/90 flex items-center justify-center rounded-lg bg-black/5 dark:bg-white/10 shrink-0 size-12">
+            <span class="material-symbols-outlined text-2xl">dentistry</span>
+          </div>
+          <div class="flex flex-col justify-center flex-1">
+            <p class="text-[#1E1E1E] dark:text-white text-base font-medium leading-normal line-clamp-1">Dental Checkup &
+              Procedure
+            </p>
+            <p class="text-[#6F7A85] dark:text-white/70 text-sm font-normal leading-normal line-clamp-2">Consent for
+              dental treatment at clinic.</p>
+          </div>
+        </div>
+        <div id="dental-status-badge"
+          class="inline-flex items-center justify-center self-start rounded-full bg-[#FFC107]/20 px-3 py-1.5 text-xs font-medium text-[#B8860B] dark:text-[#FFD700]">
+          <div id="dental-status-dot" class="mr-1.5 size-2 rounded-full bg-[#FFC107]"></div>
+          <span id="dental-status-text">Processing</span>
+        </div>
+      </div>
 
       <!-- Empty State Message (With ID 'empty-msg') -->
       <div id="empty-msg" class="text-center py-4 text-gray-400 text-sm">
@@ -206,6 +227,86 @@
       // Change Text
       const text = document.getElementById('sme-status-text');
       if (text) text.innerText = "Processing";
+    }
+
+    // 3. Check Dental (NEW CODE)
+    const isDentalSubmitted = sessionStorage.getItem('dental_application_submitted');
+    const dentalStatus = sessionStorage.getItem('dental_application_status');
+    const timerStarted = sessionStorage.getItem('dental_timer_started');
+
+    if (isDentalSubmitted === 'true') {
+      const dentalCard = document.getElementById('dental-card');
+      if (dentalCard) {
+        dentalCard.classList.remove('hidden');
+
+        // Hide empty message
+        const msg = document.getElementById('empty-msg');
+        if (msg) msg.classList.add('hidden');
+      }
+
+      // Check if already approved
+      if (dentalStatus === 'approved') {
+        updateDentalToSuccess();
+      } else if (!timerStarted) {
+        // Only start timer if not already started
+        sessionStorage.setItem('dental_timer_started', 'true');
+        // Start 5-second approval simulation
+        setTimeout(() => {
+          sessionStorage.setItem('dental_application_status', 'approved');
+          updateDentalToSuccess();
+          showApprovalNotification();
+        }, 5000);
+      }
+    }
+
+    function updateDentalToSuccess() {
+      const badge = document.getElementById('dental-status-badge');
+      if (badge) badge.className = "inline-flex items-center justify-center self-start rounded-full bg-[#10B981]/20 px-3 py-1.5 text-xs font-medium text-[#10B981] dark:text-[#34D399]";
+
+      const dot = document.getElementById('dental-status-dot');
+      if (dot) dot.className = "mr-1.5 size-2 rounded-full bg-[#10B981]";
+
+      const text = document.getElementById('dental-status-text');
+      if (text) text.innerText = "Successful";
+    }
+
+    function showApprovalNotification() {
+      const popup = document.getElementById('approval-popup');
+      if (popup) {
+        popup.classList.remove('hidden');
+        popup.classList.add('flex');
+
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+          popup.classList.add('hidden');
+          popup.classList.remove('flex');
+        }, 5000);
+      }
+    }
+  </script>
+
+  <!-- Approval Notification Popup -->
+  <div id="approval-popup" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 p-4">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-sm w-full shadow-2xl animate-bounce-in">
+      <div class="flex flex-col items-center text-center">
+        <div class="w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mb-4">
+          <span class="material-symbols-outlined text-green-500 !text-4xl">check_circle</span>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Clinic Approved!</h3>
+        <p class="text-gray-600 dark:text-gray-300 mb-4">Your Dental Checkup & Procedure application has been approved
+          by the clinic.</p>
+        <button onclick="closePopup()" class="w-full bg-primary text-white font-bold py-3 rounded-xl">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function closePopup() {
+      const popup = document.getElementById('approval-popup');
+      if (popup) {
+        popup.classList.add('hidden');
+        popup.classList.remove('flex');
+      }
     }
   </script>
 </body>

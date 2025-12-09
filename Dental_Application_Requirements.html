@@ -139,10 +139,10 @@
             <p class="text-green-600 dark:text-green-400 text-base font-medium leading-normal">Verified</p>
           </div>
         </div>
-        <div
+        <div id="procedureConsentRow"
           class="flex items-center gap-4 bg-white dark:bg-gray-800 px-4 min-h-[72px] py-2 justify-between rounded-xl shadow-[0_0_2px_rgba(0,0,0,0.05)]">
           <div class="flex items-center gap-4">
-            <div
+            <div id="procedureConsentIcon"
               class="text-blue-600 dark:text-blue-400 flex items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/50 shrink-0 size-12">
               <span class="material-symbols-outlined">info</span>
             </div>
@@ -152,14 +152,15 @@
             </div>
           </div>
           <div class="shrink-0">
-            <p class="text-blue-600 dark:text-blue-400 text-base font-medium leading-normal">Ask Parent for Permission
+            <p id="procedureConsentStatus"
+              class="text-blue-600 dark:text-blue-400 text-base font-medium leading-normal">Ask Parent for Permission
             </p>
           </div>
         </div>
-        <div
-          class="flex items-center gap-4 bg-white dark:bg-gray-800 px-4 min-h-[72px] py-2 justify-between rounded-xl shadow-[0_0_2px_rgba(0,0,0,0.05)]">
+        <div id="medicalHistoryRow" onclick="openMedicalHistoryModal()"
+          class="flex items-center gap-4 bg-white dark:bg-gray-800 px-4 min-h-[72px] py-2 justify-between rounded-xl shadow-[0_0_2px_rgba(0,0,0,0.05)] cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
           <div class="flex items-center gap-4">
-            <div
+            <div id="medicalHistoryIcon"
               class="text-amber-600 dark:text-amber-400 flex items-center justify-center rounded-lg bg-amber-100 dark:bg-amber-900/50 shrink-0 size-12">
               <span class="material-symbols-outlined">upload_file</span>
             </div>
@@ -169,7 +170,8 @@
             </div>
           </div>
           <div class="shrink-0">
-            <p class="text-amber-600 dark:text-amber-400 text-base font-medium leading-normal">Pending Upload</p>
+            <p id="medicalHistoryStatus"
+              class="text-amber-600 dark:text-amber-400 text-base font-medium leading-normal">Pending Upload</p>
           </div>
         </div>
         <div
@@ -190,36 +192,21 @@
             <p class="text-green-600 dark:text-green-400 text-base font-medium leading-normal">Verified</p>
           </div>
         </div>
-        <div
-          class="flex items-center gap-4 bg-white dark:bg-gray-800 px-4 min-h-[72px] py-2 justify-between rounded-xl shadow-[0_0_2px_rgba(0,0,0,0.05)]">
-          <div class="flex items-center gap-4">
-            <div
-              class="text-blue-600 dark:text-blue-400 flex items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/50 shrink-0 size-12">
-              <span class="material-symbols-outlined">info</span>
-            </div>
-            <div class="flex flex-col justify-center">
-              <p class="text-[#101418] dark:text-white text-base font-medium leading-normal line-clamp-1">Urgency Status
-              </p>
-              <p class="text-[#5e758d] dark:text-gray-400 text-sm font-normal leading-normal line-clamp-2">Doctor's
-                Assessment</p>
-            </div>
-          </div>
-          <div class="shrink-0">
-            <p class="text-blue-600 dark:text-blue-400 text-base font-medium leading-normal">Pending</p>
-          </div>
-        </div>
       </div>
     </div>
     <div
       class="sticky bottom-0 z-10 w-full flex-col items-center justify-center gap-2 bg-white/80 dark:bg-gray-900/80 p-4 backdrop-blur-sm border-t border-gray-200 dark:border-gray-700/80">
       <div class="flex w-full flex-col gap-2">
-        <button
+        <button id="askParentBtn" onclick="askParentPermission()"
           class="flex h-12 w-full items-center justify-center gap-x-2 rounded-xl bg-primary px-6 text-base font-bold text-white shadow-lg shadow-primary/20 hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:ring-offset-2 dark:focus:ring-offset-background-dark">
           <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group</span>
           Ask Parent for Permission
         </button>
-        <button
-          class="flex h-12 w-full items-center justify-center gap-x-2 rounded-xl bg-gray-200 dark:bg-gray-700 px-6 text-base font-bold text-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-300/50 focus:ring-offset-2 dark:focus:ring-offset-background-dark">Continue</button>
+        <button id="submitBtn" onclick="submitApplication()" style="display: none;"
+          class="flex h-12 w-full items-center justify-center gap-x-2 rounded-xl bg-green-600 px-6 text-base font-bold text-white shadow-lg shadow-green-600/20 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500/50 focus:ring-offset-2 dark:focus:ring-offset-background-dark">
+          <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+          Submit Application
+        </button>
       </div>
       <div class="flex w-full h-16 pt-2 items-start justify-between">
         <a class="flex flex-col items-center justify-center gap-1 w-1/3 text-[#5e758d] dark:text-gray-400" href="#">
@@ -237,6 +224,123 @@
       </div>
     </div>
   </div>
+  </div>
+
+  <!-- Medical History Selection Modal -->
+  <div id="medicalHistoryModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-end justify-center">
+    <div class="bg-white dark:bg-gray-800 rounded-t-2xl w-full max-w-md p-6">
+      <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Select Medical History Form</h3>
+      <div class="flex flex-col gap-3">
+        <button onclick="selectMedicalHistory('General Health Form')"
+          class="flex items-center gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+          <span class="material-symbols-outlined text-primary">description</span>
+          <span class="text-gray-900 dark:text-white font-medium">General Health Form</span>
+        </button>
+        <button onclick="selectMedicalHistory('Allergy Declaration Form')"
+          class="flex items-center gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+          <span class="material-symbols-outlined text-primary">medical_information</span>
+          <span class="text-gray-900 dark:text-white font-medium">Allergy Declaration Form</span>
+        </button>
+        <button onclick="selectMedicalHistory('Previous Dental History')"
+          class="flex items-center gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+          <span class="material-symbols-outlined text-primary">dentistry</span>
+          <span class="text-gray-900 dark:text-white font-medium">Previous Dental History</span>
+        </button>
+      </div>
+      <button onclick="closeMedicalHistoryModal()" class="w-full mt-4 py-3 text-gray-500 font-medium">Cancel</button>
+    </div>
+  </div>
+
+  <script>
+    // Check sessionStorage on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      // Check Procedure Consent status
+      const consentStatus = sessionStorage.getItem('dental_procedure_consent');
+      if (consentStatus === 'approved') {
+        updateProcedureConsentToApproved();
+      }
+
+      // Check Medical History status
+      const medicalHistoryStatus = sessionStorage.getItem('dental_medical_history');
+      if (medicalHistoryStatus === 'uploaded') {
+        updateMedicalHistoryToUploaded();
+      }
+
+      // Check if all requirements are met
+      checkAllRequirements();
+    });
+
+    function askParentPermission() {
+      // Navigate to Digital Signature page
+      window.location.href = 'Dental_Digital_Signature.html';
+    }
+
+    function updateProcedureConsentToApproved() {
+      const icon = document.getElementById('procedureConsentIcon');
+      const status = document.getElementById('procedureConsentStatus');
+
+      icon.className = 'text-green-600 dark:text-green-400 flex items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/50 shrink-0 size-12';
+      icon.innerHTML = '<span class="material-symbols-outlined">check_circle</span>';
+
+      status.className = 'text-green-600 dark:text-green-400 text-base font-medium leading-normal';
+      status.innerText = 'Approved';
+    }
+
+    function openMedicalHistoryModal() {
+      document.getElementById('medicalHistoryModal').classList.remove('hidden');
+      document.getElementById('medicalHistoryModal').classList.add('flex');
+    }
+
+    function closeMedicalHistoryModal() {
+      document.getElementById('medicalHistoryModal').classList.add('hidden');
+      document.getElementById('medicalHistoryModal').classList.remove('flex');
+    }
+
+    function selectMedicalHistory(formName) {
+      // Save to sessionStorage
+      sessionStorage.setItem('dental_medical_history', 'uploaded');
+      sessionStorage.setItem('dental_medical_history_form', formName);
+
+      // Update UI
+      updateMedicalHistoryToUploaded();
+      closeMedicalHistoryModal();
+
+      // Check if all requirements met
+      checkAllRequirements();
+    }
+
+    function updateMedicalHistoryToUploaded() {
+      const icon = document.getElementById('medicalHistoryIcon');
+      const status = document.getElementById('medicalHistoryStatus');
+      const row = document.getElementById('medicalHistoryRow');
+
+      icon.className = 'text-green-600 dark:text-green-400 flex items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/50 shrink-0 size-12';
+      icon.innerHTML = '<span class="material-symbols-outlined">check_circle</span>';
+
+      status.className = 'text-green-600 dark:text-green-400 text-base font-medium leading-normal';
+      status.innerText = 'Uploaded';
+
+      // Make row non-clickable
+      row.onclick = null;
+      row.classList.remove('cursor-pointer', 'hover:bg-gray-50', 'dark:hover:bg-gray-750');
+    }
+
+    function checkAllRequirements() {
+      const consentStatus = sessionStorage.getItem('dental_procedure_consent');
+      const medicalHistoryStatus = sessionStorage.getItem('dental_medical_history');
+
+      if (consentStatus === 'approved' && medicalHistoryStatus === 'uploaded') {
+        // Show Submit button, hide Ask Parent button
+        document.getElementById('askParentBtn').style.display = 'none';
+        document.getElementById('submitBtn').style.display = 'flex';
+      }
+    }
+
+    function submitApplication() {
+      // Navigate to Progress Tracker
+      window.location.href = 'Dental_Progress_Tracker.html';
+    }
+  </script>
 </body>
 
 </html>

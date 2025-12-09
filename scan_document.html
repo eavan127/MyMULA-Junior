@@ -271,24 +271,24 @@
 
             // Special handling for guardian type
             if (docType === 'guardian') {
-                localStorage.setItem('guardian_status', 'waiting_verification');
-                localStorage.setItem('guardian_ic', '850214-10-5566');
+                sessionStorage.setItem('guardian_status', 'waiting_verification');
+                sessionStorage.setItem('guardian_ic', '850214-10-5566');
             } else {
                 // Save state for other types
-                localStorage.setItem(`${storageKey}_status`, 'waiting');
-                localStorage.setItem(`${storageKey}_timestamp`, new Date().toISOString());
+                sessionStorage.setItem(`${storageKey}_status`, 'waiting');
+                sessionStorage.setItem(`${storageKey}_timestamp`, new Date().toISOString());
             }
 
             // Save summary based on type
             if (docType === 'spm') {
-                localStorage.setItem('spm_summary', '9 Subjects (5A 2B 2C)');
+                sessionStorage.setItem('spm_summary', '9 Subjects (5A 2B 2C)');
             } else if (docType === 'coq') {
-                localStorage.setItem('coq_summary', 'Football Club (District)');
+                sessionStorage.setItem('coq_summary', 'Football Club (District)');
             } else if (docType === 'birth') {
-                localStorage.setItem('birth_summary', 'Child MyKid/IC: 1234');
+                sessionStorage.setItem('birth_summary', 'Child MyKid/IC: 1234');
             } else if (docType !== 'guardian') {
                 // Custom summary for non-guardian types
-                localStorage.setItem(`${storageKey}_summary`, 'Details Extracted');
+                sessionStorage.setItem(`${storageKey}_summary`, 'Details Extracted');
             }
 
             // Redirect

@@ -208,9 +208,9 @@
                 return;
             }
             // Simulate API call
-            // Save state to localStorage to update profile page
-            localStorage.setItem('guardian_status', 'waiting_verification');
-            localStorage.setItem('guardian_ic', ic);
+            // Save state to sessionStorage to update profile page (resets on tab close)
+            sessionStorage.setItem('guardian_status', 'waiting_verification');
+            sessionStorage.setItem('guardian_ic', ic);
 
             // Redirect back to profile
             window.location.href = 'mainpage_profile.html';
