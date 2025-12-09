@@ -58,7 +58,8 @@
   <div class="relative flex h-auto min-h-screen w-full flex-col font-display group/design-root overflow-x-hidden">
     <div
       class="sticky top-0 z-10 flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between">
-      <div class="text-[#101418] dark:text-white flex size-12 shrink-0 items-center justify-start">
+      <div onclick="window.location.href='mainpage_applications.html'"
+        class="text-[#101418] dark:text-white flex size-12 shrink-0 items-center justify-start cursor-pointer">
         <span class="material-symbols-outlined text-2xl">arrow_back_ios_new</span>
       </div>
       <h2 class="text-[#101418] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">
@@ -116,12 +117,13 @@
             <p class="text-green-600 dark:text-green-400 text-base font-medium leading-normal">Verified</p>
           </div>
         </div>
-        <div
+        <!-- 2. Form A (Pending -> Verified) -->
+        <div id="reg-form-row"
           class="flex items-center gap-4 bg-white dark:bg-gray-800 px-4 min-h-[72px] py-2 justify-between rounded-xl shadow-[0_0_2px_rgba(0,0,0,0.05)]">
           <div class="flex items-center gap-4">
-            <div
+            <div id="reg-form-icon-box"
               class="text-blue-600 dark:text-blue-400 flex items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/50 shrink-0 size-12">
-              <span class="material-symbols-outlined">info</span>
+              <span id="reg-form-icon" class="material-symbols-outlined">info</span>
             </div>
             <div class="flex flex-col justify-center">
               <p class="text-[#101418] dark:text-white text-base font-medium leading-normal line-clamp-1">Completed
@@ -129,15 +131,17 @@
             </div>
           </div>
           <div class="shrink-0">
-            <p class="text-blue-600 dark:text-blue-400 text-base font-medium leading-normal">Pending</p>
+            <p id="reg-form-status" class="text-blue-600 dark:text-blue-400 text-base font-medium leading-normal">
+              Pending</p>
           </div>
         </div>
+        <!-- 3. Business Name (Pending -> Verified) -->
         <div
           class="flex items-center gap-4 bg-white dark:bg-gray-800 px-4 min-h-[72px] py-2 justify-between rounded-xl shadow-[0_0_2px_rgba(0,0,0,0.05)]">
           <div class="flex items-center gap-4">
-            <div
+            <div id="name-approval-icon-box"
               class="text-blue-600 dark:text-blue-400 flex items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/50 shrink-0 size-12">
-              <span class="material-symbols-outlined">info</span>
+              <span id="name-approval-icon" class="material-symbols-outlined">info</span>
             </div>
             <div class="flex flex-col justify-center">
               <p class="text-[#101418] dark:text-white text-base font-medium leading-normal line-clamp-1">Business Name
@@ -145,7 +149,8 @@
             </div>
           </div>
           <div class="shrink-0">
-            <p class="text-blue-600 dark:text-blue-400 text-base font-medium leading-normal">Pending</p>
+            <p id="name-approval-status" class="text-blue-600 dark:text-blue-400 text-base font-medium leading-normal">
+              Pending</p>
           </div>
         </div>
         <div
@@ -236,6 +241,45 @@
     </div>
   </div>
 
+  <script>
+    // Check if the "Guardian Signature" is saved for SME
+    const isSmeApproved = localStorage.getItem('sme_guardian_approved');
+
+    if (isSmeApproved === 'true') {
+      // --- UPDATE FORM A TO GREEN ---
+      const regIconBox = document.getElementById('reg-form-icon-box');
+      if (regIconBox) regIconBox.className = "text-green-600 dark:text-green-400 flex items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/50 shrink-0 size-12";
+
+      const regIcon = document.getElementById('reg-form-icon');
+      if (regIcon) regIcon.innerText = "check_circle";
+
+      const regStatus = document.getElementById('reg-form-status');
+      if (regStatus) {
+        regStatus.innerText = "Verified";
+        regStatus.className = "text-green-600 dark:text-green-400 text-base font-medium leading-normal";
+      }
+
+      // --- UPDATE NAME APPROVAL TO GREEN ---
+      const nameIconBox = document.getElementById('name-approval-icon-box');
+      if (nameIconBox) nameIconBox.className = "text-green-600 dark:text-green-400 flex items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/50 shrink-0 size-12";
+
+      const nameIcon = document.getElementById('name-approval-icon');
+      if (nameIcon) nameIcon.innerText = "check_circle";
+
+      const nameStatus = document.getElementById('name-approval-status');
+      if (nameStatus) {
+        nameStatus.innerText = "Verified";
+        nameStatus.className = "text-green-600 dark:text-green-400 text-base font-medium leading-normal";
+      }
+
+      // --- SWAP BUTTONS ---
+      const btnAsk = document.getElementById('btn-ask-parent');
+      if (btnAsk) btnAsk.classList.add('hidden');
+
+      const btnContinue = document.getElementById('btn-continue');
+      if (btnContinue) btnContinue.classList.remove('hidden');
+    }
+  </script>
 </body>
 
 </html>
