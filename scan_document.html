@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Scan Document - MyMULA Junior</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#0054A6",
+                        accent: "#4CA9FF",
+                        "background-light": "#F7F9FC",
+                        "background-dark": "#0f1923",
+                    },
+                    fontFamily: {
+                        display: ["Public Sans", "sans-serif"],
+                    },
+                    borderRadius: {
+                        lg: "12px",
+                        xl: "16px",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        @keyframes scan-line {
+            0% {
+                top: 0;
+            }
+
+            50% {
+                top: 100%;
+            }
+
+            100% {
+                top: 0;
+            }
+        }
+
+        .scan-animation {
+            animation: scan-line 2s linear infinite;
+        }
+
+        .bounce-on-tap:active {
+            transform: scale(0.98);
+            transition: transform 0.1s;
+        }
+    </style>
+</head>
+
+<body
+    class="font-display bg-background-light text-[#333333] dark:text-white dark:bg-background-dark min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <div class="flex items-center p-4 bg-white dark:bg-gray-900 shadow-sm z-10">
+        <a href="mainpage_profile.html"
+            class="p-2 -ml-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+            <span class="material-symbols-outlined">arrow_back</span>
+        </a>
+        <h1 class="flex-1 text-center text-lg font-bold" id="pageTitle">Scan Document</h1>
+        <div class="w-10"></div>
+    </div>
+
+    <!-- Scanner Area -->
+    <div id="cameraView" class="flex-1 relative bg-black flex flex-col items-center justify-center overflow-hidden">
+        <!-- Camera Feed Placeholder -->
+        <div class="absolute inset-0 bg-gray-900">
+            <!-- Simulated Camera Noise/Grid -->
+            <div class="w-full h-full opacity-20"
+                style="background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 20px 20px;"></div>
+        </div>
+
+        <!-- Guide Frame -->
+        <div class="relative w-[300px] h-[420px] border-2 border-white/50 rounded-lg">
+            <div
+                class="absolute top-0 left-0 w-full h-0.5 bg-green-500 shadow-[0_0_15px_rgba(34,197,94,0.8)] scan-animation">
+            </div>
+            <!-- Corner Markers -->
+            <div class="absolute top-0 left-0 w-8 h-8 border-t-4 border-l-4 border-white -mt-1 -ml-1"></div>
+            <div class="absolute top-0 right-0 w-8 h-8 border-t-4 border-r-4 border-white -mt-1 -mr-1"></div>
+            <div class="absolute bottom-0 left-0 w-8 h-8 border-b-4 border-l-4 border-white -mb-1 -ml-1"></div>
+            <div class="absolute bottom-0 right-0 w-8 h-8 border-b-4 border-r-4 border-white -mb-1 -mr-1"></div>
+        </div>
+
+        <p class="absolute bottom-32 text-white/80 font-medium text-sm bg-black/40 px-4 py-1 rounded-full">Position
+            document within frame</p>
+
+        <!-- Capture Button -->
+        <div class="absolute bottom-10 w-full flex justify-center">
+            <button onclick="captureImage()"
+                class="w-16 h-16 rounded-full border-4 border-white flex items-center justify-center bg-transparent active:scale-95 transition-transform">
+                <div class="w-12 h-12 bg-white rounded-full"></div>
+            </button>
+        </div>
+    </div>
+
+    <!-- Results Modal (Hidden Initially) -->
+    <div id="resultsModal" class="fixed inset-0 bg-background-light dark:bg-background-dark z-50 hidden flex-col">
+        <div class="flex-1 p-6 flex flex-col items-center justify-center">
+            <div class="w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mb-6">
+                <span class="material-symbols-outlined text-green-500 !text-4xl">check_circle</span>
+            </div>
+            <h2 class="text-2xl font-bold mb-2">Scan Successful!</h2>
+            <p class="text-gray-500 dark:text-gray-400 text-center mb-8">We've extracted the following details from your
+                document.</p>
+
+            <!-- Extracted Data Card -->
+            <div class="w-full bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm space-y-3" id="extractedDataList">
+                <!-- Data injected via JS -->
+            </div>
+        </div>
+
+        <div class="p-6 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
+            <button onclick="confirmSubmission()"
+                class="w-full bg-primary text-white font-bold py-4 rounded-xl shadow-lg bounce-on-tap mb-3">
+                Submit for Verification
+            </button>
+            <button onclick="retakeScan()" class="w-full bg-transparent text-gray-500 font-bold py-3 rounded-xl">
+                Retake Scan
+            </button>
+        </div>
+    </div>
+
+    <!-- Processing Overlay -->
+    <div id="processingOverlay"
+        class="fixed inset-0 bg-black/80 z-[60] hidden flex-col items-center justify-center text-white">
+        <span class="material-symbols-outlined animate-spin !text-4xl mb-4 text-primary">progress_activity</span>
+        <p class="font-bold text-lg">Analyzing Document...</p>
+        <p class="text-sm opacity-70">Extracting data via AI</p>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const docType = urlParams.get('type') || 'generic';
+
+        // Update Title
+        const titleMap = {
+            'spm': 'Scan SPM Certificate',
+            'coq': 'Scan Co-Curriculum',
+            'birth': 'Scan Birth Certificate',
+            'guardian': 'Scan Guardian Birth Certificate' // Explicit title for clarity or just "Scan Birth Certificate"
+        };
+        document.getElementById('pageTitle').innerText = titleMap[docType] || 'Scan Document';
+
+        function captureImage() {
+            // Show processing
+            document.getElementById('processingOverlay').classList.remove('hidden');
+            document.getElementById('processingOverlay').classList.add('flex');
+
+            setTimeout(() => {
+                showResults();
+            }, 2000);
+        }
+
+        function showResults() {
+            document.getElementById('processingOverlay').classList.add('hidden');
+            document.getElementById('processingOverlay').classList.remove('flex');
+
+            document.getElementById('cameraView').classList.add('hidden');
+            document.getElementById('resultsModal').classList.remove('hidden');
+            document.getElementById('resultsModal').classList.add('flex');
+
+            generateMockData();
+        }
+
+        function generateMockData() {
+            const container = document.getElementById('extractedDataList');
+            let html = '';
+
+            if (docType === 'spm') {
+                html = `
+                    <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
+                        <span class="text-gray-500 dark:text-gray-400">Candidate Name</span>
+                        <span class="font-semibold">Ali Bin Abu</span>
+                    </div>
+                    <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
+                        <span class="text-gray-500 dark:text-gray-400">Year</span>
+                        <span class="font-semibold">2023</span>
+                    </div>
+                     <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
+                        <span class="text-gray-500 dark:text-gray-400">Subjects Detected</span>
+                        <span class="font-semibold text-green-500">9 Subjects</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500 dark:text-gray-400">Overall Grade</span>
+                        <span class="font-semibold">5A 2B 2C</span>
+                    </div>
+                `;
+            } else if (docType === 'coq') {
+                html = `
+                     <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
+                        <span class="text-gray-500 dark:text-gray-400">Activity</span>
+                        <span class="font-semibold">Football Club</span>
+                    </div>
+                    <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
+                        <span class="text-gray-500 dark:text-gray-400">Level</span>
+                        <span class="font-semibold">District (MSSD)</span>
+                    </div>
+                     <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
+                        <span class="text-gray-500 dark:text-gray-400">Achievement</span>
+                        <span class="font-semibold">Runner-up</span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-500 dark:text-gray-400">Calculated Merit</span>
+                        <span class="font-semibold text-green-500">15 Points</span>
+                    </div>
+                `;
+            } else if (docType === 'birth') {
+                html = `
+                    <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
+                        <span class="text-gray-500 dark:text-gray-400">Name</span>
+                        <span class="font-semibold">Ali Bin Abu</span>
+                    </div>
+                     <div class="flex justify-between">
+                        <span class="text-gray-500 dark:text-gray-400">Child MyKid/IC</span>
+                        <span class="font-semibold">******-**-1234</span>
+                    </div>
+                `;
+            } else if (docType === 'guardian') {
+                html = `
+                    <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
+                        <span class="text-gray-500 dark:text-gray-400">Child Name</span>
+                        <span class="font-semibold">Ali Bin Abu</span>
+                    </div>
+                     <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
+                        <span class="text-gray-500 dark:text-gray-400">Guardian Name</span>
+                        <span class="font-semibold">Abu Bakar</span>
+                    </div>
+                     <div class="flex justify-between">
+                        <span class="text-gray-500 dark:text-gray-400">Guardian IC</span>
+                        <span class="font-semibold">850214-10-5566</span>
+                    </div>
+                `;
+            } else {
+                // Generic/Custom
+                html = `
+                    <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
+                        <span class="text-gray-500 dark:text-gray-400">Document Type</span>
+                        <span class="font-semibold">${docName || 'Document'}</span>
+                    </div>
+                     <div class="flex justify-between">
+                        <span class="text-gray-500 dark:text-gray-400">Status</span>
+                        <span class="font-semibold text-green-500">Readable</span>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+        }
+
+        function retakeScan() {
+            document.getElementById('resultsModal').classList.add('hidden');
+            document.getElementById('resultsModal').classList.remove('flex');
+            document.getElementById('cameraView').classList.remove('hidden');
+        }
+
+        function confirmSubmission() {
+            // Determine key to save. If custom name, use that as the key prefix.
+            const storageKey = (docType === 'generic' || docType === 'custom') && typeof docName !== 'undefined' && docName ? docName : docType;
+
+            // Special handling for guardian type
+            if (docType === 'guardian') {
+                localStorage.setItem('guardian_status', 'waiting_verification');
+                localStorage.setItem('guardian_ic', '850214-10-5566');
+            } else {
+                // Save state for other types
+                localStorage.setItem(`${storageKey}_status`, 'waiting');
+                localStorage.setItem(`${storageKey}_timestamp`, new Date().toISOString());
+            }
+
+            // Save summary based on type
+            if (docType === 'spm') {
+                localStorage.setItem('spm_summary', '9 Subjects (5A 2B 2C)');
+            } else if (docType === 'coq') {
+                localStorage.setItem('coq_summary', 'Football Club (District)');
+            } else if (docType === 'birth') {
+                localStorage.setItem('birth_summary', 'Child MyKid/IC: 1234');
+            } else if (docType !== 'guardian') {
+                // Custom summary for non-guardian types
+                localStorage.setItem(`${storageKey}_summary`, 'Details Extracted');
+            }
+
+            // Redirect
+            window.location.href = 'mainpage_profile.html';
+        }
+    </script>
+</body>
+
+</html>

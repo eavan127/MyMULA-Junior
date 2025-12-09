@@ -93,7 +93,9 @@
         </div>
       </div>
       <div class="w-full max-w-md mt-8 space-y-4">
-        <div class="bg-white dark:bg-gray-800 rounded-xl p-4 flex items-center justify-between shadow-sm">
+        <div
+          class="bg-white dark:bg-gray-800 rounded-xl p-4 flex items-center justify-between shadow-sm cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors"
+          onclick="window.location.href='link_guardian.html'" id="guardianSection">
           <div class="flex items-center gap-4">
             <div class="bg-gray-100 dark:bg-gray-700 rounded-full p-2">
               <span class="material-symbols-outlined text-primary !text-2xl">verified_user</span>
@@ -102,12 +104,89 @@
               <p class="font-semibold text-gray-900 dark:text-white">
                 Linked Guardian
               </p>
-              <p class="text-sm text-gray-500 dark:text-gray-400">
-                Mother: Sarah Tan
+              <p class="text-sm text-gray-500 dark:text-gray-400" id="guardianStatusText">
+                Not Linked
               </p>
             </div>
           </div>
-          <span class="material-symbols-outlined text-gray-400">lock</span>
+          <span class="material-symbols-outlined text-gray-400">chevron_right</span>
+        </div>
+
+        <!-- Child Documents Section -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm space-y-4">
+          <h3 class="font-bold text-gray-900 dark:text-white text-sm">Child Documents</h3>
+
+          <!-- Birth Certificate -->
+          <div
+            class="flex items-center justify-between border-b border-gray-100 dark:border-gray-700 pb-3 last:border-0 last:pb-0">
+            <div class="flex items-center gap-3">
+              <div
+                class="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500">
+                <span class="material-symbols-outlined !text-xl">child_care</span>
+              </div>
+              <div>
+                <p class="text-sm font-semibold text-gray-900 dark:text-white">Birth Certificate</p>
+                <p class="text-xs text-orange-500 font-medium" id="birthCertStatus">Required</p>
+              </div>
+            </div>
+            <!-- This button would also trigger a scan flow, reusing the logic or a similar page -->
+            <button id="birthBtn"
+              class="bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors p-2 rounded-lg text-xs font-bold"
+              onclick="window.location.href='scan_document.html?type=birth'">
+              Scan
+            </button>
+          </div>
+
+          <!-- SPM Certificate -->
+          <div
+            class="flex items-center justify-between border-b border-gray-100 dark:border-gray-700 pb-3 last:border-0 last:pb-0">
+            <div class="flex items-center gap-3">
+              <div
+                class="w-10 h-10 rounded-full bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center text-purple-500">
+                <span class="material-symbols-outlined !text-xl">school</span>
+              </div>
+              <div>
+                <p class="text-sm font-semibold text-gray-900 dark:text-white">SPM Certificate</p>
+                <p class="text-xs text-gray-400" id="spmStatus">Not Uploaded</p>
+              </div>
+            </div>
+            <button id="spmBtn"
+              class="bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors p-2 rounded-lg text-xs font-bold"
+              onclick="window.location.href='scan_document.html?type=spm'">
+              Scan
+            </button>
+          </div>
+
+          <!-- Co-Curriculum -->
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div
+                class="w-10 h-10 rounded-full bg-orange-50 dark:bg-orange-900/20 flex items-center justify-center text-orange-500">
+                <span class="material-symbols-outlined !text-xl">sports_soccer</span>
+              </div>
+              <div>
+                <p class="text-sm font-semibold text-gray-900 dark:text-white">Co-Curriculum</p>
+                <p class="text-xs text-gray-400" id="coqStatus">Not Uploaded</p>
+              </div>
+            </div>
+            <button id="coqBtn"
+              class="bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors p-2 rounded-lg text-xs font-bold"
+              onclick="window.location.href='scan_document.html?type=coq'">
+              Scan
+            </button>
+          </div>
+
+          <!-- Wrapper for "Add More" Button -->
+          <div id="addMoreSection" class="hidden pt-2 border-t border-gray-100 dark:border-gray-700 mt-2">
+            <button onclick="addCustomDocument()"
+              class="w-full flex items-center justify-center gap-2 py-2 text-primary font-bold text-sm bg-primary/5 hover:bg-primary/10 rounded-lg transition-colors">
+              <span class="material-symbols-outlined text-lg">add_circle</span>
+              Add More Documents
+            </button>
+          </div>
+
+          <!-- Container for Custom Documents -->
+          <div id="customDocsContainer"></div>
         </div>
         <button class="w-full bg-primary text-white font-bold py-3 px-4 rounded-xl shadow-md bounce-on-tap">
           Manage Permissions
@@ -151,7 +230,7 @@
         class="flex h-[72px] justify-around border-t border-[#f0f2f5] bg-white/80 px-4 pb-3 pt-2 dark:border-gray-700 dark:bg-background-dark/80 backdrop-blur-lg">
 
         <!-- 1. HOME BUTTON -->
-       <a class="flex flex-1 flex-col items-center justify-end gap-1 text-[#6c757d] dark:text-gray-400 hover:text-primary transition-colors"
+        <a class="flex flex-1 flex-col items-center justify-end gap-1 text-[#6c757d] dark:text-gray-400 hover:text-primary transition-colors"
           href="mainpage_home.html">
           <div class="flex h-8 items-center justify-center">
             <span class="material-symbols-outlined">home</span>
@@ -180,6 +259,167 @@
       </div>
     </div>
   </div>
+  <script>
+    // Using sessionStorage instead of localStorage for demo purposes
+    // sessionStorage persists during navigation but clears when browser tab is closed
+    document.addEventListener('DOMContentLoaded', () => {
+      // No manual reset needed - sessionStorage handles it automatically on tab close
+
+      const guardianStatus = sessionStorage.getItem('guardian_status');
+
+
+      if (guardianStatus === 'waiting_verification') {
+        const statusText = document.getElementById('guardianStatusText');
+        // User requested "Waiting Verification" instead of "Verify: IC"
+        statusText.innerHTML = `<span class="text-orange-500 font-medium flex items-center gap-1"><span class="material-symbols-outlined !text-sm">pending</span> Waiting Verification</span>`;
+      }
+
+      // Check SPM Status
+      const spmStatus = sessionStorage.getItem('spm_status');
+      const spmSummary = sessionStorage.getItem('spm_summary'); // Get saved summary
+
+      if (spmStatus === 'waiting') {
+        // Show Summary + Waiting
+        const text = spmSummary ? `${spmSummary} - Waiting Verification` : 'Waiting Verification';
+        updateDocStatus('spm', text, 'text-orange-500', true);
+
+        // SIMULATION: Auto-verify after 5 seconds for demo
+        setTimeout(() => {
+          sessionStorage.setItem('spm_status', 'verified');
+          updateDocStatus('spm', 'Verified', 'text-green-500', true);
+          showAddMore();
+        }, 5000);
+      } else if (spmStatus === 'verified') {
+        updateDocStatus('spm', 'Verified', 'text-green-500', true);
+        showAddMore();
+      }
+
+      // Check Co-Q Status
+      const coqStatus = sessionStorage.getItem('coq_status');
+      const coqSummary = sessionStorage.getItem('coq_summary'); // Get saved summary
+
+      if (coqStatus === 'waiting') {
+        const text = coqSummary ? `${coqSummary} - Waiting Verification` : 'Waiting Verification';
+        updateDocStatus('coq', text, 'text-orange-500', true);
+      }
+
+      // Check Birth Cert Status (Child)
+      const birthStatus = localStorage.getItem('birth_status');
+      const birthSummary = localStorage.getItem('birth_summary');
+
+      if (birthStatus === 'waiting') {
+        const text = birthSummary ? `${birthSummary} - Waiting Verification` : 'Waiting Verification';
+        updateDocStatus('birthCert', text, 'text-orange-500', true);
+
+        // SIMULATION: Auto-verify after 5 seconds for demo (same as SPM)
+        setTimeout(() => {
+          localStorage.setItem('birth_status', 'verified');
+          updateDocStatus('birthCert', 'Verified', 'text-green-500', true);
+          showAddMore();
+        }, 5000);
+      } else if (birthStatus === 'verified') {
+        updateDocStatus('birthCert', 'Verified', 'text-green-500', true);
+        showAddMore();
+      }
+
+      function updateDocStatus(type, text, colorClass, disableBtn) {
+        let statusEl, btnEl;
+
+        // Special handling for birthCert ID mismatch
+        if (type === 'birthCert') {
+          statusEl = document.getElementById('birthCertStatus');
+          btnEl = document.getElementById('birthBtn');
+        } else {
+          statusEl = document.getElementById(type + 'Status');
+          btnEl = document.getElementById(type + 'Btn');
+        }
+
+        if (statusEl) {
+          statusEl.innerText = text;
+          statusEl.className = "text-xs font-medium " + colorClass;
+        }
+
+        if (disableBtn && btnEl) {
+          if (text === 'Verified') {
+            btnEl.innerHTML = '<span class="material-symbols-outlined !text-base">check_circle</span>';
+            btnEl.classList.remove('bg-gray-100', 'text-gray-500', 'bg-primary/10', 'text-primary');
+            btnEl.classList.add('bg-green-100', 'text-green-600');
+            btnEl.disabled = true;
+          } else {
+            btnEl.innerText = "Pending";
+            btnEl.disabled = true;
+            btnEl.classList.add('opacity-50', 'cursor-not-allowed');
+          }
+        }
+      }
+
+      function showAddMore() {
+        const section = document.getElementById('addMoreSection');
+        if (section) section.classList.remove('hidden');
+      }
+
+      function addCustomDocument() {
+        const name = prompt("Enter document name (e.g., Car License):");
+        if (!name) return;
+
+        let list = JSON.parse(sessionStorage.getItem('custom_docs_list') || '[]');
+        if (!list.includes(name)) {
+          list.push(name);
+          sessionStorage.setItem('custom_docs_list', JSON.stringify(list));
+        }
+
+        renderCustomDocRow(name);
+      }
+
+      function loadCustomDocs() {
+        const list = JSON.parse(sessionStorage.getItem('custom_docs_list') || '[]');
+        list.forEach(name => renderCustomDocRow(name));
+      }
+
+      function renderCustomDocRow(name) {
+        const container = document.getElementById('customDocsContainer');
+        if (document.getElementById(`doc-row-${name}`)) return;
+
+        const rowHtml = `
+          <div id="doc-row-${name}" class="flex items-center justify-between border-t border-gray-100 dark:border-gray-700 pt-3 mt-3">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full bg-teal-50 dark:bg-teal-900/20 flex items-center justify-center text-teal-500">
+                <span class="material-symbols-outlined !text-xl">description</span>
+              </div>
+              <div>
+                <p class="text-sm font-semibold text-gray-900 dark:text-white">${name}</p>
+                <p class="text-xs text-gray-400" id="custom_${name}Status">Not Uploaded</p>
+              </div>
+            </div>
+            <button id="custom_${name}Btn"
+              class="bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors p-2 rounded-lg text-xs font-bold"
+              onclick="window.location.href='scan_document.html?type=custom&name=${encodeURIComponent(name)}'">
+              Scan
+            </button>
+          </div>
+        `;
+
+        container.insertAdjacentHTML('beforeend', rowHtml);
+
+        const status = sessionStorage.getItem(`${name}_status`);
+        if (status === 'waiting') {
+          updateDocStatus(null, 'Waiting Verification', 'text-orange-500', true, `custom_${name}`);
+          setTimeout(() => {
+            sessionStorage.setItem(`${name}_status`, 'verified');
+            updateDocStatus(null, 'Verified', 'text-green-500', true, `custom_${name}`);
+          }, 4000);
+        } else if (status === 'verified') {
+          updateDocStatus(null, 'Verified', 'text-green-500', true, `custom_${name}`);
+        }
+      }
+
+      // Make functions globally accessible
+      window.addCustomDocument = addCustomDocument;
+
+      // Load Custom Docs on startup
+      loadCustomDocs();
+    });
+  </script>
 </body>
 
 </html>
