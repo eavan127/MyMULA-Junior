@@ -130,13 +130,13 @@
         </div>
 
         <!-- Recent Activity Section -->
-        <div class="px-4 py-4 flex-1">
+        <div class="px-4 py-4 flex-1 overflow-y-auto">
             <h2 class="text-lg font-bold text-[#333] dark:text-white mb-3 flex items-center gap-2">
                 <span class="material-symbols-outlined text-primary">history</span>
                 Recent Activity
             </h2>
 
-            <div id="activityList" class="flex flex-col gap-3">
+            <div id="activityList" class="flex flex-col gap-3 pb-4">
                 <!-- Activity items will be loaded here -->
                 <div class="text-center py-8 text-gray-400">
                     <span class="material-symbols-outlined text-5xl mb-2">inbox</span>
@@ -213,8 +213,10 @@
 
             if (requests.length === 0) return;
 
-            container.innerHTML = requests.slice(0, 3).map(req => `
-        <div class="flex items-center gap-4 bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm">
+            // Show ALL requests, not just first 3
+            container.innerHTML = requests.map(req => `
+        <div onclick="handleActivityClick('${req.id}', '${req.status}')" 
+             class="flex items-center gap-4 bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm cursor-pointer hover:shadow-md transition-all active:scale-[0.98]">
           <div class="h-10 w-10 rounded-full ${req.status === 'approved' ? 'bg-green-100' : 'bg-orange-100'} flex items-center justify-center">
             <span class="material-symbols-outlined ${req.status === 'approved' ? 'text-green-500' : 'text-orange-500'}">
               ${req.status === 'approved' ? 'check_circle' : 'pending'}
@@ -225,8 +227,20 @@
             <p class="text-xs text-gray-500">From: ${req.childName}</p>
           </div>
           <span class="text-xs px-2 py-1 rounded-full ${req.status === 'approved' ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600'}">${req.status}</span>
+          <span class="material-symbols-outlined text-gray-400">chevron_right</span>
         </div>
       `).join('');
+        }
+
+        function handleActivityClick(requestId, status) {
+            if (status === 'pending') {
+                // Set current request and go to approval flow
+                sessionStorage.setItem('current_approval_request', requestId);
+                window.location.href = 'request_received_guardian.html';
+            } else {
+                // Already approved - go to requests page for history
+                window.location.href = 'adult_requests.html';
+            }
         }
     </script>
 </body>

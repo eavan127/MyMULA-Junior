@@ -308,13 +308,15 @@
         saveDraft();
       });
 
-      // Override submit to clear draft
+      // Override submit to clear draft and reset status
       const submitBtn = document.getElementById('btn-continue');
       if (submitBtn) {
         submitBtn.addEventListener('click', (e) => {
           e.preventDefault();
           clearDraft();
           sessionStorage.setItem('application_submitted', 'true');
+          // Clear guardian approval so new applications start fresh
+          sessionStorage.removeItem('guardian_approved');
           window.location.href = 'progress_tracker.html';
         });
       }

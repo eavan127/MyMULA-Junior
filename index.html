@@ -112,6 +112,23 @@
   </div>
 
   <script>
+    // Clean up old localStorage data on fresh session start
+    if (!sessionStorage.getItem('session_started')) {
+      // This is a fresh browser session - clear old demo data from localStorage
+      localStorage.removeItem('guardian_approved');
+      localStorage.removeItem('sme_guardian_approved');
+      localStorage.removeItem('application_submitted');
+      localStorage.removeItem('sme_application_submitted');
+      localStorage.removeItem('child_requests');
+      localStorage.removeItem('draft_scholarship');
+      localStorage.removeItem('draft_sme');
+      localStorage.removeItem('draft_dental');
+      localStorage.removeItem('adult_registered');
+      localStorage.removeItem('adult_documents');
+      sessionStorage.setItem('session_started', 'true');
+      console.log('Fresh session - cleared old localStorage demo data');
+    }
+
     function launchAdultApp() {
       // Check if user is already registered (sessionStorage clears when browser closes)
       const isRegistered = sessionStorage.getItem('adult_registered') === 'true';

@@ -150,13 +150,20 @@
 
     <script>
         function signAndApprove() {
-            // Mark guardian as approved (for junior app)
-            sessionStorage.setItem('guardian_approved', 'true');
+            // Get the current request to determine type
+            const requestId = sessionStorage.getItem('current_approval_request');
+            const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+            const currentRequest = requests.find(req => req.id === requestId);
+
+            // Set the correct approval flag based on request type
+            if (currentRequest && currentRequest.type === 'sme') {
+                sessionStorage.setItem('sme_guardian_approved', 'true');
+            } else {
+                sessionStorage.setItem('guardian_approved', 'true');
+            }
 
             // Update the request status in child_requests
-            const requestId = sessionStorage.getItem('current_approval_request');
             if (requestId) {
-                const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
                 const updatedRequests = requests.map(req => {
                     if (req.id === requestId) {
                         return { ...req, status: 'approved', approvedAt: new Date().toISOString() };
@@ -168,7 +175,8 @@
             }
 
             // Show success feedback
-            alert('Application approved! Your child can now submit their application.');
+            const appType = currentRequest ? currentRequest.title : 'Application';
+            alert(`${appType} approved! Your child can now submit their application.`);
 
             // Go to adult home page
             window.location.href = 'adult_home.html';

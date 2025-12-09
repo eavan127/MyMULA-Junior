@@ -325,13 +325,15 @@
       saveDraft();
     });
 
-    // Clear draft on submit
+    // Clear draft on submit and reset status
     const submitBtn = document.getElementById('btn-continue');
     if (submitBtn) {
       submitBtn.addEventListener('click', (e) => {
         e.preventDefault();
         clearDraft();
         sessionStorage.setItem('sme_application_submitted', 'true');
+        // Clear guardian approval so new applications start fresh
+        sessionStorage.removeItem('sme_guardian_approved');
         window.location.href = 'SME_Application_Progress_Tracker.html';
       });
     }
