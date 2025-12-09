@@ -176,7 +176,7 @@
 
   </div>
 
-  <<script>
+  <script>
     // 1. Check PESP (Existing code)
     const isPespSubmitted = localStorage.getItem('application_submitted');
     if (isPespSubmitted === 'true') {
@@ -191,8 +191,7 @@
     if (isSmeSubmitted === 'true') {
     // Change Badge Color to Yellow (Processing)
     const badge = document.getElementById('sme-status-badge');
-    badge.className = "inline-flex items-center justify-center self-start rounded-full bg-[#FFC107]/20 px-3 py-1.5
-    text-xs font-medium text-[#B8860B] dark:text-[#FFD700]";
+    badge.className = "inline-flex items-center justify-center self-start rounded-full bg-[#FFC107]/20 px-3 py-1.5 text-xs font-medium text-[#B8860B] dark:text-[#FFD700]";
 
     // Change Dot Color
     document.getElementById('sme-status-dot').className = "mr-1.5 size-2 rounded-full bg-[#FFC107]";
