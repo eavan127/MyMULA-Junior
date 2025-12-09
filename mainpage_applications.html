@@ -117,7 +117,9 @@
       </div>
 
       <!-- CARD 2: SME (Always Visible) -->
-      <!-- <div class="flex flex-col gap-4 rounded-xl bg-white dark:bg-black/20 p-4 shadow-sm cursor-pointer">
+      <!-- CARD 2: SME (Initially Hidden) -->
+      <div id="sme-card" onclick="window.location.href='SME_Application_Progress_Tracker.html'"
+        class="hidden flex flex-col gap-4 rounded-xl bg-white dark:bg-black/20 p-4 shadow-sm cursor-pointer">
         <div class="flex items-center gap-4">
           <div
             class="text-[#1E1E1E] dark:text-white/90 flex items-center justify-center rounded-lg bg-black/5 dark:bg-white/10 shrink-0 size-12">
@@ -130,19 +132,14 @@
               small to medium enterprise.</p>
           </div>
         </div>
-        <div
+        <div id="sme-status-badge"
           class="inline-flex items-center justify-center self-start rounded-full bg-[#007BFF]/20 px-3 py-1.5 text-xs font-medium text-[#0054a8] dark:text-[#66b2ff]">
-          <div class="mr-1.5 size-2 rounded-full bg-[#007BFF]"></div>
-          Guardian Approval Needed
+          <div id="sme-status-dot" class="mr-1.5 size-2 rounded-full bg-[#007BFF]"></div>
+          <span id="sme-status-text">Guardian Approval Needed</span>
         </div>
-      </div> -->
-
-      <!-- Find the SME Card (Card 2) and update the Badge part -->
-      <div id="sme-status-badge"
-        class="inline-flex items-center justify-center self-start rounded-full bg-[#007BFF]/20 px-3 py-1.5 text-xs font-medium text-[#0054a8] dark:text-[#66b2ff]">
-        <div id="sme-status-dot" class="mr-1.5 size-2 rounded-full bg-[#007BFF]"></div>
-        <span id="sme-status-text">Guardian Approval Needed</span>
       </div>
+
+
 
       <!-- Empty State Message (With ID 'empty-msg') -->
       <div id="empty-msg" class="text-center py-4 text-gray-400 text-sm">
@@ -180,26 +177,37 @@
     // 1. Check PESP (Existing code)
     const isPespSubmitted = localStorage.getItem('application_submitted');
     if (isPespSubmitted === 'true') {
-    const card = document.getElementById('pesp-card');
-    if (card) card.classList.remove('hidden');
-    const msg = document.getElementById('empty-msg');
-    if (msg) msg.classList.add('hidden');
+      const card = document.getElementById('pesp-card');
+      if (card) card.classList.remove('hidden');
+      const msg = document.getElementById('empty-msg');
+      if (msg) msg.classList.add('hidden');
     }
 
     // 2. Check SME (NEW CODE)
     const isSmeSubmitted = localStorage.getItem('sme_application_submitted');
     if (isSmeSubmitted === 'true') {
-    // Change Badge Color to Yellow (Processing)
-    const badge = document.getElementById('sme-status-badge');
-    badge.className = "inline-flex items-center justify-center self-start rounded-full bg-[#FFC107]/20 px-3 py-1.5 text-xs font-medium text-[#B8860B] dark:text-[#FFD700]";
+      const smeCard = document.getElementById('sme-card');
+      if (smeCard) {
+        smeCard.classList.remove('hidden');
 
-    // Change Dot Color
-    document.getElementById('sme-status-dot').className = "mr-1.5 size-2 rounded-full bg-[#FFC107]";
+        // Hide empty message if SME card is shown
+        const msg = document.getElementById('empty-msg');
+        if (msg) msg.classList.add('hidden');
+      }
 
-    // Change Text
-    document.getElementById('sme-status-text').innerText = "Processing";
+      // Change Badge Color to Yellow (Processing)
+      const badge = document.getElementById('sme-status-badge');
+      if (badge) badge.className = "inline-flex items-center justify-center self-start rounded-full bg-[#FFC107]/20 px-3 py-1.5 text-xs font-medium text-[#B8860B] dark:text-[#FFD700]";
+
+      // Change Dot Color
+      const dot = document.getElementById('sme-status-dot');
+      if (dot) dot.className = "mr-1.5 size-2 rounded-full bg-[#FFC107]";
+
+      // Change Text
+      const text = document.getElementById('sme-status-text');
+      if (text) text.innerText = "Processing";
     }
-    </script>
+  </script>
 </body>
 
 </html>

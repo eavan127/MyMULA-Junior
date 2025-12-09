@@ -108,6 +108,14 @@
 <body class="bg-background-light dark:bg-background-dark font-display text-gray-900 dark:text-white">
 
   <div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-hidden">
+    <script>
+      // RESET DEMO STATE
+      // Clear specific items to ensure a fresh demo flow
+      localStorage.removeItem('sme_application_submitted');
+      localStorage.removeItem('sme_guardian_approved');
+      localStorage.removeItem('application_submitted'); // PESP reset if needed
+      console.log('Demo state reset.');
+    </script>
 
     <!-- Header -->
     <header class="flex items-center bg-transparent p-4 justify-between sticky top-0 z-10 w-full">
