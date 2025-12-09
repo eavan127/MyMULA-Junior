@@ -142,6 +142,17 @@
     </div>
   </div>
 
+  <script>
+    // DEBUGGING: Print to console to prove it ran
+    console.log("Tracker Loaded: Saving submission status...");
+
+    // 1. Save the 'True' flag to the browser memory
+    localStorage.setItem('application_submitted', 'true');
+
+    // 2. Verify it worked (Optional, for you to see in F12 console)
+    const check = localStorage.getItem('application_submitted');
+    console.log("Status currently saved as: " + check);
+  </script>
 </body>
 
 </html>
