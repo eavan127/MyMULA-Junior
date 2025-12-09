@@ -1,40 +1,134 @@
 [
-  {
-    "title": "Scholarships / Biasiswa",
-    "description": "Find and apply for educational funding.",
-    "icon": "school",
-    "link": "scholarship_application.html",
-    "tags": [
-      { "text": "Guardian Approval Required", "type": "default" }
-    ]
-  },
-  {
-    "title": "SME Registration / Pendaftaran PKS",
-    "description": "Register your small or medium enterprise.",
-    "icon": "business_center",
-    "link": "#",
-    "tags": [
-      { "text": "Guardian Approval Required", "type": "default" },
-      { "text": "Ages 16+", "type": "default" }
-    ]
-  },
-  {
-    "title": "Healthcare / Penjagaan Kesihatan",
-    "description": "Access public healthcare services.",
-    "icon": "health_and_safety",
-    "link": "#",
-    "tags": [
-      { "text": "Popular", "type": "success" }
-    ]
-  },
-  {
-    "title": "Online Safety / Keselamatan Talian",
-    "description": "Stay protected with age verification.",
-    "icon": "verified_user",
-    "link": "#",
-    "tags": [
-      { "text": "Guardian Approval Required", "type": "default" },
-      { "text": "Act 2025", "type": "default" }
-    ]
-  }
+    {
+        "id": 1,
+        "title": "Scholarships / Biasiswa",
+        "description": "Find and apply for educational funding.",
+        "icon": "school",
+        "link": "scholarship_application.html",
+        "tags": [
+            {
+                "text": "Guardian Approval Required",
+                "type": "default"
+            }
+        ],
+        "age_requirement": null,
+        "guardian_requirement": true
+    },
+    {
+        "id": 2,
+        "title": "SME Registration / Pendaftaran PKS",
+        "description": "Register your small or medium enterprise.",
+        "icon": "business_center",
+        "link": "SME_Registration.html",
+        "tags": [
+            {
+                "text": "Guardian Approval Required",
+                "type": "default"
+            },
+            {
+                "text": "Ages 16+",
+                "type": "default"
+            }
+        ],
+        "age_requirement": 16,
+        "guardian_requirement": true,
+        "requirements": [
+            {
+                "id": "mykad",
+                "name": "Owner’s Identity Card (MyKad)",
+                "description": "from Smart ID",
+                "icon": "check_circle",
+                "iconColor": "text-green-600 dark:text-green-400",
+                "iconBg": "bg-green-100 dark:bg-green-900/50",
+                "status": "Verified",
+                "statusColor": "text-green-600 dark:text-green-400"
+            },
+            {
+                "id": "form_a",
+                "name": "Completed Registration Form (Form A)",
+                "description": null,
+                "icon": "info",
+                "iconColor": "text-blue-600 dark:text-blue-400",
+                "iconBg": "bg-blue-100 dark:bg-blue-900/50",
+                "status": "Pending",
+                "statusColor": "text-blue-600 dark:text-blue-400",
+                "dynamicStatus": true
+            },
+            {
+                "id": "business_name",
+                "name": "Business Name Approval",
+                "description": null,
+                "icon": "info",
+                "iconColor": "text-blue-600 dark:text-blue-400",
+                "iconBg": "bg-blue-100 dark:bg-blue-900/50",
+                "status": "Pending",
+                "statusColor": "text-blue-600 dark:text-blue-400",
+                "dynamicStatus": true
+            },
+            {
+                "id": "business_address",
+                "name": "Business Address",
+                "description": "from Smart ID",
+                "icon": "check_circle",
+                "iconColor": "text-green-600 dark:text-green-400",
+                "iconBg": "bg-green-100 dark:bg-green-900/50",
+                "status": "Verified",
+                "statusColor": "text-green-600 dark:text-green-400"
+            },
+            {
+                "id": "activity_desc",
+                "name": "Business Activity Description",
+                "description": "from Smart ID",
+                "icon": "check_circle",
+                "iconColor": "text-green-600 dark:text-green-400",
+                "iconBg": "bg-green-100 dark:bg-green-900/50",
+                "status": "Verified",
+                "statusColor": "text-green-600 dark:text-green-400"
+            },
+            {
+                "id": "permits",
+                "name": "Required Permits / Licenses",
+                "description": "from Smart ID",
+                "icon": "check_circle",
+                "iconColor": "text-green-600 dark:text-green-400",
+                "iconBg": "bg-green-100 dark:bg-green-900/50",
+                "status": "Verified",
+                "statusColor": "text-green-600 dark:text-green-400"
+            }
+        ]
+    },
+    {
+        "id": 3,
+        "title": "Healthcare / Penjagaan Kesihatan",
+        "description": "Access public healthcare services.",
+        "icon": "health_and_safety",
+        "link": "Dental_Healthcare_Consent.html",
+        "tags": [
+            {
+                "text": "Popular",
+                "type": "success"
+            }
+        ],
+        "age_requirement": null,
+        "guardian_requirement": false
+    },
+    {
+        "id": 4,
+        "title": "Online Safety / Keselamatan Talian",
+        "description": "Stay protected with age verification.",
+        "icon": "verified_user",
+        "link": "Age_Digital_Control.html",
+        "tags": [
+            {
+                "text": "Guardian Approval Required",
+                "type": "default"
+            },
+            {
+                "text": "Act 2025",
+                "type": "default"
+            }
+        ],
+        "age_requirement": null,
+        "guardian_requirement": true
+    }
 ]

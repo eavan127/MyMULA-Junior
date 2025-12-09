@@ -47,11 +47,6 @@
       min-height: max(884px, 100dvh);
     }
   </style>
-  <style>
-    body {
-      min-height: max(884px, 100dvh);
-    }
-  </style>
 </head>
 
 <body class="bg-background-light dark:bg-background-dark">
@@ -98,116 +93,12 @@
           </div>
         </div>
       </div>
-      <div class="flex flex-col gap-2">
-        <div
-          class="flex items-center gap-4 bg-white dark:bg-gray-800 px-4 min-h-[72px] py-2 justify-between rounded-xl shadow-[0_0_2px_rgba(0,0,0,0.05)]">
-          <div class="flex items-center gap-4">
-            <div
-              class="text-green-600 dark:text-green-400 flex items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/50 shrink-0 size-12">
-              <span class="material-symbols-outlined">check_circle</span>
-            </div>
-            <div class="flex flex-col justify-center">
-              <p class="text-[#101418] dark:text-white text-base font-medium leading-normal line-clamp-1">Owner’s
-                Identity Card (MyKad)</p>
-              <p class="text-[#5e758d] dark:text-gray-400 text-sm font-normal leading-normal line-clamp-2">from Smart ID
-              </p>
-            </div>
-          </div>
-          <div class="shrink-0">
-            <p class="text-green-600 dark:text-green-400 text-base font-medium leading-normal">Verified</p>
-          </div>
-        </div>
-        <!-- 2. Form A (Pending -> Verified) -->
-        <div id="reg-form-row"
-          class="flex items-center gap-4 bg-white dark:bg-gray-800 px-4 min-h-[72px] py-2 justify-between rounded-xl shadow-[0_0_2px_rgba(0,0,0,0.05)]">
-          <div class="flex items-center gap-4">
-            <div id="reg-form-icon-box"
-              class="text-blue-600 dark:text-blue-400 flex items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/50 shrink-0 size-12">
-              <span id="reg-form-icon" class="material-symbols-outlined">info</span>
-            </div>
-            <div class="flex flex-col justify-center">
-              <p class="text-[#101418] dark:text-white text-base font-medium leading-normal line-clamp-1">Completed
-                Registration Form (Form A)</p>
-            </div>
-          </div>
-          <div class="shrink-0">
-            <p id="reg-form-status" class="text-blue-600 dark:text-blue-400 text-base font-medium leading-normal">
-              Pending</p>
-          </div>
-        </div>
-        <!-- 3. Business Name (Pending -> Verified) -->
-        <div
-          class="flex items-center gap-4 bg-white dark:bg-gray-800 px-4 min-h-[72px] py-2 justify-between rounded-xl shadow-[0_0_2px_rgba(0,0,0,0.05)]">
-          <div class="flex items-center gap-4">
-            <div id="name-approval-icon-box"
-              class="text-blue-600 dark:text-blue-400 flex items-center justify-center rounded-lg bg-blue-100 dark:bg-blue-900/50 shrink-0 size-12">
-              <span id="name-approval-icon" class="material-symbols-outlined">info</span>
-            </div>
-            <div class="flex flex-col justify-center">
-              <p class="text-[#101418] dark:text-white text-base font-medium leading-normal line-clamp-1">Business Name
-                Approval</p>
-            </div>
-          </div>
-          <div class="shrink-0">
-            <p id="name-approval-status" class="text-blue-600 dark:text-blue-400 text-base font-medium leading-normal">
-              Pending</p>
-          </div>
-        </div>
-        <div
-          class="flex items-center gap-4 bg-white dark:bg-gray-800 px-4 min-h-[72px] py-2 justify-between rounded-xl shadow-[0_0_2px_rgba(0,0,0,0.05)]">
-          <div class="flex items-center gap-4">
-            <div
-              class="text-green-600 dark:text-green-400 flex items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/50 shrink-0 size-12">
-              <span class="material-symbols-outlined">check_circle</span>
-            </div>
-            <div class="flex flex-col justify-center">
-              <p class="text-[#101418] dark:text-white text-base font-medium leading-normal line-clamp-1">Business
-                Address</p>
-              <p class="text-[#5e758d] dark:text-gray-400 text-sm font-normal leading-normal line-clamp-2">from Smart ID
-              </p>
-            </div>
-          </div>
-          <div class="shrink-0">
-            <p class="text-green-600 dark:text-green-400 text-base font-medium leading-normal">Verified</p>
-          </div>
-        </div>
-        <div
-          class="flex items-center gap-4 bg-white dark:bg-gray-800 px-4 min-h-[72px] py-2 justify-between rounded-xl shadow-[0_0_2px_rgba(0,0,0,0.05)]">
-          <div class="flex items-center gap-4">
-            <div
-              class="text-green-600 dark:text-green-400 flex items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/50 shrink-0 size-12">
-              <span class="material-symbols-outlined">check_circle</span>
-            </div>
-            <div class="flex flex-col justify-center">
-              <p class="text-[#101418] dark:text-white text-base font-medium leading-normal line-clamp-1">Business
-                Activity Description</p>
-              <p class="text-[#5e758d] dark:text-gray-400 text-sm font-normal leading-normal line-clamp-2">from Smart ID
-              </p>
-            </div>
-          </div>
-          <div class="shrink-0">
-            <p class="text-green-600 dark:text-green-400 text-base font-medium leading-normal">Verified</p>
-          </div>
-        </div>
-        <div
-          class="flex items-center gap-4 bg-white dark:bg-gray-800 px-4 min-h-[72px] py-2 justify-between rounded-xl shadow-[0_0_2px_rgba(0,0,0,0.05)]">
-          <div class="flex items-center gap-4">
-            <div
-              class="text-green-600 dark:text-green-400 flex items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/50 shrink-0 size-12">
-              <span class="material-symbols-outlined">check_circle</span>
-            </div>
-            <div class="flex flex-col justify-center">
-              <p class="text-[#101418] dark:text-white text-base font-medium leading-normal line-clamp-1">Required
-                Permits / Licenses</p>
-              <p class="text-[#5e758d] dark:text-gray-400 text-sm font-normal leading-normal line-clamp-2">from Smart ID
-              </p>
-            </div>
-          </div>
-          <div class="shrink-0">
-            <p class="text-green-600 dark:text-green-400 text-base font-medium leading-normal">Verified</p>
-          </div>
-        </div>
+
+      <!-- DYNAMIC REQUIREMENTS LIST -->
+      <div id="requirements-list" class="flex flex-col gap-2">
+        <!-- Requirements will be loaded here -->
       </div>
+
     </div>
     <div
       class="sticky bottom-0 z-10 w-full flex-col items-center justify-center gap-2 bg-white/80 dark:bg-gray-900/80 p-4 backdrop-blur-sm border-t border-gray-200 dark:border-gray-700/80">
@@ -272,85 +163,6 @@
       console.log('SME Draft cleared - application submitted');
     }
 
-    // Check if the "Guardian Signature" is saved for SME
-    const isSmeApproved = sessionStorage.getItem('sme_guardian_approved');
-
-    // Check for rejected requests in history
-    const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
-    const smeRequests = requests.filter(r => r.type === 'sme');
-    const rejectedRequest = smeRequests.find(r => r.status === 'rejected');
-
-    // PRIORITY: Approval flag takes precedence over rejection history
-    if (isSmeApproved === 'true') {
-      // --- UPDATE FORM A TO GREEN ---
-      const regIconBox = document.getElementById('reg-form-icon-box');
-      if (regIconBox) regIconBox.className = "text-green-600 dark:text-green-400 flex items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/50 shrink-0 size-12";
-
-      const regIcon = document.getElementById('reg-form-icon');
-      if (regIcon) regIcon.innerText = "check_circle";
-
-      const regStatus = document.getElementById('reg-form-status');
-      if (regStatus) {
-        regStatus.innerText = "Verified";
-        regStatus.className = "text-green-600 dark:text-green-400 text-base font-medium leading-normal";
-      }
-
-      // --- UPDATE NAME APPROVAL TO GREEN ---
-      const nameIconBox = document.getElementById('name-approval-icon-box');
-      if (nameIconBox) nameIconBox.className = "text-green-600 dark:text-green-400 flex items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/50 shrink-0 size-12";
-
-      const nameIcon = document.getElementById('name-approval-icon');
-      if (nameIcon) nameIcon.innerText = "check_circle";
-
-      const nameStatus = document.getElementById('name-approval-status');
-      if (nameStatus) {
-        nameStatus.innerText = "Verified";
-        nameStatus.className = "text-green-600 dark:text-green-400 text-base font-medium leading-normal";
-      }
-
-      // --- SWAP BUTTONS ---
-      const btnAsk = document.getElementById('btn-ask-parent');
-      if (btnAsk) btnAsk.classList.add('hidden');
-
-      const btnContinue = document.getElementById('btn-continue');
-      if (btnContinue) btnContinue.classList.remove('hidden');
-    } else if (rejectedRequest) {
-      // --- SHOW REJECTED STATUS IN RED (only if NOT approved) ---
-      const regIconBox = document.getElementById('reg-form-icon-box');
-      if (regIconBox) regIconBox.className = "text-red-600 dark:text-red-400 flex items-center justify-center rounded-lg bg-red-100 dark:bg-red-900/50 shrink-0 size-12";
-
-      const regIcon = document.getElementById('reg-form-icon');
-      if (regIcon) regIcon.innerText = "cancel";
-
-      const regStatus = document.getElementById('reg-form-status');
-      if (regStatus) {
-        regStatus.innerText = "Rejected";
-        regStatus.className = "text-red-600 dark:text-red-400 text-base font-medium leading-normal";
-      }
-
-      const nameIconBox = document.getElementById('name-approval-icon-box');
-      if (nameIconBox) nameIconBox.className = "text-red-600 dark:text-red-400 flex items-center justify-center rounded-lg bg-red-100 dark:bg-red-900/50 shrink-0 size-12";
-
-      const nameIcon = document.getElementById('name-approval-icon');
-      if (nameIcon) nameIcon.innerText = "cancel";
-
-      const nameStatus = document.getElementById('name-approval-status');
-      if (nameStatus) {
-        nameStatus.innerText = "Rejected";
-        nameStatus.className = "text-red-600 dark:text-red-400 text-base font-medium leading-normal";
-      }
-    }
-
-    // Save draft when navigating back
-    const backButton = document.querySelector('[onclick*="mainpage_applications.html"]');
-    if (backButton) {
-      backButton.setAttribute('onclick', '');
-      backButton.addEventListener('click', (e) => {
-        saveDraft();
-        window.location.href = 'mainpage_home.html';
-      });
-    }
-
     // Save draft when page unloads
     window.addEventListener('beforeunload', () => {
       saveDraft();
@@ -368,9 +180,6 @@
         window.location.href = 'SME_Application_Progress_Tracker.html';
       });
     }
-
-    // Save draft on page load
-    saveDraft();
 
     // === CREATE PARENT REQUEST FOR SME ===
     function createSmeParentRequest() {
@@ -395,14 +204,93 @@
       // Store current request ID for approval flow
       sessionStorage.setItem('current_approval_request', requestId);
 
-      // Save draft before leaving
-      saveDraft();
-
       // Show notification and navigate
       alert('SME Registration request sent to your parent/guardian! They will need to approve using Face ID and signature.');
 
       // Go back to home (simulating "request sent" state)
       window.location.href = 'mainpage_home.html';
+    }
+
+    // === DYNAMIC REQUIREMENTS LOADING ===
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        const response = await fetch('mock_data.json');
+        const data = await response.json();
+        const smeApp = data.find(app => app.id === 2); // SME is ID 2
+
+        if (smeApp && smeApp.requirements) {
+          renderRequirements(smeApp.requirements);
+          updateStatus(smeApp.requirements);
+        }
+      } catch (error) {
+        console.error('Error loading mock data:', error);
+      }
+    });
+
+    function renderRequirements(requirements) {
+      const container = document.getElementById('requirements-list');
+      if (!container) return;
+
+      container.innerHTML = requirements.map(req => `
+        <div id="req-row-${req.id}"
+          class="flex items-center gap-4 bg-white dark:bg-gray-800 px-4 min-h-[72px] py-2 justify-between rounded-xl shadow-[0_0_2px_rgba(0,0,0,0.05)]">
+          <div class="flex items-center gap-4">
+            <div id="req-icon-box-${req.id}"
+              class="${req.iconColor} flex items-center justify-center rounded-lg ${req.iconBg} shrink-0 size-12">
+              <span id="req-icon-${req.id}" class="material-symbols-outlined">${req.icon}</span>
+            </div>
+            <div class="flex flex-col justify-center">
+              <p class="text-[#101418] dark:text-white text-base font-medium leading-normal line-clamp-1">${req.name}</p>
+              ${req.description ? `<p class="text-[#5e758d] dark:text-gray-400 text-sm font-normal leading-normal line-clamp-2">${req.description}</p>` : ''}
+            </div>
+          </div>
+          <div class="shrink-0">
+            <p id="req-status-${req.id}" class="${req.statusColor} text-base font-medium leading-normal">${req.status}</p>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function updateStatus(requirements) {
+      const isSmeApproved = sessionStorage.getItem('sme_guardian_approved');
+
+      // Check for rejected requests in history
+      const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+      const smeRequests = requests.filter(r => r.type === 'sme');
+      const rejectedRequest = smeRequests.find(r => r.status === 'rejected');
+
+      if (isSmeApproved === 'true') {
+        // Update all dynamic status items to Verified
+        requirements.filter(req => req.dynamicStatus).forEach(req => {
+          updateItemStatus(req.id, 'Verified', 'check_circle', 'text-green-600 dark:text-green-400', 'bg-green-100 dark:bg-green-900/50');
+        });
+
+        // Swap buttons
+        const btnAsk = document.getElementById('btn-ask-parent');
+        if (btnAsk) btnAsk.classList.add('hidden');
+
+        const btnContinue = document.getElementById('btn-continue');
+        if (btnContinue) btnContinue.classList.remove('hidden');
+
+      } else if (rejectedRequest) {
+        // Update all dynamic status items to Rejected
+        requirements.filter(req => req.dynamicStatus).forEach(req => {
+          updateItemStatus(req.id, 'Rejected', 'cancel', 'text-red-600 dark:text-red-400', 'bg-red-100 dark:bg-red-900/50');
+        });
+      }
+    }
+
+    function updateItemStatus(id, statusText, iconName, colorClass, bgClass) {
+      const iconBox = document.getElementById(`req-icon-box-${id}`);
+      const icon = document.getElementById(`req-icon-${id}`);
+      const status = document.getElementById(`req-status-${id}`);
+
+      if (iconBox) iconBox.className = `${colorClass} flex items-center justify-center rounded-lg ${bgClass} shrink-0 size-12`;
+      if (icon) icon.innerText = iconName;
+      if (status) {
+        status.innerText = statusText;
+        status.className = `${colorClass} text-base font-medium leading-normal`;
+      }
     }
   </script>
 </body>

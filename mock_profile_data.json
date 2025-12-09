@@ -1,0 +1,40 @@
+{
+    "user": {
+        "name": "Ali",
+        "id": "******-**-1234",
+        "avatar": "https://lh3.googleusercontent.com/aida-public/AB6AXuCsYcXFkFsFledf_qaRhclLFxukFFj7_RpSh9rCzy78mBo-x0GF7vKE_S91r-iJBE-H4ycYLv-s2-9Vd6p0huSFXTg-ZLbFHKzINUXDEDGq_OVHbTPMzOs96CZ7hMZnjsfA2bV37BrgOQxMb979KFt1kIb63ZoAJXZtE9VuJbAfDQ36MemKQbLx8DBjF5-mavhrhE7v7cyC2WNBEce6mmCCGVV7nOEznLYlcQIWdUOiqO4k_o1-JM8O8q7PhwPwc9EvnCu94vVXQss"
+    },
+    "guardian": {
+        "status": "Not Linked",
+        "linked_name": null
+    },
+    "documents": [
+        {
+            "id": "birthCert",
+            "name": "Birth Certificate",
+            "icon": "child_care",
+            "iconColor": "text-blue-500 bg-blue-50 dark:bg-blue-900/20",
+            "status": "Required",
+            "statusColor": "text-orange-500",
+            "isCustom": false
+        },
+        {
+            "id": "spm",
+            "name": "SPM Certificate",
+            "icon": "school",
+            "iconColor": "text-purple-500 bg-purple-50 dark:bg-purple-900/20",
+            "status": "Required",
+            "statusColor": "text-orange-500",
+            "isCustom": false
+        },
+        {
+            "id": "coq",
+            "name": "Co-Curriculum",
+            "icon": "sports_soccer",
+            "iconColor": "text-orange-500 bg-orange-50 dark:bg-orange-900/20",
+            "status": "Required",
+            "statusColor": "text-orange-500",
+            "isCustom": false
+        }
+    ]
+}
