@@ -63,7 +63,8 @@
   <div class="relative flex h-auto min-h-screen w-full flex-col font-display group/design-root overflow-x-hidden">
     <div
       class="sticky top-0 z-10 flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between">
-      <div class="text-[#101418] dark:text-white flex size-12 shrink-0 items-center justify-start">
+      <div onclick="window.location.href='mainpage_home.html'"
+        class="text-[#101418] dark:text-white flex size-12 shrink-0 items-center justify-start cursor-pointer">
         <span class="material-symbols-outlined text-2xl">arrow_back_ios_new</span>
       </div>
       <h2 class="text-[#101418] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">
@@ -256,37 +257,47 @@
     const DRAFT_KEY = 'draft_dental';
 
     function saveDraft() {
-      const consentStatus = sessionStorage.getItem('dental_procedure_consent');
+      const guardianApproved = sessionStorage.getItem('dental_guardian_approved');
       const medicalStatus = sessionStorage.getItem('dental_medical_history');
       if (sessionStorage.getItem('dental_application_submitted') !== 'true') {
         const draftData = {
           lastModified: new Date().toISOString(),
-          progress: consentStatus === 'approved' && medicalStatus === 'uploaded'
+          progress: guardianApproved === 'true' && medicalStatus === 'uploaded'
             ? 'Ready to Submit'
-            : consentStatus === 'approved'
+            : guardianApproved === 'true'
               ? 'Guardian Approved - Upload medical history'
               : 'Awaiting guardian consent',
-          consentApproved: consentStatus === 'approved',
+          guardianApproved: guardianApproved === 'true',
           medicalUploaded: medicalStatus === 'uploaded',
-          step: consentStatus === 'approved' && medicalStatus === 'uploaded' ? 3 : consentStatus === 'approved' ? 2 : 1
+          step: guardianApproved === 'true' && medicalStatus === 'uploaded' ? 3 : guardianApproved === 'true' ? 2 : 1
         };
-        localStorage.setItem(DRAFT_KEY, JSON.stringify(draftData));
+        sessionStorage.setItem(DRAFT_KEY, JSON.stringify(draftData));
         console.log('Dental Draft saved:', draftData);
       }
     }
 
     function clearDraft() {
-      localStorage.removeItem(DRAFT_KEY);
-      localStorage.removeItem('resuming_dental');
+      sessionStorage.removeItem(DRAFT_KEY);
+      sessionStorage.removeItem('resuming_dental');
       console.log('Dental Draft cleared - application submitted');
     }
 
     // Check sessionStorage on page load
     document.addEventListener('DOMContentLoaded', () => {
-      // Check Procedure Consent status
-      const consentStatus = sessionStorage.getItem('dental_procedure_consent');
-      if (consentStatus === 'approved') {
+      // Check for rejected requests from child_requests
+      const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+      const dentalRequests = requests.filter(r => r.type === 'dental');
+      const rejectedRequest = dentalRequests.find(r => r.status === 'rejected');
+
+      // PRIORITY: Approval flag takes precedence over rejection history
+      const guardianApproved = sessionStorage.getItem('dental_guardian_approved');
+
+      if (guardianApproved === 'true') {
+        // Approval takes priority - show verified even if there's rejection history
         updateProcedureConsentToApproved();
+      } else if (rejectedRequest) {
+        // Show rejected status only if NOT approved
+        updateProcedureConsentToRejected();
       }
 
       // Check Medical History status
@@ -302,10 +313,53 @@
       saveDraft();
     });
 
+    function updateProcedureConsentToRejected() {
+      const icon = document.getElementById('procedureConsentIcon');
+      const status = document.getElementById('procedureConsentStatus');
+
+      icon.className = 'text-red-600 dark:text-red-400 flex items-center justify-center rounded-lg bg-red-100 dark:bg-red-900/50 shrink-0 size-12';
+      icon.innerHTML = '<span class="material-symbols-outlined">cancel</span>';
+
+      status.className = 'text-red-600 dark:text-red-400 text-base font-medium leading-normal';
+      status.innerText = 'Rejected';
+    }
+
     function askParentPermission() {
+      // Create request for parent/guardian using same pattern as Scholarship/SME
+      createDentalParentRequest();
+    }
+
+    // === CREATE PARENT REQUEST FOR DENTAL ===
+    function createDentalParentRequest() {
+      // Create a unique request for the parent/guardian
+      const requestId = 'req_dental_' + Date.now();
+      const newRequest = {
+        id: requestId,
+        type: 'dental',
+        title: 'Dental Checkup & Procedure - Guardian Consent',
+        childName: 'Ali',
+        timestamp: new Date().toISOString(),
+        status: 'pending'
+      };
+
+      // Get existing requests or create empty array
+      const existingRequests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+
+      // Add new request
+      existingRequests.push(newRequest);
+      sessionStorage.setItem('child_requests', JSON.stringify(existingRequests));
+
+      // Store current request ID for approval flow
+      sessionStorage.setItem('current_approval_request', requestId);
+
+      // Save draft before leaving
       saveDraft();
-      // Navigate to Digital Signature page
-      window.location.href = 'Dental_Digital_Signature.html';
+
+      // Show notification and navigate
+      alert('Dental procedure consent request sent to your parent/guardian! They will need to approve using Face ID and signature.');
+
+      // Go back to home (simulating "request sent" state)
+      window.location.href = 'mainpage_home.html';
     }
 
     function updateProcedureConsentToApproved() {
@@ -362,10 +416,10 @@
     }
 
     function checkAllRequirements() {
-      const consentStatus = sessionStorage.getItem('dental_procedure_consent');
+      const guardianApproved = sessionStorage.getItem('dental_guardian_approved');
       const medicalHistoryStatus = sessionStorage.getItem('dental_medical_history');
 
-      if (consentStatus === 'approved' && medicalHistoryStatus === 'uploaded') {
+      if (guardianApproved === 'true' && medicalHistoryStatus === 'uploaded') {
         // Show Submit button, hide Ask Parent button
         document.getElementById('askParentBtn').style.display = 'none';
         document.getElementById('submitBtn').style.display = 'flex';
@@ -375,6 +429,8 @@
     function submitApplication() {
       clearDraft();
       sessionStorage.setItem('dental_application_submitted', 'true');
+      // Clear guardian approval so new applications start fresh
+      sessionStorage.removeItem('dental_guardian_approved');
       // Navigate to Progress Tracker
       window.location.href = 'Dental_Progress_Tracker.html';
     }

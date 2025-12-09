@@ -119,11 +119,11 @@
                 badge
               </span>
             </div>
-            <h1 class="pt-4 text-2xl font-bold tracking-tight text-[#1D1D1F] dark:text-neutral-100">Request from Ali
+            <h1 id="requestTitle" class="pt-4 text-2xl font-bold tracking-tight text-[#1D1D1F] dark:text-neutral-100">
+              Request from Ali
             </h1>
-            <p class="pt-2 text-base text-neutral-600 dark:text-neutral-400">
-              Ali is requesting approval for B40 income verification. Your financial details will not be shared. This
-              only confirms your status.
+            <p id="requestDescription" class="pt-2 text-base text-neutral-600 dark:text-neutral-400">
+              Loading request details...
             </p>
           </div>
         </div>
@@ -140,7 +140,7 @@
           <p class="text-base text-neutral-600 dark:text-neutral-400">Confirm with Face ID to continue</p>
         </div>
         <div class="flex flex-col items-center gap-4 px-4 pb-8 pt-2">
-          <button
+          <button onclick="cancelRequest()"
             class="w-full max-w-sm cursor-pointer rounded-full bg-transparent p-3 text-sm font-bold text-primary">Cancel
             Request</button>
         </div>
@@ -148,6 +148,22 @@
     </div>
   </div>
   <script>
+    // Load dynamic content based on request type
+    document.addEventListener('DOMContentLoaded', () => {
+      const requestId = sessionStorage.getItem('current_approval_request');
+      const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+      const currentRequest = requests.find(req => req.id === requestId);
+
+      const descriptions = {
+        'scholarship': 'Ali is requesting approval for B40 income verification. Your financial details will not be shared. This only confirms your status.',
+        'sme': 'Ali is requesting approval for SME Business Registration. This will authorize the sole proprietorship registration under your guardianship.',
+        'dental': 'Ali is requesting approval for a dental procedure. This provides consent for the checkup and treatment at the registered clinic.'
+      };
+
+      const type = currentRequest ? currentRequest.type : 'scholarship';
+      document.getElementById('requestDescription').textContent = descriptions[type] || descriptions['scholarship'];
+    });
+
     function simulateFaceID() {
       const scanner = document.getElementById('face-scanner');
       const text = document.getElementById('scan-text');
@@ -162,6 +178,27 @@
       setTimeout(() => {
         window.location.href = 'guardian_signature_comfirmation.html';
       }, 1500);
+    }
+
+    function cancelRequest() {
+      if (confirm('Are you sure you want to reject this request?')) {
+        const requestId = sessionStorage.getItem('current_approval_request');
+        const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+
+        // Update request status to rejected
+        const updatedRequests = requests.map(req => {
+          if (req.id === requestId) {
+            return { ...req, status: 'rejected', rejectedAt: new Date().toISOString() };
+          }
+          return req;
+        });
+
+        sessionStorage.setItem('child_requests', JSON.stringify(updatedRequests));
+        sessionStorage.removeItem('current_approval_request');
+
+        alert('Request has been rejected.');
+        window.location.href = 'adult_home.html';
+      }
     }
   </script>
 </body>

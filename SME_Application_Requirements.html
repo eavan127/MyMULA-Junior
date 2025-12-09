@@ -58,7 +58,7 @@
   <div class="relative flex h-auto min-h-screen w-full flex-col font-display group/design-root overflow-x-hidden">
     <div
       class="sticky top-0 z-10 flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between">
-      <div onclick="window.location.href='mainpage_applications.html'"
+      <div onclick="window.location.href='mainpage_home.html'"
         class="text-[#101418] dark:text-white flex size-12 shrink-0 items-center justify-start cursor-pointer">
         <span class="material-symbols-outlined text-2xl">arrow_back_ios_new</span>
       </div>
@@ -275,6 +275,12 @@
     // Check if the "Guardian Signature" is saved for SME
     const isSmeApproved = sessionStorage.getItem('sme_guardian_approved');
 
+    // Check for rejected requests in history
+    const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+    const smeRequests = requests.filter(r => r.type === 'sme');
+    const rejectedRequest = smeRequests.find(r => r.status === 'rejected');
+
+    // PRIORITY: Approval flag takes precedence over rejection history
     if (isSmeApproved === 'true') {
       // --- UPDATE FORM A TO GREEN ---
       const regIconBox = document.getElementById('reg-form-icon-box');
@@ -308,6 +314,31 @@
 
       const btnContinue = document.getElementById('btn-continue');
       if (btnContinue) btnContinue.classList.remove('hidden');
+    } else if (rejectedRequest) {
+      // --- SHOW REJECTED STATUS IN RED (only if NOT approved) ---
+      const regIconBox = document.getElementById('reg-form-icon-box');
+      if (regIconBox) regIconBox.className = "text-red-600 dark:text-red-400 flex items-center justify-center rounded-lg bg-red-100 dark:bg-red-900/50 shrink-0 size-12";
+
+      const regIcon = document.getElementById('reg-form-icon');
+      if (regIcon) regIcon.innerText = "cancel";
+
+      const regStatus = document.getElementById('reg-form-status');
+      if (regStatus) {
+        regStatus.innerText = "Rejected";
+        regStatus.className = "text-red-600 dark:text-red-400 text-base font-medium leading-normal";
+      }
+
+      const nameIconBox = document.getElementById('name-approval-icon-box');
+      if (nameIconBox) nameIconBox.className = "text-red-600 dark:text-red-400 flex items-center justify-center rounded-lg bg-red-100 dark:bg-red-900/50 shrink-0 size-12";
+
+      const nameIcon = document.getElementById('name-approval-icon');
+      if (nameIcon) nameIcon.innerText = "cancel";
+
+      const nameStatus = document.getElementById('name-approval-status');
+      if (nameStatus) {
+        nameStatus.innerText = "Rejected";
+        nameStatus.className = "text-red-600 dark:text-red-400 text-base font-medium leading-normal";
+      }
     }
 
     // Save draft when navigating back
