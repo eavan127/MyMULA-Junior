@@ -213,23 +213,32 @@
 
             if (requests.length === 0) return;
 
+            // Helper function to get status-based styles
+            function getStatusStyles(status) {
+                if (status === 'approved') return { bg: 'bg-green-100', text: 'text-green-500', badge: 'bg-green-100 text-green-600', icon: 'check_circle' };
+                if (status === 'rejected') return { bg: 'bg-red-100', text: 'text-red-500', badge: 'bg-red-100 text-red-600', icon: 'cancel' };
+                return { bg: 'bg-orange-100', text: 'text-orange-500', badge: 'bg-orange-100 text-orange-600', icon: 'pending' };
+            }
+
             // Show ALL requests, not just first 3
-            container.innerHTML = requests.map(req => `
+            container.innerHTML = requests.map(req => {
+                const styles = getStatusStyles(req.status);
+                return `
         <div onclick="handleActivityClick('${req.id}', '${req.status}')" 
              class="flex items-center gap-4 bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm cursor-pointer hover:shadow-md transition-all active:scale-[0.98]">
-          <div class="h-10 w-10 rounded-full ${req.status === 'approved' ? 'bg-green-100' : 'bg-orange-100'} flex items-center justify-center">
-            <span class="material-symbols-outlined ${req.status === 'approved' ? 'text-green-500' : 'text-orange-500'}">
-              ${req.status === 'approved' ? 'check_circle' : 'pending'}
+          <div class="h-10 w-10 rounded-full ${styles.bg} flex items-center justify-center">
+            <span class="material-symbols-outlined ${styles.text}">
+              ${styles.icon}
             </span>
           </div>
           <div class="flex-1">
             <p class="text-sm font-bold text-[#333] dark:text-white">${req.title}</p>
             <p class="text-xs text-gray-500">From: ${req.childName}</p>
           </div>
-          <span class="text-xs px-2 py-1 rounded-full ${req.status === 'approved' ? 'bg-green-100 text-green-600' : 'bg-orange-100 text-orange-600'}">${req.status}</span>
+          <span class="text-xs px-2 py-1 rounded-full ${styles.badge}">${req.status}</span>
           <span class="material-symbols-outlined text-gray-400">chevron_right</span>
         </div>
-      `).join('');
+      `}).join('');
         }
 
         function handleActivityClick(requestId, status) {

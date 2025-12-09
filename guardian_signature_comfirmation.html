@@ -92,7 +92,7 @@
                     Confirm Your Digital Signature</h1>
                 <!-- Body Text -->
                 <p class="text-slate-600 dark:text-slate-300 text-base font-normal leading-normal pb-3 pt-1 px-4">Your
-                    signature will be applied to Ali’s application. Your private details remain protected.</p>
+                    signature will be applied to Ali's application. Your private details remain protected.</p>
                 <!-- Card -->
                 <div class="px-4 py-2 @container">
                     <div
@@ -100,10 +100,12 @@
                         <div class="flex w-full grow flex-col items-stretch justify-center gap-1 p-4">
                             <div class="flex items-center gap-2">
                                 <span class="material-symbols-outlined text-base text-primary">description</span>
-                                <p class="text-primary text-sm font-bold leading-normal">Consent Form Preview</p>
+                                <p id="consentTitle" class="text-primary text-sm font-bold leading-normal">Consent Form
+                                    Preview</p>
                             </div>
-                            <p class="text-[#101418] dark:text-slate-100 text-base font-normal leading-normal mt-1">B40
-                                Income Verification: This verifies eligibility without revealing financial details.</p>
+                            <p id="consentDescription"
+                                class="text-[#101418] dark:text-slate-100 text-base font-normal leading-normal mt-1">
+                                Loading consent details...</p>
                         </div>
                         <div class="flex justify-center py-1">
                             <span class="material-symbols-outlined text-slate-400">more_horiz</span>
@@ -112,9 +114,9 @@
                 </div>
                 <!-- Digital Signature Display -->
                 <div class="px-4 pt-4 pb-2 flex flex-col items-center">
-                    <p class="font-script text-5xl text-[#101418] dark:text-white">Sarah Tan</p>
+                    <p id="signatureName" class="font-script text-5xl text-[#101418] dark:text-white">Ahmad</p>
                     <p class="text-slate-500 dark:text-slate-400 text-xs font-normal leading-normal pt-1">This is your
-                        saved signature from MyMULA Smart ID.</p>
+                        saved signature from MyMULA registration.</p>
                 </div>
                 <!-- Security Stamp Row -->
                 <div class="px-4 pt-4 pb-4">
@@ -156,10 +158,15 @@
             const currentRequest = requests.find(req => req.id === requestId);
 
             // Set the correct approval flag based on request type
-            if (currentRequest && currentRequest.type === 'sme') {
-                sessionStorage.setItem('sme_guardian_approved', 'true');
-            } else {
-                sessionStorage.setItem('guardian_approved', 'true');
+            if (currentRequest) {
+                if (currentRequest.type === 'sme') {
+                    sessionStorage.setItem('sme_guardian_approved', 'true');
+                } else if (currentRequest.type === 'dental') {
+                    sessionStorage.setItem('dental_guardian_approved', 'true');
+                } else {
+                    // scholarship or default
+                    sessionStorage.setItem('guardian_approved', 'true');
+                }
             }
 
             // Update the request status in child_requests
@@ -181,6 +188,27 @@
             // Go to adult home page
             window.location.href = 'adult_home.html';
         }
+
+        // Load dynamic content on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const requestId = sessionStorage.getItem('current_approval_request');
+            const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+            const currentRequest = requests.find(req => req.id === requestId);
+
+            // Load signature name from registration
+            const adultName = sessionStorage.getItem('adult_name') || 'Ahmad';
+            document.getElementById('signatureName').textContent = adultName;
+
+            // Set consent description based on request type
+            const descriptions = {
+                'scholarship': 'PESP Scholarship - B40 Income Verification: This verifies eligibility without revealing financial details.',
+                'sme': 'SME Registration Form (Form A): This legally binds you as owner of Ali\'s enterprise. Includes business name, address, and activity details.',
+                'dental': 'Dental Procedure Consent: This authorizes the dental checkup and procedures, confirming understanding of treatment and clinic details.'
+            };
+
+            const type = currentRequest ? currentRequest.type : 'scholarship';
+            document.getElementById('consentDescription').textContent = descriptions[type] || descriptions['scholarship'];
+        });
     </script>
 </body>
 
