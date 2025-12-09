@@ -252,6 +252,35 @@
   </div>
 
   <script>
+    // === AUTO-SAVE DRAFT FUNCTIONALITY ===
+    const DRAFT_KEY = 'draft_dental';
+
+    function saveDraft() {
+      const consentStatus = sessionStorage.getItem('dental_procedure_consent');
+      const medicalStatus = sessionStorage.getItem('dental_medical_history');
+      if (sessionStorage.getItem('dental_application_submitted') !== 'true') {
+        const draftData = {
+          lastModified: new Date().toISOString(),
+          progress: consentStatus === 'approved' && medicalStatus === 'uploaded'
+            ? 'Ready to Submit'
+            : consentStatus === 'approved'
+              ? 'Guardian Approved - Upload medical history'
+              : 'Awaiting guardian consent',
+          consentApproved: consentStatus === 'approved',
+          medicalUploaded: medicalStatus === 'uploaded',
+          step: consentStatus === 'approved' && medicalStatus === 'uploaded' ? 3 : consentStatus === 'approved' ? 2 : 1
+        };
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(draftData));
+        console.log('Dental Draft saved:', draftData);
+      }
+    }
+
+    function clearDraft() {
+      localStorage.removeItem(DRAFT_KEY);
+      localStorage.removeItem('resuming_dental');
+      console.log('Dental Draft cleared - application submitted');
+    }
+
     // Check sessionStorage on page load
     document.addEventListener('DOMContentLoaded', () => {
       // Check Procedure Consent status
@@ -268,9 +297,13 @@
 
       // Check if all requirements are met
       checkAllRequirements();
+
+      // Save draft on load
+      saveDraft();
     });
 
     function askParentPermission() {
+      saveDraft();
       // Navigate to Digital Signature page
       window.location.href = 'Dental_Digital_Signature.html';
     }
@@ -307,6 +340,9 @@
 
       // Check if all requirements met
       checkAllRequirements();
+
+      // Save draft
+      saveDraft();
     }
 
     function updateMedicalHistoryToUploaded() {
@@ -337,9 +373,16 @@
     }
 
     function submitApplication() {
+      clearDraft();
+      sessionStorage.setItem('dental_application_submitted', 'true');
       // Navigate to Progress Tracker
       window.location.href = 'Dental_Progress_Tracker.html';
     }
+
+    // Save draft when page unloads
+    window.addEventListener('beforeunload', () => {
+      saveDraft();
+    });
   </script>
 </body>
 

@@ -249,6 +249,29 @@
   </div>
 
   <script>
+    // === AUTO-SAVE DRAFT FUNCTIONALITY ===
+    const DRAFT_KEY = 'draft_sme';
+
+    function saveDraft() {
+      const isSmeApproved = localStorage.getItem('sme_guardian_approved');
+      if (localStorage.getItem('sme_application_submitted') !== 'true') {
+        const draftData = {
+          lastModified: new Date().toISOString(),
+          progress: isSmeApproved === 'true' ? 'Guardian Approved - Ready to Submit' : 'Documents verified - Awaiting guardian',
+          guardianApproved: isSmeApproved === 'true',
+          step: isSmeApproved === 'true' ? 2 : 1
+        };
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(draftData));
+        console.log('SME Draft saved:', draftData);
+      }
+    }
+
+    function clearDraft() {
+      localStorage.removeItem(DRAFT_KEY);
+      localStorage.removeItem('resuming_sme');
+      console.log('SME Draft cleared - application submitted');
+    }
+
     // Check if the "Guardian Signature" is saved for SME
     const isSmeApproved = localStorage.getItem('sme_guardian_approved');
 
@@ -286,6 +309,35 @@
       const btnContinue = document.getElementById('btn-continue');
       if (btnContinue) btnContinue.classList.remove('hidden');
     }
+
+    // Save draft when navigating back
+    const backButton = document.querySelector('[onclick*="mainpage_applications.html"]');
+    if (backButton) {
+      backButton.setAttribute('onclick', '');
+      backButton.addEventListener('click', (e) => {
+        saveDraft();
+        window.location.href = 'mainpage_home.html';
+      });
+    }
+
+    // Save draft when page unloads
+    window.addEventListener('beforeunload', () => {
+      saveDraft();
+    });
+
+    // Clear draft on submit
+    const submitBtn = document.getElementById('btn-continue');
+    if (submitBtn) {
+      submitBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        clearDraft();
+        localStorage.setItem('sme_application_submitted', 'true');
+        window.location.href = 'SME_Application_Progress_Tracker.html';
+      });
+    }
+
+    // Save draft on page load
+    saveDraft();
   </script>
 </body>
 

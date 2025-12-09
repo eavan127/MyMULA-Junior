@@ -247,6 +247,32 @@
 
     <!-- SCRIPT -->
     <script>
+      // === AUTO-SAVE DRAFT FUNCTIONALITY ===
+      const DRAFT_KEY = 'draft_scholarship';
+
+      // Save draft data on page load / navigation
+      function saveDraft() {
+        const isApproved = localStorage.getItem('guardian_approved');
+        // Only save if not yet fully submitted
+        if (localStorage.getItem('application_submitted') !== 'true') {
+          const draftData = {
+            lastModified: new Date().toISOString(),
+            progress: isApproved === 'true' ? 'Guardian Approved - Ready to Submit' : 'Documents verified - Awaiting guardian',
+            guardianApproved: isApproved === 'true',
+            step: isApproved === 'true' ? 2 : 1
+          };
+          localStorage.setItem(DRAFT_KEY, JSON.stringify(draftData));
+          console.log('Draft saved:', draftData);
+        }
+      }
+
+      // Clear draft when application is fully submitted
+      function clearDraft() {
+        localStorage.removeItem(DRAFT_KEY);
+        localStorage.removeItem('resuming_scholarship');
+        console.log('Draft cleared - application submitted');
+      }
+
       // Check if the "Parent Signature" is saved
       const isApproved = localStorage.getItem('guardian_approved');
 
@@ -265,6 +291,36 @@
         document.getElementById('btn-ask-parent').classList.add('hidden');
         document.getElementById('btn-continue').classList.remove('hidden');
       }
+
+      // Save draft when navigating back
+      const backButton = document.querySelector('[onclick*="scholarship_application.html"]');
+      if (backButton) {
+        const originalOnclick = backButton.getAttribute('onclick');
+        backButton.setAttribute('onclick', '');
+        backButton.addEventListener('click', (e) => {
+          saveDraft();
+          window.location.href = 'mainpage_home.html'; // Go to home instead of scholarship list
+        });
+      }
+
+      // Save draft when page is about to unload
+      window.addEventListener('beforeunload', () => {
+        saveDraft();
+      });
+
+      // Override submit to clear draft
+      const submitBtn = document.getElementById('btn-continue');
+      if (submitBtn) {
+        submitBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          clearDraft();
+          localStorage.setItem('application_submitted', 'true');
+          window.location.href = 'progress_tracker.html';
+        });
+      }
+
+      // Save draft on initial page visit (so it appears in Continue section)
+      saveDraft();
     </script>
 </body>
 

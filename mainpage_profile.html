@@ -221,7 +221,11 @@
           </div>
         </div>
         <div class="pt-4 text-center">
-          <button class="text-red-500 font-bold">Log Out</button>
+          <button onclick="handleLogout()"
+            class="text-red-500 font-bold flex items-center justify-center gap-2 w-full py-3 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-colors">
+            <span class="material-symbols-outlined">logout</span>
+            Log Out
+          </button>
         </div>
       </div>
     </div>
@@ -429,6 +433,41 @@
       // Load Custom Docs on startup
       loadCustomDocs();
     });
+
+    // === LOGOUT FUNCTIONALITY ===
+    function handleLogout() {
+      // Show confirmation
+      if (confirm('Are you sure you want to log out? Your application drafts will be saved.')) {
+        // Clear session data BUT preserve draft applications
+        const draftsToPreserve = [];
+        ['draft_scholarship', 'draft_sme', 'draft_dental'].forEach(key => {
+          const draft = localStorage.getItem(key);
+          if (draft) {
+            draftsToPreserve.push({ key, value: draft });
+          }
+        });
+
+        // Clear sessionStorage (session-specific data)
+        sessionStorage.clear();
+
+        // Clear localStorage session data (but NOT drafts)
+        localStorage.removeItem('guardian_approved');
+        localStorage.removeItem('application_submitted');
+        localStorage.removeItem('guardian_status');
+        localStorage.removeItem('sme_application_submitted');
+        localStorage.removeItem('junior_logged_in');
+
+        // Restore drafts
+        draftsToPreserve.forEach(item => {
+          localStorage.setItem(item.key, item.value);
+        });
+
+        console.log('Logged out. Drafts preserved:', draftsToPreserve.length);
+
+        // Redirect to index/login page
+        window.location.href = 'index.html';
+      }
+    }
   </script>
 </body>
 
