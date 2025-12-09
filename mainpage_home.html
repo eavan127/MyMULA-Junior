@@ -81,145 +81,149 @@
     <div class="px-4 pb-4">
       <button onclick="window.location.href='application_category_dashboard.html'"
         class="flex w-full items-center justify-between rounded-xl bg-white p-4 shadow-sm border border-blue-100 active:scale-[0.98] transition-all hover:shadow-md dark:bg-gray-800 dark:border-gray-700">
-        <span class="text-[#6c757d] dark:text-gray-400 text-base font-normal">What would you like to apply for today</span>
+        <span class="text-[#6c757d] dark:text-gray-400 text-base font-normal">What would you like to apply for
+          today</span>
         <span class="material-symbols-outlined text-primary">search</span>
       </button>
     </div>
     <div class="flex-grow">
-      <div class="grid grid-cols-2 gap-4 p-4 pt-0">
-        <div
-          class="bounce-on-tap flex cursor-pointer flex-col gap-3 rounded-xl bg-gradient-to-br from-blue-100 to-white p-4 shadow-md dark:from-blue-900/50 dark:to-gray-800/50">
-          <div class="flex justify-between items-start">
-            <div class="text-primary rounded-full bg-white p-2">
-              <span class="material-symbols-outlined !text-3xl">school</span>
-            </div>
-            <span class="material-symbols-outlined text-gray-400 !text-xl">info</span>
+      <!-- Scholarship Card -->
+      <div onclick="window.location.href='scholarship_application.html'"
+        class="bounce-on-tap flex cursor-pointer flex-col gap-3 rounded-xl bg-gradient-to-br from-blue-100 to-white p-4 shadow-md dark:from-blue-900/50 dark:to-gray-800/50 active:scale-[0.98] transition-transform">
+
+        <div class="flex justify-between items-start">
+          <div class="text-primary rounded-full bg-white p-2">
+            <span class="material-symbols-outlined !text-3xl">school</span>
           </div>
-          <div class="flex flex-col gap-1">
-            <h2 class="text-[#333333] dark:text-white text-base font-bold leading-tight">Scholarships</h2>
-            <p class="text-[#6c757d] dark:text-gray-400 text-sm font-normal leading-normal">Biasiswa</p>
-          </div>
+          <span class="material-symbols-outlined text-gray-400 !text-xl">info</span>
         </div>
-        <div
-          class="bounce-on-tap flex cursor-pointer flex-col gap-3 rounded-xl bg-gradient-to-br from-blue-100 to-white p-4 shadow-md dark:from-blue-900/50 dark:to-gray-800/50">
-          <div class="flex justify-between items-start">
-            <div class="text-primary rounded-full bg-white p-2">
-              <span class="material-symbols-outlined !text-3xl">storefront</span>
-            </div>
-            <span class="material-symbols-outlined text-gray-400 !text-xl">info</span>
-          </div>
-          <div class="flex flex-col gap-1">
-            <h2 class="text-[#333333] dark:text-white text-base font-bold leading-tight">SME Registration</h2>
-            <p class="text-[#6c757d] dark:text-gray-400 text-sm font-normal leading-normal">Pendaftaran PKS</p>
-          </div>
+
+        <div class="flex flex-col gap-1">
+          <h2 class="text-[#333333] dark:text-white text-base font-bold leading-tight">Scholarships</h2>
+          <p class="text-[#6c757d] dark:text-gray-400 text-sm font-normal leading-normal">Biasiswa</p>
         </div>
-        <div
-          class="bounce-on-tap flex cursor-pointer flex-col gap-3 rounded-xl bg-gradient-to-br from-blue-100 to-white p-4 shadow-md dark:from-blue-900/50 dark:to-gray-800/50">
-          <div class="flex justify-between items-start">
-            <div class="text-primary rounded-full bg-white p-2">
-              <span class="material-symbols-outlined !text-3xl">health_and_safety</span>
-            </div>
-            <span class="material-symbols-outlined text-gray-400 !text-xl">info</span>
-          </div>
-          <div class="flex flex-col gap-1">
-            <h2 class="text-[#333333] dark:text-white text-base font-bold leading-tight">Healthcare</h2>
-            <p class="text-[#6c757d] dark:text-gray-400 text-sm font-normal leading-normal">Kebenaran Kesihatan</p>
-          </div>
-        </div>
-        <div
-          class="bounce-on-tap flex cursor-pointer flex-col gap-3 rounded-xl bg-gradient-to-br from-blue-100 to-white p-4 shadow-md dark:from-blue-900/50 dark:to-gray-800/50">
-          <div class="flex justify-between items-start">
-            <div class="text-primary rounded-full bg-white p-2">
-              <span class="material-symbols-outlined !text-3xl">security</span>
-            </div>
-            <span class="material-symbols-outlined text-gray-400 !text-xl">info</span>
-          </div>
-          <div class="flex flex-col gap-1">
-            <h2 class="text-[#333333] dark:text-white text-base font-bold leading-tight">Online Safety</h2>
-            <p class="text-[#6c757d] dark:text-gray-400 text-sm font-normal leading-normal">Keselamatan Talian</p>
-          </div>
-        </div>
-      </div>
-      <div class="px-4 pb-3 pt-5">
-        <h2 class="text-[#333333] dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em]">Suggested for
-          You</h2>
-        <p class="text-[#6c757d] dark:text-gray-400 text-sm font-medium leading-normal">Personalised for Age 16</p>
+
       </div>
       <div
-        class="flex overflow-x-auto [-ms-scrollbar-style:none] [scrollbar-width:none] [&amp;::-webkit-scrollbar]:hidden pb-4">
-        <div class="flex items-stretch px-4 gap-4">
-          <div
-            class="flex h-full flex-1 flex-col gap-3 rounded-xl min-w-[280px] bg-white dark:bg-gray-800/50 p-3 cursor-pointer shadow-lg overflow-hidden">
-            <div class="w-full bg-center bg-no-repeat aspect-[3/2] bg-cover rounded-lg flex flex-col"
-              data-alt="A photo of books and a graduation cap, representing scholarships."
-              style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCvxncq0PtDMiz-uP28U5gxT8aN7eN99eROXQGhJiWSW9u3Huls6PhoAvb2blB_uqUDYx4-_rbxKU3KBDYqgmKwaNfMODBQWWmu3nhQf-IKd59XONdhUPCip8LnWGze-5KAC2TGiqJ3lQ6ri0TIqN1FTWL93vv8qktLdqYgIWcz50K7yPf8cHt_ahFgbaLSt0NHimu-5PzWYbDV3Au60DQeNq-r63XdVxWCzxXGVel_JY3giwHOtI5NmhrSaw-Nednpwupr9WaOd8U");'>
-            </div>
-            <div>
-              <div class="mb-2">
-                <span
-                  class="inline-block bg-accent/20 text-accent text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">New
-                  Scholarship</span>
-              </div>
-              <p class="text-[#333333] dark:text-white text-base font-semibold leading-normal">Scholarship Apply</p>
-              <p class="text-[#6c757d] dark:text-gray-400 text-sm font-normal leading-normal">Check your eligibility for
-                new scholarships.</p>
-            </div>
+        class="bounce-on-tap flex cursor-pointer flex-col gap-3 rounded-xl bg-gradient-to-br from-blue-100 to-white p-4 shadow-md dark:from-blue-900/50 dark:to-gray-800/50">
+        <div class="flex justify-between items-start">
+          <div class="text-primary rounded-full bg-white p-2">
+            <span class="material-symbols-outlined !text-3xl">storefront</span>
           </div>
-          <div
-            class="flex h-full flex-1 flex-col gap-3 rounded-xl min-w-[280px] bg-white dark:bg-gray-800/50 p-3 cursor-pointer shadow-lg overflow-hidden">
-            <div class="w-full bg-center bg-no-repeat aspect-[3/2] bg-cover rounded-lg flex flex-col"
-              data-alt="A young entrepreneur working on a laptop in a creative workspace."
-              style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBhU6i78EonFvbimNUpiaqixn21z5ZciHuM4-pK_Ynvwuy9UlBO3X3n0GfP6ZM15rqYil0xcqkTDL05tzz5ENd8T80qGnQCg6o2T5az8xngKjAmQNdzLe9iR9EwRmz4oaBrRRLKVkXFceCAX9bxbsWI5U-DLuYOc0NLCNJFER88mpiQBz0S1KMQZEep6Wt9Nx0A-8YRYHwG7gZJOLiHXlj7CAgmK1HPEdNZwet60B75bToukZGG4_Zt7nZBluJv__zJ3REnETRpDng");'>
+          <span class="material-symbols-outlined text-gray-400 !text-xl">info</span>
+        </div>
+        <div class="flex flex-col gap-1">
+          <h2 class="text-[#333333] dark:text-white text-base font-bold leading-tight">SME Registration</h2>
+          <p class="text-[#6c757d] dark:text-gray-400 text-sm font-normal leading-normal">Pendaftaran PKS</p>
+        </div>
+      </div>
+      <div
+        class="bounce-on-tap flex cursor-pointer flex-col gap-3 rounded-xl bg-gradient-to-br from-blue-100 to-white p-4 shadow-md dark:from-blue-900/50 dark:to-gray-800/50">
+        <div class="flex justify-between items-start">
+          <div class="text-primary rounded-full bg-white p-2">
+            <span class="material-symbols-outlined !text-3xl">health_and_safety</span>
+          </div>
+          <span class="material-symbols-outlined text-gray-400 !text-xl">info</span>
+        </div>
+        <div class="flex flex-col gap-1">
+          <h2 class="text-[#333333] dark:text-white text-base font-bold leading-tight">Healthcare</h2>
+          <p class="text-[#6c757d] dark:text-gray-400 text-sm font-normal leading-normal">Kebenaran Kesihatan</p>
+        </div>
+      </div>
+      <div
+        class="bounce-on-tap flex cursor-pointer flex-col gap-3 rounded-xl bg-gradient-to-br from-blue-100 to-white p-4 shadow-md dark:from-blue-900/50 dark:to-gray-800/50">
+        <div class="flex justify-between items-start">
+          <div class="text-primary rounded-full bg-white p-2">
+            <span class="material-symbols-outlined !text-3xl">security</span>
+          </div>
+          <span class="material-symbols-outlined text-gray-400 !text-xl">info</span>
+        </div>
+        <div class="flex flex-col gap-1">
+          <h2 class="text-[#333333] dark:text-white text-base font-bold leading-tight">Online Safety</h2>
+          <p class="text-[#6c757d] dark:text-gray-400 text-sm font-normal leading-normal">Keselamatan Talian</p>
+        </div>
+      </div>
+    </div>
+    <div class="px-4 pb-3 pt-5">
+      <h2 class="text-[#333333] dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em]">Suggested for
+        You</h2>
+      <p class="text-[#6c757d] dark:text-gray-400 text-sm font-medium leading-normal">Personalised for Age 16</p>
+    </div>
+    <div
+      class="flex overflow-x-auto [-ms-scrollbar-style:none] [scrollbar-width:none] [&amp;::-webkit-scrollbar]:hidden pb-4">
+      <div class="flex items-stretch px-4 gap-4">
+        <div
+          class="flex h-full flex-1 flex-col gap-3 rounded-xl min-w-[280px] bg-white dark:bg-gray-800/50 p-3 cursor-pointer shadow-lg overflow-hidden">
+          <div class="w-full bg-center bg-no-repeat aspect-[3/2] bg-cover rounded-lg flex flex-col"
+            data-alt="A photo of books and a graduation cap, representing scholarships."
+            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCvxncq0PtDMiz-uP28U5gxT8aN7eN99eROXQGhJiWSW9u3Huls6PhoAvb2blB_uqUDYx4-_rbxKU3KBDYqgmKwaNfMODBQWWmu3nhQf-IKd59XONdhUPCip8LnWGze-5KAC2TGiqJ3lQ6ri0TIqN1FTWL93vv8qktLdqYgIWcz50K7yPf8cHt_ahFgbaLSt0NHimu-5PzWYbDV3Au60DQeNq-r63XdVxWCzxXGVel_JY3giwHOtI5NmhrSaw-Nednpwupr9WaOd8U");'>
+          </div>
+          <div>
+            <div class="mb-2">
+              <span
+                class="inline-block bg-accent/20 text-accent text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">New
+                Scholarship</span>
             </div>
-            <div>
-              <div class="mb-2">
-                <span
-                  class="inline-block bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Starter
-                  PKS</span>
-              </div>
-              <p class="text-[#333333] dark:text-white text-base font-semibold leading-normal">Explore youth
-                entrepreneurship grants</p>
-              <p class="text-[#6c757d] dark:text-gray-400 text-sm font-normal leading-normal">Available in your state.
-              </p>
+            <p class="text-[#333333] dark:text-white text-base font-semibold leading-normal">Scholarship Apply</p>
+            <p class="text-[#6c757d] dark:text-gray-400 text-sm font-normal leading-normal">Check your eligibility for
+              new scholarships.</p>
+          </div>
+        </div>
+        <div
+          class="flex h-full flex-1 flex-col gap-3 rounded-xl min-w-[280px] bg-white dark:bg-gray-800/50 p-3 cursor-pointer shadow-lg overflow-hidden">
+          <div class="w-full bg-center bg-no-repeat aspect-[3/2] bg-cover rounded-lg flex flex-col"
+            data-alt="A young entrepreneur working on a laptop in a creative workspace."
+            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBhU6i78EonFvbimNUpiaqixn21z5ZciHuM4-pK_Ynvwuy9UlBO3X3n0GfP6ZM15rqYil0xcqkTDL05tzz5ENd8T80qGnQCg6o2T5az8xngKjAmQNdzLe9iR9EwRmz4oaBrRRLKVkXFceCAX9bxbsWI5U-DLuYOc0NLCNJFER88mpiQBz0S1KMQZEep6Wt9Nx0A-8YRYHwG7gZJOLiHXlj7CAgmK1HPEdNZwet60B75bToukZGG4_Zt7nZBluJv__zJ3REnETRpDng");'>
+          </div>
+          <div>
+            <div class="mb-2">
+              <span
+                class="inline-block bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">Starter
+                PKS</span>
             </div>
+            <p class="text-[#333333] dark:text-white text-base font-semibold leading-normal">Explore youth
+              entrepreneurship grants</p>
+            <p class="text-[#6c757d] dark:text-gray-400 text-sm font-normal leading-normal">Available in your state.
+            </p>
           </div>
         </div>
       </div>
     </div>
-    <div class="h-5 bg-transparent"></div>
-    <div class="sticky bottom-0">
-      <div
-        class="flex h-[72px] justify-around border-t border-[#f0f2f5] bg-white/80 px-4 pb-3 pt-2 dark:border-gray-700 dark:bg-background-dark/80 backdrop-blur-lg">
+  </div>
+  <div class="h-5 bg-transparent"></div>
+  <div class="sticky bottom-0">
+    <div
+      class="flex h-[72px] justify-around border-t border-[#f0f2f5] bg-white/80 px-4 pb-3 pt-2 dark:border-gray-700 dark:bg-background-dark/80 backdrop-blur-lg">
 
-        <!-- 1. HOME BUTTON -->
-        <a class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full text-primary"
-          href="mainpage_home.html">
-          <div class="flex h-8 items-center justify-center">
-            <span class="material-symbols-outlined fill">home</span>
-          </div>
-          <p class="text-primary text-xs font-semibold leading-normal tracking-[0.015em]">Home</p>
-        </a>
+      <!-- 1. HOME BUTTON -->
+      <a class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full text-primary"
+        href="mainpage_home.html">
+        <div class="flex h-8 items-center justify-center">
+          <span class="material-symbols-outlined fill">home</span>
+        </div>
+        <p class="text-primary text-xs font-semibold leading-normal tracking-[0.015em]">Home</p>
+      </a>
 
-        <!-- 2. MY APPLICATIONS BUTTON -->
-        <a class="flex flex-1 flex-col items-center justify-end gap-1 text-[#6c757d] dark:text-gray-400 hover:text-primary transition-colors"
-          href="mainpage_applications.html">
-          <div class="flex h-8 items-center justify-center">
-            <span class="material-symbols-outlined">description</span>
-          </div>
-          <p class="text-xs font-semibold leading-normal tracking-[0.015em]">My Applications</p>
-        </a>
+      <!-- 2. MY APPLICATIONS BUTTON -->
+      <a class="flex flex-1 flex-col items-center justify-end gap-1 text-[#6c757d] dark:text-gray-400 hover:text-primary transition-colors"
+        href="mainpage_applications.html">
+        <div class="flex h-8 items-center justify-center">
+          <span class="material-symbols-outlined">description</span>
+        </div>
+        <p class="text-xs font-semibold leading-normal tracking-[0.015em]">My Applications</p>
+      </a>
 
-        <!-- 3. PROFILE BUTTON -->
-        <a class="flex flex-1 flex-col items-center justify-end gap-1 text-[#6c757d] dark:text-gray-400 hover:text-primary transition-colors"
-          href="mainpage_profile.html">
-          <div class="flex h-8 items-center justify-center">
-            <span class="material-symbols-outlined">account_circle</span>
-          </div>
-          <p class="text-xs font-semibold leading-normal tracking-[0.015em]">Profile</p>
-        </a>
+      <!-- 3. PROFILE BUTTON -->
+      <a class="flex flex-1 flex-col items-center justify-end gap-1 text-[#6c757d] dark:text-gray-400 hover:text-primary transition-colors"
+        href="mainpage_profile.html">
+        <div class="flex h-8 items-center justify-center">
+          <span class="material-symbols-outlined">account_circle</span>
+        </div>
+        <p class="text-xs font-semibold leading-normal tracking-[0.015em]">Profile</p>
+      </a>
 
-      </div>
     </div>
+  </div>
   </div>
 </body>
 
