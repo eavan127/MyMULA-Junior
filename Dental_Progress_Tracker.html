@@ -61,9 +61,10 @@
     class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
     <div
       class="flex items-center bg-white dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10 shadow-sm">
-      <div class="text-[#101418] dark:text-white flex size-12 shrink-0 items-center justify-start -ml-2">
+      <a href="mainpage_applications.html"
+        class="text-[#101418] dark:text-white flex size-12 shrink-0 items-center justify-start -ml-2 cursor-pointer hover:opacity-75 transition-opacity">
         <span class="material-symbols-outlined">arrow_back_ios_new</span>
-      </div>
+      </a>
       <h2 class="text-[#101418] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center">
         Consent Progress Tracker</h2>
       <div class="flex size-12 shrink-0 items-center"></div>
@@ -146,7 +147,7 @@
   </div>
 
   <script>
-    src="google_translate.js"
+    src = "google_translate.js"
     // Save dental application status to sessionStorage
     localStorage.setItem('dental_application_submitted', 'true');
     sessionStorage.setItem('dental_application_status', 'processing');
