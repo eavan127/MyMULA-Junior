@@ -4,12 +4,11 @@
 <head>
   <meta charset="utf-8" />
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-  <title>Home Dashboard (Enhanced UI) - MyMULA Junior</title>
+  <title>Home Dashboard - MyMULA Junior</title>
   <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;900&amp;display=swap"
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;900&display=swap"
     rel="stylesheet" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
     rel="stylesheet" />
   <script>
     tailwind.config = {
@@ -25,12 +24,6 @@
           fontFamily: {
             "display": ["Public Sans", "sans-serif"]
           },
-          borderRadius: {
-            "DEFAULT": "0.25rem",
-            "lg": "12px",
-            "xl": "16px",
-            "full": "9999px"
-          },
         },
       },
     }
@@ -45,55 +38,106 @@
     }
 
     body {
-      min-height: max(884px, 100dvh);
+      min-height: 100vh;
     }
 
-    .bounce-on-tap:active {
-      transform: scale(0.95);
-      transition: transform 0.1s ease-in-out;
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .animate-slide-in {
+      animation: slideIn 0.3s ease-out;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.6;
+      }
+    }
+
+    .animate-pulse-slow {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
   </style>
 </head>
 
 <body class="font-display bg-background-light">
   <div
-    class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden">
+    class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden">
+    <!-- Header -->
     <div class="flex items-center bg-transparent dark:bg-background-dark p-4 justify-between">
       <div class="flex items-center gap-3">
         <img alt="Ali's avatar" class="h-12 w-12 rounded-full object-cover border-2 border-primary shadow-md"
-          src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPCkPYpsFrKyuL2q0wKCKpuzOi4pehvyVUPD_CyjBd3x6ml3D8IsF04UqGyXjYwha3tEJyz65UrQLJxhQoL5CT6ZxCYLaLmh6o3ZFrivlVBRZLnjzp0xw422ehXkulea3qL4He8lkwYMIKXmP-pTwIvdQ4rZ0SF1jYIiPX0bnyLaiTBeLnnCNWt9_oD6if7UddAmxHabrhqvNTMH1tCRpjsFZeaAtofbK1-NPQXfO4hmlvYib9UxO6Oto6udXG1K0j5_DWpiEd6Ik" />
-        <h1 class="text-[#333333] dark:text-white text-xl font-bold leading-tight tracking-[-0.015em] flex-1">Hi, Ali!
-        </h1>
+          src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=100&h=100&fit=crop" />
+        <h1 class="text-[#333333] dark:text-white text-xl font-bold leading-tight tracking-[-0.015em]">Hi, Ali!</h1>
       </div>
       <div class="flex w-12 items-center justify-end relative">
-        <button onclick="window.location.href='Notification.html'"
-          class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 w-10 bg-transparent text-[#333333] dark:text-white gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
+        <button
+          class="flex cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 w-10 bg-transparent text-[#333333] dark:text-white">
           <span class="material-symbols-outlined !text-3xl">notifications</span>
         </button>
-        <div class="absolute top-1 right-1 h-2.5 w-2.5 rounded-full bg-red-500 border-2 border-background-light"></div>
+        <div id="notificationBadge"
+          class="absolute top-1 right-1 h-2.5 w-2.5 rounded-full bg-red-500 border-2 border-background-light animate-pulse-slow">
+        </div>
       </div>
     </div>
+
     <div class="px-4 pb-2">
       <p class="text-[#333333] dark:text-white text-lg font-bold leading-tight tracking-[-0.015em]">What would you like
-        to
-        apply for today?</p>
+        to apply for today?</p>
     </div>
 
-    <!-- CONTINUE APPLICATION SECTION (dynamically shown when drafts exist) -->
-    <div id="continueSection" class="hidden px-4 pb-4">
-      <div class="flex items-center justify-between mb-3">
-        <h2 class="text-[#333333] dark:text-white text-base font-bold flex items-center gap-2">
-          <span class="material-symbols-outlined text-orange-500">pending_actions</span>
-          Continue Where You Left Off
-        </h2>
+    <!-- Applications Section -->
+    <div id="application-list" class="flex-grow flex flex-col gap-4 px-4 mb-6">
+      <div
+        class="flex items-center justify-between gap-4 rounded-xl bg-white dark:bg-gray-800 p-4 shadow-sm cursor-pointer active:scale-[0.98] transition-transform">
+        <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary/20 text-primary">
+          <span class="material-symbols-outlined text-3xl">school</span>
+        </div>
+        <div class="flex flex-col gap-1 flex-1">
+          <p class="text-[#101418] dark:text-white text-base font-bold leading-tight">PESP Scholarship</p>
+          <p class="text-[#5e758d] dark:text-gray-400 text-sm">Financial aid for students</p>
+          <div class="flex gap-2 flex-wrap pt-1">
+            <div
+              class="flex h-6 shrink-0 items-center justify-center gap-x-2 rounded-full bg-green-200 dark:bg-green-800 px-3">
+              <p class="text-green-800 dark:text-green-200 text-xs font-medium">Eligible</p>
+            </div>
+          </div>
+        </div>
+        <span class="material-symbols-outlined text-[#5e758d]">chevron_right</span>
       </div>
-      <div id="draftCardsContainer" class="flex flex-col gap-3">
-        <!-- Draft cards will be inserted here by JavaScript -->
-      </div>
-    </div>
 
-    <div id="application-list" class="flex-grow flex flex-col gap-4 px-4">
-      <!-- Applications will be loaded here -->
+      <div
+        class="flex items-center justify-between gap-4 rounded-xl bg-white dark:bg-gray-800 p-4 shadow-sm cursor-pointer active:scale-[0.98] transition-transform">
+        <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary/20 text-primary">
+          <span class="material-symbols-outlined text-3xl">business_center</span>
+        </div>
+        <div class="flex flex-col gap-1 flex-1">
+          <p class="text-[#101418] dark:text-white text-base font-bold leading-tight">SME Registration</p>
+          <p class="text-[#5e758d] dark:text-gray-400 text-sm">Register your business</p>
+          <div class="flex gap-2 flex-wrap pt-1">
+            <div
+              class="flex h-6 shrink-0 items-center justify-center gap-x-2 rounded-full bg-gray-200 dark:bg-gray-700 px-3">
+              <p class="text-gray-700 dark:text-gray-300 text-xs font-medium">New</p>
+            </div>
+          </div>
+        </div>
+        <span class="material-symbols-outlined text-[#5e758d]">chevron_right</span>
+      </div>
     </div>
 
     <!-- Recent Activity Section -->
@@ -103,247 +147,274 @@
       <p class="text-[#6c757d] dark:text-gray-400 text-sm font-medium leading-normal">Digital Curfew & Controls</p>
     </div>
 
-    <div class="flex flex-col gap-3 px-4">
-      <!-- Activity Item 1 -->
-      <div
-        class="flex items-center gap-3 rounded-xl bg-white dark:bg-gray-800 p-4 shadow-sm border border-gray-100 dark:border-gray-700">
+    <div class="flex flex-col gap-3 px-4 pb-24">
+      <!-- Curfew Settings Activity - Real-time Updates -->
+      <div id="curfewActivity"
+        class="flex items-center gap-3 rounded-xl bg-white dark:bg-gray-800 p-4 shadow-sm border border-gray-100 dark:border-gray-700 animate-slide-in">
         <div
           class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30 text-primary">
           <span class="material-symbols-outlined text-xl">timer</span>
         </div>
         <div class="flex-1">
           <p class="text-[#101418] dark:text-white text-sm font-bold">Curfew Settings Updated</p>
-          <p id="recent-curfew-desc" class="text-gray-500 dark:text-gray-400 text-xs">Guardian adjusted curfew to 11:00
-            PM</p>
+          <p id="curfewDescription" class="text-gray-500 dark:text-gray-400 text-xs">Loading curfew settings...</p>
         </div>
-        <span class="text-xs text-gray-400">2h ago</span>
+        <span id="curfewTimestamp" class="text-xs text-gray-400">Just now</span>
       </div>
 
-      <!-- Activity Item 2 -->
-      <div
-        class="flex items-center gap-3 rounded-xl bg-white dark:bg-gray-800 p-4 shadow-sm border border-gray-100 dark:border-gray-700">
+      <!-- Curfew Status Card -->
+      <div id="curfewStatusCard"
+        class="flex items-start gap-3 rounded-xl bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-4 border border-blue-200 dark:border-blue-800 shadow-sm">
+        <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-500 text-white">
+          <span class="material-symbols-outlined text-xl">schedule</span>
+        </div>
+        <div class="flex-1">
+          <p class="text-[#101418] dark:text-white text-sm font-bold mb-1">Current Curfew Status</p>
+          <div class="space-y-1">
+            <p id="curfewEnabledStatus" class="text-xs font-medium">Status: <span id="curfewStatusText"
+                class="font-bold text-green-600">Active</span></p>
+            <p class="text-xs text-gray-600 dark:text-gray-400">Starts: <span id="curfewStartDisplay"
+                class="font-semibold text-blue-600 dark:text-blue-400">10:00 PM</span></p>
+            <p class="text-xs text-gray-600 dark:text-gray-400">Ends: <span id="curfewEndDisplay"
+                class="font-semibold text-blue-600 dark:text-blue-400">07:00 AM</span></p>
+          </div>
+        </div>
+        <button onclick="refreshCurfewData()"
+          class="p-1.5 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors" title="Refresh">
+          <span class="material-symbols-outlined text-blue-600 text-xl">refresh</span>
+        </button>
+      </div>
+
+      <!-- TikTok Override Activity -->
+      <div id="tiktokActivity"
+        class="hidden flex items-center gap-3 rounded-xl bg-white dark:bg-gray-800 p-4 shadow-sm border border-gray-100 dark:border-gray-700">
         <div
           class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 text-green-600">
           <span class="material-symbols-outlined text-xl">check_circle</span>
         </div>
         <div class="flex-1">
           <p class="text-[#101418] dark:text-white text-sm font-bold">TikTok Override Approved</p>
-          <p class="text-gray-500 dark:text-gray-400 text-xs">30 min usage granted</p>
+          <p id="tiktokDescription" class="text-gray-500 dark:text-gray-400 text-xs">30 min usage granted</p>
         </div>
-        <span class="text-xs text-gray-400">5h ago</span>
+        <span id="tiktokTimestamp" class="text-xs text-gray-400">Just now</span>
       </div>
     </div>
-
-
   </div>
-  <div class="h-5 bg-transparent"></div>
-  <div class="sticky bottom-0">
+
+  <!-- Bottom Navigation -->
+  <div class="fixed bottom-0 left-0 right-0">
     <div
       class="flex h-[72px] justify-around border-t border-[#f0f2f5] bg-white/80 px-4 pb-3 pt-2 dark:border-gray-700 dark:bg-background-dark/80 backdrop-blur-lg">
-
-      <!-- 1. HOME BUTTON -->
-      <a class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full text-primary"
-        href="mainpage_home.html">
+      <div class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full text-primary">
         <div class="flex h-8 items-center justify-center">
           <span class="material-symbols-outlined fill">home</span>
         </div>
         <p class="text-primary text-xs font-semibold leading-normal tracking-[0.015em]">Home</p>
-      </a>
+      </div>
 
-      <!-- 2. MY APPLICATIONS BUTTON -->
-      <a class="flex flex-1 flex-col items-center justify-end gap-1 text-[#6c757d] dark:text-gray-400 hover:text-primary transition-colors"
-        href="mainpage_applications.html">
+      <div
+        class="flex flex-1 flex-col items-center justify-end gap-1 text-[#6c757d] dark:text-gray-400 cursor-pointer hover:text-primary transition-colors">
         <div class="flex h-8 items-center justify-center">
           <span class="material-symbols-outlined">description</span>
         </div>
         <p class="text-xs font-semibold leading-normal tracking-[0.015em]">My Applications</p>
-      </a>
+      </div>
 
-      <!-- 3. PROFILE BUTTON -->
-      <a class="flex flex-1 flex-col items-center justify-end gap-1 text-[#6c757d] dark:text-gray-400 hover:text-primary transition-colors"
-        href="mainpage_profile.html">
+      <div
+        class="flex flex-1 flex-col items-center justify-end gap-1 text-[#6c757d] dark:text-gray-400 cursor-pointer hover:text-primary transition-colors">
         <div class="flex h-8 items-center justify-center">
           <span class="material-symbols-outlined">account_circle</span>
         </div>
         <p class="text-xs font-semibold leading-normal tracking-[0.015em]">Profile</p>
-      </a>
+      </div>
     </div>
   </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded', async () => {
-      try {
-        const response = await fetch('mock_data.json');
-        const data = await response.json();
-        const container = document.getElementById('application-list');
-
-        if (container) {
-          container.innerHTML = data.map(app => `
-            <a class="flex items-center justify-between gap-4 rounded-xl bg-white dark:bg-gray-800 p-4 shadow-[0_2px_8px_rgba(0,0,0,0.05)] cursor-pointer active:scale-[0.98] transition-transform"
-              href="${app.link}">
-              <div
-                class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary/20 text-primary dark:bg-primary/30 dark:text-blue-300">
-                <span class="material-symbols-outlined text-3xl">${app.icon}</span>
-              </div>
-              <div class="flex flex-col gap-1 flex-1">
-                <p class="text-[#101418] dark:text-white text-base font-bold leading-tight">${app.title}</p>
-                <p class="text-[#5e758d] dark:text-gray-400 text-sm font-normal leading-normal">${app.description}</p>
-                <div class="flex gap-2 flex-wrap pt-1">
-                  ${app.tags.map(tag => `
-                    <div
-                      class="flex h-6 shrink-0 items-center justify-center gap-x-2 rounded-full ${tag.type === 'success' ? 'bg-green-200 dark:bg-green-800' : 'bg-gray-200 dark:bg-gray-700'} px-3">
-                      <p class="${tag.type === 'success' ? 'text-green-800 dark:text-green-200' : 'text-gray-700 dark:text-gray-300'} text-xs font-medium leading-normal">${tag.text}</p>
-                    </div>
-                  `).join('')}
-                </div>
-              </div>
-              <div class="text-[#5e758d] dark:text-gray-400">
-                <span class="material-symbols-outlined">chevron_right</span>
-              </div>
-            </a>
-          `).join('');
-        }
-      } catch (error) {
-        console.error('Error loading mock data:', error);
-      }
-    });
-  </script>
-
-  <!-- DRAFT APPLICATIONS SCRIPT -->
-  <script>
-    // Application type configurations
-    const APP_TYPES = {
-      scholarship: {
-        name: 'PESP Scholarship',
-        icon: 'school',
-        color: 'blue',
-        resumeUrl: 'scholarship_requirements.html'
-      },
-      sme: {
-        name: 'SME Registration',
-        icon: 'business_center',
-        color: 'green',
-        resumeUrl: 'SME_Application_Requirements.html'
-      },
-      dental: {
-        name: 'Dental Checkup',
-        icon: 'dentistry',
-        color: 'purple',
-        resumeUrl: 'Dental_Healthcare_Consent.html'
-      }
+    // State management using in-memory storage
+    let curfewState = {
+      enabled: true,
+      startTime: '22:00',
+      endTime: '07:00',
+      lastUpdated: Date.now(),
+      tiktokOverride: false
     };
 
-    // Load and display draft applications on page load
+    // Check for updates from parent control page
+    function checkForCurfewUpdates() {
+      // In a real app, this would poll a server or use WebSocket
+      // For demo, we'll sync with the parent page's state if available
+
+      // Simulate checking for updates every 3 seconds
+      const checkInterval = setInterval(() => {
+        // Try to get shared state (in real app, this would be from server/API)
+        const sharedState = getSharedCurfewState();
+
+        if (sharedState && hasStateChanged(sharedState)) {
+          curfewState = { ...sharedState, lastUpdated: Date.now() };
+          updateCurfewDisplay();
+          showNewUpdateNotification();
+        }
+      }, 3000);
+    }
+
+    function getSharedCurfewState() {
+      // In a real app, this would fetch from server/API
+      // For demo, we'll create a shared state mechanism
+      try {
+        const stored = sessionStorage.getItem('parentCurfewSettings');
+        if (stored) {
+          return JSON.parse(stored);
+        }
+      } catch (e) {
+        console.error('Error reading shared state:', e);
+      }
+      return null;
+    }
+
+    function hasStateChanged(newState) {
+      return (
+        newState.enabled !== curfewState.enabled ||
+        newState.startTime !== curfewState.startTime ||
+        newState.endTime !== curfewState.endTime ||
+        newState.tiktokOverride !== curfewState.tiktokOverride
+      );
+    }
+
+    function formatTime(timeStr) {
+      if (!timeStr) return '';
+      const [hour, minute] = timeStr.split(':');
+      const h = parseInt(hour);
+      const period = h >= 12 ? 'PM' : 'AM';
+      const displayHour = h === 0 ? 12 : h > 12 ? h - 12 : h;
+      return `${String(displayHour).padStart(2, '0')}:${minute} ${period}`;
+    }
+
+    function formatTimeAgo(timestamp) {
+      const now = Date.now();
+      const diff = now - timestamp;
+      const seconds = Math.floor(diff / 1000);
+      const minutes = Math.floor(seconds / 60);
+      const hours = Math.floor(minutes / 60);
+
+      if (seconds < 10) return 'Just now';
+      if (seconds < 60) return `${seconds}s ago`;
+      if (minutes < 60) return `${minutes}m ago`;
+      if (hours < 24) return `${hours}h ago`;
+      return 'Earlier';
+    }
+
+    function updateCurfewDisplay() {
+      // Update status text
+      const statusText = document.getElementById('curfewStatusText');
+      statusText.textContent = curfewState.enabled ? 'Active' : 'Disabled';
+      statusText.className = curfewState.enabled ? 'font-bold text-green-600' : 'font-bold text-gray-500';
+
+      // Update times
+      document.getElementById('curfewStartDisplay').textContent = formatTime(curfewState.startTime);
+      document.getElementById('curfewEndDisplay').textContent = formatTime(curfewState.endTime);
+
+      // Update description in activity
+      const desc = curfewState.enabled
+        ? `Guardian adjusted curfew to ${formatTime(curfewState.startTime)} - ${formatTime(curfewState.endTime)}`
+        : 'Guardian disabled digital curfew';
+      document.getElementById('curfewDescription').textContent = desc;
+
+      // Update timestamp
+      document.getElementById('curfewTimestamp').textContent = formatTimeAgo(curfewState.lastUpdated);
+
+      // Show TikTok override if active
+      if (curfewState.tiktokOverride) {
+        document.getElementById('tiktokActivity').classList.remove('hidden');
+      }
+    }
+
+    function refreshCurfewData() {
+      // Show loading state
+      const btn = event.currentTarget;
+      const icon = btn.querySelector('.material-symbols-outlined');
+      icon.style.animation = 'spin 1s linear infinite';
+
+      // Simulate refresh
+      setTimeout(() => {
+        const sharedState = getSharedCurfewState();
+        if (sharedState) {
+          curfewState = { ...sharedState, lastUpdated: Date.now() };
+          updateCurfewDisplay();
+          showToast('✓ Curfew data refreshed');
+        }
+        icon.style.animation = '';
+      }, 500);
+    }
+
+    function showNewUpdateNotification() {
+      // Flash the notification badge
+      const badge = document.getElementById('notificationBadge');
+      badge.classList.add('animate-pulse-slow');
+
+      // Show toast
+      showToast('📢 Curfew settings updated by guardian');
+
+      // Animate the curfew activity card
+      const card = document.getElementById('curfewActivity');
+      card.classList.remove('animate-slide-in');
+      void card.offsetWidth; // Trigger reflow
+      card.classList.add('animate-slide-in');
+    }
+
+    function showToast(message) {
+      const toast = document.createElement('div');
+      toast.className = 'fixed top-20 left-1/2 -translate-x-1/2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 px-6 py-3 rounded-full shadow-xl text-sm font-medium z-50 animate-slide-in';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.3s';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
+
+    // Initialize on page load
     document.addEventListener('DOMContentLoaded', () => {
-      loadDraftApplications();
+      updateCurfewDisplay();
+      checkForCurfewUpdates();
+
+      // Update timestamps every 30 seconds
+      setInterval(() => {
+        document.getElementById('curfewTimestamp').textContent = formatTimeAgo(curfewState.lastUpdated);
+        if (curfewState.tiktokOverride) {
+          // Update TikTok timestamp if needed
+        }
+      }, 30000);
     });
 
-    function loadDraftApplications() {
-      const container = document.getElementById('draftCardsContainer');
-      const section = document.getElementById('continueSection');
-      let hasDrafts = false;
-
-      container.innerHTML = ''; // Clear existing
-
-      // Check each application type for drafts
-      Object.keys(APP_TYPES).forEach(type => {
-        const draftKey = `draft_${type}`;
-        const draft = sessionStorage.getItem(draftKey);
-
-        if (draft) {
-          try {
-            const draftData = JSON.parse(draft);
-            hasDrafts = true;
-            const card = createDraftCard(type, draftData);
-            container.appendChild(card);
-          } catch (e) {
-            console.error(`Error parsing draft for ${type}:`, e);
-          }
-        }
-      });
-
-      // Show/hide section based on drafts
-      if (hasDrafts) {
-        section.classList.remove('hidden');
-      } else {
-        section.classList.add('hidden');
+    // Add CSS for spin animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
       }
-    }
+    `;
+    document.head.appendChild(style);
 
-    function createDraftCard(type, draftData) {
-      const config = APP_TYPES[type];
-      const lastModified = draftData.lastModified ? formatTimeAgo(new Date(draftData.lastModified)) : 'Recently';
-      const progress = draftData.progress || 'In progress';
+    // Expose function to be called by parent page
+    window.updateChildCurfewFromParent = function (newSettings) {
+      curfewState = {
+        enabled: newSettings.enabled,
+        startTime: newSettings.startTime,
+        endTime: newSettings.endTime,
+        tiktokOverride: newSettings.tiktokOverride || false,
+        lastUpdated: Date.now()
+      };
 
-      const card = document.createElement('div');
-      card.className = 'flex items-center gap-3 rounded-xl bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 p-4 border border-orange-200 dark:border-orange-800 shadow-sm';
-      card.innerHTML = `
-        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-${config.color}-100 dark:bg-${config.color}-900/30 text-${config.color}-500">
-          <span class="material-symbols-outlined text-2xl">${config.icon}</span>
-        </div>
-        <div class="flex-1 min-w-0">
-          <p class="text-[#101418] dark:text-white text-sm font-bold truncate">${config.name}</p>
-          <p class="text-orange-600 dark:text-orange-400 text-xs font-medium">${progress}</p>
-          <p class="text-gray-500 dark:text-gray-400 text-xs">Last edited: ${lastModified}</p>
-        </div>
-        <div class="flex gap-2 shrink-0">
-          <button onclick="discardDraft('${type}')" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors" title="Discard">
-            <span class="material-symbols-outlined text-gray-500 hover:text-red-500 text-xl">delete</span>
-          </button>
-          <button onclick="resumeDraft('${type}')" class="px-4 py-2 rounded-lg bg-primary text-white font-bold text-sm shadow-sm hover:bg-primary/90 transition-colors">
-            Continue
-          </button>
-        </div>
-      `;
-      return card;
-    }
+      // Store in session for persistence
+      sessionStorage.setItem('parentCurfewSettings', JSON.stringify(curfewState));
 
-    function formatTimeAgo(date) {
-      const now = new Date();
-      const diffMs = now - date;
-      const diffMins = Math.floor(diffMs / 60000);
-      const diffHours = Math.floor(diffMins / 60);
-      const diffDays = Math.floor(diffHours / 24);
-
-      if (diffMins < 1) return 'Just now';
-      if (diffMins < 60) return `${diffMins} min ago`;
-      if (diffHours < 24) return `${diffHours} hr ago`;
-      if (diffDays < 7) return `${diffDays} days ago`;
-      return date.toLocaleDateString();
-    }
-
-    function resumeDraft(type) {
-      const config = APP_TYPES[type];
-      // Mark that we're resuming a draft
-      sessionStorage.setItem(`resuming_${type}`, 'true');
-      window.location.href = config.resumeUrl;
-    }
-
-    function discardDraft(type) {
-      if (confirm('Are you sure you want to discard this application? All saved progress will be lost.')) {
-        sessionStorage.removeItem(`draft_${type}`);
-        loadDraftApplications(); // Refresh the list
-      }
-    }
-  </script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Update Recent Activity Curfew Time
-      const curfewStart = localStorage.getItem('curfew_start');
-      if (curfewStart) {
-        // Format time (e.g., 22:00 -> 10:00 PM)
-        const [h, m] = curfewStart.split(':');
-        const hour = parseInt(h);
-        const ampm = hour >= 12 ? 'PM' : 'AM';
-        const formattedHour = hour % 12 || 12;
-        const formattedTime = `${formattedHour}:${m} ${ampm}`;
-
-        const descEl = document.getElementById('recent-curfew-desc');
-        if (descEl) {
-          descEl.textContent = `Guardian adjusted curfew to ${formattedTime}`;
-        }
-      }
-    });
+      updateCurfewDisplay();
+      showNewUpdateNotification();
+    };
   </script>
 </body>
 
