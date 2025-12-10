@@ -412,7 +412,10 @@ Education Portal: Always allowed
 Settings have been pushed to Ali's device.`;
 
       showToast('✓ Settings saved successfully!');
-      setTimeout(() => alert(summary), 300);
+      setTimeout(() => {
+        alert(summary);
+        window.location.href = 'digital_curfew_settings_saved.html';
+      }, 300);
     }
 
     function goBack() {
