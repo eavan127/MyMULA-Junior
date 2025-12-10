@@ -199,7 +199,7 @@
 
             } catch (error) {
                 console.error("Error calling Backend:", error);
-                return "I'm having trouble connecting to the MyMULA Intelligence Server. Make sure `py_chatbot_server.py` is running! 😓";
+                return `⚠️ Connection Issue: ${error.message}\n\nPlease check the black server window for details!`;
             }
         }
 
