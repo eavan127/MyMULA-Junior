@@ -78,9 +78,9 @@
     <!-- Background Content Placeholder -->
     <div class="p-4 bg-background-light dark:bg-background-dark">
       <div class="flex items-center justify-between py-2">
-        <span class="material-symbols-outlined text-neutral-800 dark:text-neutral-200">menu</span>
+        <span class="material-symbols-outlined notranslate text-neutral-800 dark:text-neutral-200">menu</span>
         <h1 class="text-xl font-bold text-neutral-800 dark:text-neutral-200">MyMULA Junior</h1>
-        <span class="material-symbols-outlined text-neutral-800 dark:text-neutral-200">notifications</span>
+        <span class="material-symbols-outlined notranslate text-neutral-800 dark:text-neutral-200">notifications</span>
       </div>
       <div class="mt-4 p-6 bg-white dark:bg-neutral-800 rounded-xl shadow-sm">
         <p class="text-neutral-600 dark:text-neutral-400">Welcome, Guardian!</p>
@@ -99,7 +99,7 @@
             <button
               class="flex max-w-[480px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-full border border-neutral-300 dark:border-neutral-700 bg-transparent px-3 py-1.5 text-sm font-bold text-neutral-700 dark:text-neutral-300">
               <span>EN</span>
-              <span class="material-symbols-outlined text-base">swap_horiz</span>
+              <span class="material-symbols-outlined notranslate text-base">swap_horiz</span>
               <span>BM</span>
             </button>
           </div>
@@ -108,14 +108,14 @@
           <div class="flex w-24 items-center justify-end">
             <button
               class="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-transparent text-[#1D1D1F] dark:text-neutral-100">
-              <span class="material-symbols-outlined">close</span>
+              <span class="material-symbols-outlined notranslate">close</span>
             </button>
           </div>
         </div>
         <div class="px-4 pt-4 pb-6 text-center">
           <div class="rounded-xl bg-white dark:bg-neutral-800 p-6 shadow-sm">
             <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
-              <span class="material-symbols-outlined !text-4xl">
+              <span class="material-symbols-outlined notranslate !text-4xl">
                 badge
               </span>
             </div>
@@ -132,7 +132,7 @@
           <!-- Added ID 'face-scanner' and onclick event -->
           <div id="face-scanner" onclick="simulateFaceID()"
             class="relative h-40 w-40 overflow-hidden text-primary cursor-pointer transition-all duration-300 rounded-3xl border-4 border-transparent">
-            <span class="material-symbols-outlined !text-[160px]">face</span>
+            <span class="material-symbols-outlined notranslate !text-[160px]">face</span>
             <div id="scan-line" class="scanner-gradient"></div>
           </div>
           <h3 id="scan-text" class="text-xl font-bold text-[#1D1D1F] dark:text-neutral-100">Tap Face to Authenticate
@@ -201,6 +201,7 @@
       }
     }
   </script>
+  <script src="google_translate.js"></script>
 </body>
 
 </html>

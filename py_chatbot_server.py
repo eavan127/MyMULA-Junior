@@ -86,8 +86,10 @@ def chat():
         })
 
     except Exception as e:
-        print(f"Error: {e}")
-        return jsonify({"error": str(e)}), 500
+        import traceback
+        traceback.print_exc()
+        print(f"CRITICAL API ERROR: {e}")
+        return jsonify({"error": f"Internal Server Error: {str(e)}"}), 500
 
 if __name__ == '__main__':
     print("🤖 MyMULA AI Server running on http://localhost:5000")

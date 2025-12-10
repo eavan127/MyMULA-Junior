@@ -63,7 +63,7 @@
             </div>
             <div class="flex items-center gap-2">
                 <button class="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                    <span class="material-symbols-outlined text-[#333] dark:text-white text-2xl">notifications</span>
+                    <span class="material-symbols-outlined notranslate text-[#333] dark:text-white text-2xl">notifications</span>
                     <div id="notificationBadge"
                         class="hidden absolute top-1 right-1 h-3 w-3 rounded-full bg-red-500 border-2 border-white">
                     </div>
@@ -79,7 +79,7 @@
                     <div class="flex items-center gap-3 mb-2">
                         <div
                             class="h-10 w-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-primary">child_care</span>
+                            <span class="material-symbols-outlined notranslate text-primary">child_care</span>
                         </div>
                         <div>
                             <p class="text-2xl font-bold text-[#333] dark:text-white">1</p>
@@ -93,7 +93,7 @@
                     <div class="flex items-center gap-3 mb-2">
                         <div
                             class="h-10 w-10 rounded-full bg-orange-100 dark:bg-orange-900/30 flex items-center justify-center">
-                            <span class="material-symbols-outlined text-orange-500">pending_actions</span>
+                            <span class="material-symbols-outlined notranslate text-orange-500">pending_actions</span>
                         </div>
                         <div>
                             <p id="pendingCount" class="text-2xl font-bold text-[#333] dark:text-white">0</p>
@@ -107,7 +107,7 @@
         <!-- Linked Children Section -->
         <div class="px-4 pb-2">
             <h2 class="text-lg font-bold text-[#333] dark:text-white mb-3 flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary">family_restroom</span>
+                <span class="material-symbols-outlined notranslate text-primary">family_restroom</span>
                 Linked Children
             </h2>
 
@@ -120,11 +120,11 @@
                         <p class="text-base font-bold text-[#333] dark:text-white">Ali</p>
                         <p class="text-sm text-gray-500 dark:text-gray-400">Age 16 • MyMULA Junior</p>
                         <div class="flex items-center gap-1 mt-1">
-                            <span class="material-symbols-outlined text-green-500 text-sm">verified</span>
+                            <span class="material-symbols-outlined notranslate text-green-500 text-sm">verified</span>
                             <span class="text-xs text-green-600">Linked</span>
                         </div>
                     </div>
-                    <span class="material-symbols-outlined text-gray-400">chevron_right</span>
+                    <span class="material-symbols-outlined notranslate text-gray-400">chevron_right</span>
                 </div>
             </div>
         </div>
@@ -132,14 +132,14 @@
         <!-- Recent Activity Section -->
         <div class="px-4 py-4 flex-1 overflow-y-auto">
             <h2 class="text-lg font-bold text-[#333] dark:text-white mb-3 flex items-center gap-2">
-                <span class="material-symbols-outlined text-primary">history</span>
+                <span class="material-symbols-outlined notranslate text-primary">history</span>
                 Recent Activity
             </h2>
 
             <div id="activityList" class="flex flex-col gap-3 pb-4">
                 <!-- Activity items will be loaded here -->
                 <div class="text-center py-8 text-gray-400">
-                    <span class="material-symbols-outlined text-5xl mb-2">inbox</span>
+                    <span class="material-symbols-outlined notranslate text-5xl mb-2">inbox</span>
                     <p>No recent activity</p>
                 </div>
             </div>
@@ -154,7 +154,7 @@
                 <a class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full text-primary"
                     href="adult_home.html">
                     <div class="flex h-8 items-center justify-center">
-                        <span class="material-symbols-outlined fill">home</span>
+                        <span class="material-symbols-outlined notranslate fill">home</span>
                     </div>
                     <p class="text-primary text-xs font-semibold">Home</p>
                 </a>
@@ -163,7 +163,7 @@
                 <a class="flex flex-1 flex-col items-center justify-end gap-1 text-[#6c757d] dark:text-gray-400 hover:text-primary transition-colors relative"
                     href="adult_requests.html">
                     <div class="flex h-8 items-center justify-center relative">
-                        <span class="material-symbols-outlined">pending_actions</span>
+                        <span class="material-symbols-outlined notranslate">pending_actions</span>
                         <div id="navBadge"
                             class="hidden absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-white text-[10px] font-bold flex items-center justify-center">
                             0</div>
@@ -175,7 +175,7 @@
                 <a class="flex flex-1 flex-col items-center justify-end gap-1 text-[#6c757d] dark:text-gray-400 hover:text-primary transition-colors"
                     href="adult_profile.html">
                     <div class="flex h-8 items-center justify-center">
-                        <span class="material-symbols-outlined">account_circle</span>
+                        <span class="material-symbols-outlined notranslate">account_circle</span>
                     </div>
                     <p class="text-xs font-semibold">Profile</p>
                 </a>
@@ -227,7 +227,7 @@
         <div onclick="handleActivityClick('${req.id}', '${req.status}')" 
              class="flex items-center gap-4 bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm cursor-pointer hover:shadow-md transition-all active:scale-[0.98]">
           <div class="h-10 w-10 rounded-full ${styles.bg} flex items-center justify-center">
-            <span class="material-symbols-outlined ${styles.text}">
+            <span class="material-symbols-outlined notranslate ${styles.text}">
               ${styles.icon}
             </span>
           </div>
@@ -236,7 +236,7 @@
             <p class="text-xs text-gray-500">From: ${req.childName}</p>
           </div>
           <span class="text-xs px-2 py-1 rounded-full ${styles.badge}">${req.status}</span>
-          <span class="material-symbols-outlined text-gray-400">chevron_right</span>
+          <span class="material-symbols-outlined notranslate text-gray-400">chevron_right</span>
         </div>
       `}).join('');
         }
@@ -252,6 +252,7 @@
             }
         }
     </script>
+  <script src="google_translate.js"></script>
 </body>
 
 </html>

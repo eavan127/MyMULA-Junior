@@ -53,7 +53,7 @@
             <div class="flex items-center p-4 justify-between">
                 <h1 class="text-xl font-bold text-[#333] dark:text-white">Child Requests</h1>
                 <button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                    <span class="material-symbols-outlined text-[#333] dark:text-white">filter_list</span>
+                    <span class="material-symbols-outlined notranslate text-[#333] dark:text-white">filter_list</span>
                 </button>
             </div>
 
@@ -76,7 +76,7 @@
 
             <!-- Empty State -->
             <div id="emptyState" class="hidden text-center py-12">
-                <span class="material-symbols-outlined text-6xl text-gray-300 mb-4">inbox</span>
+                <span class="material-symbols-outlined notranslate text-6xl text-gray-300 mb-4">inbox</span>
                 <h3 class="text-lg font-bold text-gray-500 mb-2">No Requests</h3>
                 <p class="text-sm text-gray-400">When your child submits an application request, it will appear here.
                 </p>
@@ -91,7 +91,7 @@
                 <a class="flex flex-1 flex-col items-center justify-end gap-1 text-[#6c757d] dark:text-gray-400 hover:text-primary transition-colors"
                     href="adult_home.html">
                     <div class="flex h-8 items-center justify-center">
-                        <span class="material-symbols-outlined">home</span>
+                        <span class="material-symbols-outlined notranslate">home</span>
                     </div>
                     <p class="text-xs font-semibold">Home</p>
                 </a>
@@ -99,7 +99,7 @@
                 <a class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full text-primary"
                     href="adult_requests.html">
                     <div class="flex h-8 items-center justify-center">
-                        <span class="material-symbols-outlined fill">pending_actions</span>
+                        <span class="material-symbols-outlined notranslate fill">pending_actions</span>
                     </div>
                     <p class="text-primary text-xs font-semibold">Requests</p>
                 </a>
@@ -107,7 +107,7 @@
                 <a class="flex flex-1 flex-col items-center justify-end gap-1 text-[#6c757d] dark:text-gray-400 hover:text-primary transition-colors"
                     href="adult_profile.html">
                     <div class="flex h-8 items-center justify-center">
-                        <span class="material-symbols-outlined">account_circle</span>
+                        <span class="material-symbols-outlined notranslate">account_circle</span>
                     </div>
                     <p class="text-xs font-semibold">Profile</p>
                 </a>
@@ -145,7 +145,7 @@
             container.innerHTML = requests.map(req => `
         <div onclick="handleRequestClick('${req.id}')" class="flex items-center gap-4 bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm cursor-pointer hover:shadow-md transition-all active:scale-[0.98]">
           <div class="h-12 w-12 rounded-full ${getTypeColor(req.type)} flex items-center justify-center">
-            <span class="material-symbols-outlined ${getTypeTextColor(req.type)}">${getTypeIcon(req.type)}</span>
+            <span class="material-symbols-outlined notranslate ${getTypeTextColor(req.type)}">${getTypeIcon(req.type)}</span>
           </div>
           <div class="flex-1 min-w-0">
             <p class="text-base font-bold text-[#333] dark:text-white truncate">${req.title}</p>
@@ -154,7 +154,7 @@
           </div>
           <div class="flex flex-col items-end gap-2">
             <span class="text-xs px-2 py-1 rounded-full ${getStatusColor(req.status)}">${req.status}</span>
-            <span class="material-symbols-outlined text-gray-400">chevron_right</span>
+            <span class="material-symbols-outlined notranslate text-gray-400">chevron_right</span>
           </div>
         </div>
       `).join('');
@@ -231,6 +231,7 @@
             return date.toLocaleDateString();
         }
     </script>
+  <script src="google_translate.js"></script>
 </body>
 
 </html>
