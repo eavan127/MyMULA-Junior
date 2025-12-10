@@ -205,14 +205,14 @@
                     phone: "+6012-3456789"
                 };
 
-                sessionStorage.setItem('guardian_status', 'waiting_verification');
+                sessionStorage.setItem('guardian_status', 'verified'); // Auto-verify: Simulating Government DB Match
                 sessionStorage.setItem('guardian_data', JSON.stringify(mockGuardianData));
 
                 // We also set the IC for consistency if used elsewhere
                 document.getElementById('icInput').value = mockGuardianData.ic;
 
                 // Create a brief verified feeling before redirecting
-                alert("Birth Certificate Scanned! Verification Pending.");
+                alert("Birth Certificate Scanned! Guardian Verified against Government Database.");
                 window.location.href = 'mainpage_profile.html';
             }, 1500);
         }

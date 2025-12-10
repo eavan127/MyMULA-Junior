@@ -319,7 +319,7 @@
             } else if (docType === 'coq') {
                 dataToSave = { activity: "Football Club", level: "District (MSSD)", achievement: "Runner-up", merit: "15 Points" };
             } else if (docType === 'birth') {
-                dataToSave = { name: "Ali Bin Abu", mykid: "******-**-1234" };
+                dataToSave = { name: "Ali Bin Abu", mykid: "******-**-1234", guardian_ic: "850214-10-5566", guardian_name: "Abu Bakar" };
             } else if (docType === 'guardian') {
                 dataToSave = { child: "Ali Bin Abu", guardian: "Abu Bakar", ic: "850214-10-5566" };
             } else if (docName === 'Car Licenses') {
@@ -333,54 +333,65 @@
             // Save key data for View functionality
             sessionStorage.setItem(`${storageKey}_data`, JSON.stringify(dataToSave));
 
-            // Special handling for guardian type
-            if (docType === 'guardian') {
-                // Mock Government DB Check
-                // Valid Adult: Sarah Tan (IC: 850612-10-5566) - Note: Using the ID from extracted data or input
-                // For this demo, let's assume the scanner read the correct ID: 850612-10-5566
-                // If the user manually entered something else in previous step, we'd check that.
-                // Here we simulate the check:
+            // Valid Adult IC for checking
+            const validAdultIC = "850214-10-5566";
 
-                // Let's pretend the mock data generated IS the correct adult for the happy path, 
-                // but we check if the user "registered" (conceptually). 
-                // Since this is a demo, we will check against the HARDCODED Verified Adult IC.
-                const validAdultIC = "850214-10-5566"; // Matches the mock data generated above
+            // Special handling for guardian link or Birth Cert (which contains guardian info)
+            if (docType === 'guardian' || docType === 'birth') {
+                // Determine which IC to check
+                const icToCheck = docType === 'guardian' ? dataToSave.ic : dataToSave.guardian_ic;
 
-                if (dataToSave.ic === validAdultIC) {
+                if (icToCheck === validAdultIC) {
                     sessionStorage.setItem('guardian_status', 'verified'); // Auto-verify!
-                    sessionStorage.setItem('guardian_data', JSON.stringify(dataToSave));
-                    alert("Guardian Verified against Government Database!");
-                } else {
+
+                    // If it was a birth cert scan, we should also construct the Guardian Data object for the profile
+                    if (docType === 'birth') {
+                        const guardianMock = { child: dataToSave.name, guardian: dataToSave.guardian_name, ic: dataToSave.guardian_ic, relation: "Father" };
+                        sessionStorage.setItem('guardian_data', JSON.stringify(guardianMock));
+                    } else {
+                        sessionStorage.setItem('guardian_data', JSON.stringify(dataToSave));
+                    }
+
+                    if (docType === 'guardian') {
+                        alert("Guardian Verified against Government Database!");
+                    } else {
+                        // For Birth Cert, we just implicitly verify guardian too
+                        console.log("Guardian implicitly verified via Birth Cert.");
+                    }
+                } else if (docType === 'guardian') {
                     alert("Error: Guardian not found in Government Database or ID mismatch.");
                     return; // Stop submission
                 }
-            } else {
-                // Save state for other types
-                sessionStorage.setItem(`${storageKey}_status`, 'verified'); // Auto-verify documents for demo speed
-                sessionStorage.setItem(`${storageKey}_timestamp`, new Date().toISOString());
-
-                // Add to central list of document keys for Adult View
-                let docKeys = JSON.parse(sessionStorage.getItem('db_child_doc_keys') || '[]');
-                if (!docKeys.includes(storageKey)) {
-                    docKeys.push(storageKey);
-                    sessionStorage.setItem('db_child_doc_keys', JSON.stringify(docKeys));
-                }
             }
-
-            // Save summary based on type (Shared logic)
-            let summary = 'Details Extracted';
-            if (docType === 'spm') summary = '9 Subjects (5A 2B 2C)';
-            else if (docType === 'coq') summary = 'Football Club (District)';
-            else if (docType === 'birth') summary = 'Child MyKid/IC: 1234';
-            else if (docName === 'Car Licenses') summary = 'Class D (Exp: 2026)';
-            else if (docName === 'Passport Number') summary = 'MYS (Exp: 2028)';
 
             if (docType !== 'guardian') {
-                sessionStorage.setItem(`${storageKey}_summary`, summary);
+                // Save state for all other types (including birth)
+                sessionStorage.setItem(`${storageKey}_status`, 'verified');
+                sessionStorage.setItem(`${storageKey}_timestamp`, new Date().toISOString());
             }
 
-            // Redirect using the return URL
-            window.location.href = returnUrl;
+            // Add to central list of document keys for Adult View
+            let docKeys = JSON.parse(sessionStorage.getItem('db_child_doc_keys') || '[]');
+            if (!docKeys.includes(storageKey)) {
+                docKeys.push(storageKey);
+                sessionStorage.setItem('db_child_doc_keys', JSON.stringify(docKeys));
+            }
+        }
+
+        // Save summary based on type (Shared logic)
+        let summary = 'Details Extracted';
+        if (docType === 'spm') summary = '9 Subjects (5A 2B 2C)';
+        else if (docType === 'coq') summary = 'Football Club (District)';
+        else if (docType === 'birth') summary = 'Child MyKid/IC: 1234';
+        else if (docName === 'Car Licenses') summary = 'Class D (Exp: 2026)';
+        else if (docName === 'Passport Number') summary = 'MYS (Exp: 2028)';
+
+        if (docType !== 'guardian') {
+            sessionStorage.setItem(`${storageKey}_summary`, summary);
+        }
+
+        // Redirect using the return URL
+        window.location.href = returnUrl;
         }
     </script>
 </body>

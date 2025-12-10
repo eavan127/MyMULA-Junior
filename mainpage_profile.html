@@ -276,6 +276,9 @@
         const statusText = document.getElementById('guardianStatusText');
         // User requested "Waiting Verification" instead of "Verify: IC"
         statusText.innerHTML = `<span class="text-orange-500 font-medium flex items-center gap-1"><span class="material-symbols-outlined !text-sm">pending</span> Waiting Verification</span>`;
+      } else if (guardianStatus === 'verified') {
+        const statusText = document.getElementById('guardianStatusText');
+        statusText.innerHTML = `<span class="text-green-500 font-medium flex items-center gap-1"><span class="material-symbols-outlined !text-sm">verified</span> Linked</span>`;
       }
 
       // Check SPM Status
