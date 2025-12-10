@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Real-Time Gaming Approval (Guardian) - White UI</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;700&amp;display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 24
+        }
+
+        .scanner-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, transparent, #0054a8, transparent);
+            animation: scan 2.5s infinite linear;
+        }
+
+        @keyframes scan {
+            0% {
+                transform: translateY(-100%);
+            }
+
+            100% {
+                transform: translateY(100%);
+            }
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0054a8",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f1923",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body class="bg-background-light font-display">
+    <div class="relative flex min-h-screen w-full flex-col bg-white">
+        <div class="p-4 bg-background-light">
+            <div class="flex items-center justify-between py-2">
+                <span class="material-symbols-outlined text-neutral-800">menu</span>
+                <h1 class="text-xl font-bold text-neutral-800">MyMULA Junior</h1>
+                <span class="material-symbols-outlined text-neutral-800">notifications</span>
+            </div>
+            <div class="mt-4 p-6 bg-white rounded-xl shadow-sm">
+                <p class="text-neutral-600">Welcome, Guardian!</p>
+                <p class="text-neutral-800 font-bold text-lg mt-1">Here's a summary of recent activity.</p>
+            </div>
+        </div>
+        <div class="absolute inset-0 flex flex-col justify-end bg-black/50 backdrop-blur-sm">
+            <div class="flex flex-col rounded-t-xl bg-white">
+                <button class="flex h-5 w-full items-center justify-center pt-3">
+                    <div class="h-1 w-9 rounded-full bg-neutral-300"></div>
+                </button>
+                <div class="flex items-center justify-between p-4 pb-2">
+                    <div class="flex w-24 items-center justify-start">
+                        <button
+                            class="flex max-w-[480px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-full border border-neutral-300 bg-transparent px-3 py-1.5 text-sm font-bold text-neutral-700">
+                            <span>EN</span>
+                            <span class="material-symbols-outlined text-base">swap_horiz</span>
+                            <span>BM</span>
+                        </button>
+                    </div>
+                    <h2 class="flex-1 text-center text-lg font-bold tracking-tight text-[#1D1D1F]">Real-Time Approval
+                    </h2>
+                    <div class="flex w-24 items-center justify-end">
+                        <button
+                            class="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-transparent text-[#1D1D1F]">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="px-4 pt-4 pb-6 text-center">
+                    <div class="rounded-xl bg-neutral-100 p-6 shadow-sm">
+                        <div
+                            class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-primary">
+                            <span class="material-symbols-outlined !text-4xl !font-light">shopping_cart</span>
+                        </div>
+                        <h1 class="pt-4 text-2xl font-bold tracking-tight text-[#1D1D1F]">Transaction Approval Needed
+                        </h1>
+                        <p class="pt-2 text-base text-neutral-600">
+                            Ali is attempting a RM 50.00 purchase (in-game item) in Mobile Legends. This amount exceeds
+                            the current spending limit. Please Approve or Reject.
+                        </p>
+                    </div>
+                </div>
+                <div class="flex flex-col items-center gap-4 px-4 pb-8">
+                    <div class="relative h-40 w-40 overflow-hidden text-primary">
+                        <span class="material-symbols-outlined !text-[160px]">
+                            face
+                        </span>
+                        <div class="scanner-gradient"></div>
+                    </div>
+                    <h3 class="text-xl font-bold text-[#1D1D1F]">Authenticate to Confirm</h3>
+                    <p class="text-base text-neutral-600">Confirm with Face ID to finalize decision</p>
+                </div>
+                <div class="flex flex-col items-center gap-4 px-4 pb-8 pt-2">
+                    <button
+                        class="w-full max-w-sm cursor-pointer rounded-full bg-transparent p-3 text-sm font-bold text-primary">Cancel
+                        Request</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
