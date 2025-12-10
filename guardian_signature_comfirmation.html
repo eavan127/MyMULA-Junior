@@ -183,8 +183,27 @@
             const appType = currentRequest ? currentRequest.title : 'Application';
             alert(`${appType} approved! Your child can now submit their application.`);
 
-            // Go to Age Approval Details page
-            window.location.href = 'Age_Approval_Details.html';
+            // Redirect to appropriate summary page based on request type
+            let redirectUrl = 'adult_home.html'; // default fallback
+            if (currentRequest) {
+                switch (currentRequest.type) {
+                    case 'transaction':
+                        redirectUrl = 'Age_Approval_Details.html';
+                        break;
+                    case 'sme':
+                        redirectUrl = 'SME_view_document.html';
+                        break;
+                    case 'scholarship':
+                        redirectUrl = 'scholarship_view_document.html';
+                        break;
+                    case 'dental':
+                        redirectUrl = 'Dental_Progress_Tracker.html';
+                        break;
+                    default:
+                        redirectUrl = 'adult_home.html';
+                }
+            }
+            window.location.href = redirectUrl;
         }
 
         // Load dynamic content on page load

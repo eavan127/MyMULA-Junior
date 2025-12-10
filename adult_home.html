@@ -257,15 +257,17 @@
                 return;
             }
 
-            // Sort by timestamp desc and take top 3
-            const recent = requests
-                .sort((a, b) => b.timestamp - a.timestamp)
-                .slice(0, 3);
+            // Sort by timestamp desc (latest first) - handle both ISO strings and timestamps
+            const sortedRequests = requests.sort((a, b) => {
+                const timeA = new Date(a.timestamp || a.approvedAt || 0).getTime();
+                const timeB = new Date(b.timestamp || b.approvedAt || 0).getTime();
+                return timeB - timeA;
+            });
 
-            container.innerHTML = recent
+            container.innerHTML = sortedRequests
                 .map(
                     (req) => `
-                <div onclick="window.location.href='adult_requests.html'" class="glass-card rounded-3xl p-4 shadow-sm border border-white/50 dark:border-gray-800 flex items-center gap-4 cursor-pointer hover:shadow-md transition-all group">
+                <div onclick="handleActivityClick('${req.id}', '${req.type}', '${req.status}')" class="glass-card rounded-3xl p-4 shadow-sm border border-white/50 dark:border-gray-800 flex items-center gap-4 cursor-pointer hover:shadow-md transition-all group">
                     <div class="size-12 rounded-2xl ${getTypeColor(
                         req.type
                     )} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
@@ -278,12 +280,12 @@
                             ${req.title}
                         </h3>
                         <p class="text-[#60758a] dark:text-gray-400 text-xs sm:text-sm">From: ${req.childName
-                        } • ${getRelativeTime(req.timestamp)}</p>
+                        } • ${getRelativeTime(req.timestamp || req.approvedAt)}</p>
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
                         <div class="px-2.5 py-1 ${getStatusColor(
                             req.status
-                        )} rounded-full hidden sm:block">
+                        )} rounded-full">
                             <span class="${getStatusTextColor(
                             req.status
                         )} text-xs font-bold uppercase tracking-wide">${req.status
@@ -297,6 +299,30 @@
             `
                 )
                 .join("");
+        }
+
+        function handleActivityClick(requestId, type, status) {
+            sessionStorage.setItem('current_approval_request', requestId);
+
+            if (status === 'approved') {
+                // Navigate to view pages for approved requests
+                const viewPages = {
+                    scholarship: 'scholarship_view_document.html',
+                    sme: 'SME_view_document.html',
+                    dental: 'Dental_Progress_Tracker.html',
+                    transaction: 'Age_Approval_Details.html'
+                };
+                window.location.href = viewPages[type] || 'adult_requests.html';
+            } else {
+                // Navigate to approval pages for pending requests
+                const approvalPages = {
+                    scholarship: 'request_received_guardian.html',
+                    sme: 'SME_Guardian_Approval.html',
+                    dental: 'request_received_guardian.html',
+                    transaction: 'Transaction_guardian_approval.html'
+                };
+                window.location.href = approvalPages[type] || 'adult_requests.html';
+            }
         }
 
         // Helper functions
@@ -334,24 +360,32 @@
         }
 
         function getStatusColor(status) {
-            return status === "approved"
-                ? "bg-green-50 dark:bg-green-900/20"
-                : "bg-orange-50 dark:bg-orange-900/20";
+            if (status === "approved") return "bg-green-50 dark:bg-green-900/20";
+            if (status === "rejected") return "bg-red-50 dark:bg-red-900/20";
+            return "bg-orange-50 dark:bg-orange-900/20";
         }
 
         function getStatusTextColor(status) {
-            return status === "approved" ? "text-green-600" : "text-orange-600";
+            if (status === "approved") return "text-green-600";
+            if (status === "rejected") return "text-red-600";
+            return "text-orange-600";
         }
 
         function getRelativeTime(timestamp) {
+            if (!timestamp) return "Just now";
+
             const now = Date.now();
-            const diff = now - timestamp;
+            const time = new Date(timestamp).getTime();
+            const diff = now - time;
             const minutes = Math.floor(diff / 60000);
             const hours = Math.floor(minutes / 60);
+            const days = Math.floor(hours / 24);
 
+            if (minutes < 1) return "Just now";
             if (minutes < 60) return `${minutes}m ago`;
             if (hours < 24) return `${hours}h ago`;
-            return "Yesterday";
+            if (days === 1) return "Yesterday";
+            return `${days} days ago`;
         }
     </script>
     <script src="google_translate.js"></script>
