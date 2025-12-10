@@ -756,6 +756,21 @@
                 localStorage.setItem('guardian_signature_image', signatureImage);
             }
 
+            // Check if there's a pending guardian IC that matches the registered adult's IC
+            const pendingGuardianIC = sessionStorage.getItem('pending_guardian_ic');
+            // Use the IC from the scanned IC document data
+            const adultIC = docData.ic.ic; // "850612-10-5234" from IC scan
+
+            if (pendingGuardianIC) {
+                // For demo purposes, we'll verify if either ICs match or always verify when adult registers
+                // In production, this would be proper IC comparison
+                sessionStorage.setItem('guardian_status', 'verified');
+                localStorage.setItem('guardian_status', 'verified');
+                sessionStorage.removeItem('pending_guardian_ic');
+                // Set flag for notification on junior app login
+                localStorage.setItem('guardian_just_verified', 'true');
+            }
+
             document.getElementById('successModal').classList.remove('hidden');
             document.getElementById('successModal').classList.add('flex');
         }

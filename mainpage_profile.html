@@ -251,13 +251,19 @@
     </div>
   </div>
   <script>
-    // Using sessionStorage instead of localStorage for demo purposes
     // sessionStorage persists during navigation but clears when browser tab is closed
     document.addEventListener('DOMContentLoaded', () => {
       // No manual reset needed - sessionStorage handles it automatically on tab close
 
-      const guardianStatus = sessionStorage.getItem('guardian_status');
+      // Check localStorage first (persistent across sessions), then sessionStorage
+      let guardianStatus = localStorage.getItem('guardian_status') || sessionStorage.getItem('guardian_status');
 
+      // Check if guardian was just verified (show notification once)
+      const justVerified = localStorage.getItem('guardian_just_verified');
+      if (justVerified === 'true') {
+        alert('Your guardian has registered their account and is verified by the government!');
+        localStorage.removeItem('guardian_just_verified');
+      }
 
       if (guardianStatus === 'waiting_verification') {
         const statusText = document.getElementById('guardianStatusText');
