@@ -78,22 +78,7 @@
     </div>
 
     <!-- Toggle -->
-    <div class="flex px-4 py-3">
-      <div class="flex h-10 flex-1 items-center justify-center rounded-lg bg-black/5 dark:bg-white/10 p-1">
-        <label
-          class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-background-dark has-[:checked]:shadow-sm has-[:checked]:text-[#1E1E1E] dark:has-[:checked]:text-white text-[#6F7A85] dark:text-white/60 text-sm font-medium leading-normal">
-          <span class="truncate">EN</span>
-          <input checked="" class="invisible w-0" name="language-toggle" type="radio" value="EN" id="lang-en"
-            onchange="toggleLanguage('EN')" />
-        </label>
-        <label
-          class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-background-dark has-[:checked]:shadow-sm has-[:checked]:text-[#1E1E1E] dark:has-[:checked]:text-white text-[#6F7A85] dark:text-white/60 text-sm font-medium leading-normal">
-          <span class="truncate">BM</span>
-          <input class="invisible w-0" name="language-toggle" type="radio" value="BM" id="lang-bm"
-            onchange="toggleLanguage('BM')" />
-        </label>
-      </div>
-    </div>
+    
 
     <!-- Application Cards List -->
     <div class="flex-grow flex flex-col gap-4 px-4 pb-28">
@@ -313,50 +298,8 @@
       }
     }
   </script>
-  <script>
-    function toggleLanguage(lang) {
-      const title = document.getElementById('page-title');
-      const subtitle = document.getElementById('page-subtitle');
-      const pespTitle = document.querySelector('#pesp-card .text-base');
-      const pespDesc = document.querySelector('#pesp-card .text-sm');
-      const smeTitle = document.querySelector('#sme-card .text-base');
-      const smeDesc = document.querySelector('#sme-card .text-sm');
-      const dentalTitle = document.querySelector('#dental-card .text-base');
-      const dentalDesc = document.querySelector('#dental-card .text-sm');
-      const navHome = document.querySelector('a[href="mainpage_home.html"] p');
-      const navApps = document.querySelector('a[href="mainpage_applications.html"] p');
-      const navProfile = document.querySelector('a[href="mainpage_profile.html"] p');
-
-
-      if (lang === 'BM') {
-        if (title) title.innerText = 'Permohonan Saya';
-        if (subtitle) subtitle.innerText = 'My Applications'; // Swap or keep relevant context
-        if (pespTitle) pespTitle.innerText = 'Biasiswa PESP';
-        if (pespDesc) pespDesc.innerText = 'Permohonan untuk pembiayaan pendidikan tinggi.';
-        if (smeTitle) smeTitle.innerText = 'Pendaftaran PKS';
-        if (smeDesc) smeDesc.innerText = 'Mendaftar perusahaan kecil dan sederhana.';
-        if (dentalTitle) dentalTitle.innerText = 'Pemeriksaan Gigi & Prosedur';
-        if (dentalDesc) dentalDesc.innerText = 'Kebenaran untuk rawatan gigi di klinik.';
-        if (navHome) navHome.innerText = 'Utama';
-        if (navApps) navApps.innerText = 'Permohonan';
-        if (navProfile) navProfile.innerText = 'Profil';
-
-      } else {
-        // EN
-        if (title) title.innerText = 'My Applications';
-        if (subtitle) subtitle.innerText = 'Permohonan Saya';
-        if (pespTitle) pespTitle.innerText = 'PESP Scholarship';
-        if (pespDesc) pespDesc.innerText = 'Application for tertiary education funding.';
-        if (smeTitle) smeTitle.innerText = 'SME Registration';
-        if (smeDesc) smeDesc.innerText = 'Registering a small to medium enterprise.';
-        if (dentalTitle) dentalTitle.innerText = 'Dental Checkup & Procedure';
-        if (dentalDesc) dentalDesc.innerText = 'Consent for dental treatment at clinic.';
-        if (navHome) navHome.innerText = 'Home';
-        if (navApps) navApps.innerText = 'My Applications';
-        if (navProfile) navProfile.innerText = 'Profile';
-      }
-    }
-  </script>
+  
+  <script src="google_translate.js"></script>
 </body>
 
 </html>

@@ -63,31 +63,7 @@
 
     <!-- SEARCH BAR -->
     <div class="px-4 py-3">
-      <div class="flex items-center gap-3">
-        <label class="flex flex-col min-w-40 h-12 w-full flex-grow">
-          <div class="flex w-full flex-1 items-stretch rounded-full h-full">
-            <div
-              class="text-[#5e758d] dark:text-gray-400 flex border-none bg-white dark:bg-background-dark dark:border dark:border-gray-700 items-center justify-center pl-4 rounded-l-full border-r-0">
-              <span class="material-symbols-outlined">search</span>
-            </div>
-            <input
-              class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-full text-[#101418] dark:text-white focus:outline-0 focus:ring-0 border-none bg-white dark:bg-background-dark dark:border dark:border-gray-700 dark:border-l-0 focus:border-none h-full placeholder:text-[#5e758d] dark:placeholder:text-gray-400 px-4 rounded-l-none border-l-0 pl-2 text-base font-normal leading-normal"
-              placeholder="Search scholarships..." value="" />
-          </div>
-        </label>
-        <div
-          class="flex h-10 w-28 shrink-0 items-center justify-center rounded-full bg-white dark:bg-background-dark dark:border dark:border-gray-700 p-1">
-          <label
-            class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-full px-2 has-[:checked]:bg-primary has-[:checked]:shadow-[0_0_4px_rgba(0,0,0,0.1)] has-[:checked]:text-white text-[#5e758d] dark:text-gray-400 text-sm font-medium leading-normal">
-            <span class="truncate">EN</span>
-            <input checked="" class="invisible w-0" name="language-toggle" type="radio" value="EN" />
-          </label>
-          <label
-            class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-full px-2 has-[:checked]:bg-primary has-[:checked]:shadow-[0_0_4px_rgba(0,0,0,0.1)] has-[:checked]:text-white text-[#5e758d] dark:text-gray-400 text-sm font-medium leading-normal">
-            <span class="truncate">BM</span>
-            <input class="invisible w-0" name="language-toggle" type="radio" value="BM" />
-          </label>
-        </div>
+      
       </div>
     </div>
 
@@ -205,6 +181,7 @@
     localStorage.removeItem('guardian_approved');
     console.log("Demo State Reset: Status is now Pending.");
   </script>
+  <script src="google_translate.js"></script>
 </body>
 
 </html>
