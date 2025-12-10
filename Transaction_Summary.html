@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Approval Summary - Gaming Purchase - MyMULA Junior</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0459ae",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#0f1923",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.5rem", "lg": "1rem", "xl": "1.5rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 24
+        }
+    </style>
+    <style>
+        body {
+            min-height: max(884px, 100dvh);
+        }
+    </style>
+</head>
+
+<body class="font-display bg-background-light dark:bg-background-dark">
+    <div class="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+        <!-- Top App Bar -->
+        <header
+            class="sticky top-0 z-10 flex h-16 shrink-0 items-center justify-between border-b border-b-slate-200 bg-white/80 px-4 backdrop-blur-sm dark:border-b-slate-800 dark:bg-background-dark/80">
+            <button class="flex size-10 shrink-0 items-center justify-center text-[#111418] dark:text-white">
+                <span class="material-symbols-outlined text-2xl">arrow_back</span>
+            </button>
+            <h1
+                class="flex-1 text-center text-lg font-bold leading-tight tracking-[-0.015em] text-[#111418] dark:text-white">
+                Approval Details</h1>
+            <div class="size-10 shrink-0"></div>
+        </header>
+        <main class="flex-1 pb-32">
+            <!-- Main Card -->
+            <div class="p-4">
+                <div
+                    class="flex flex-col items-stretch justify-start rounded-xl bg-white shadow-[0_4px_12px_rgba(0,0,0,0.05)] dark:bg-slate-900">
+                    <div class="flex flex-col items-stretch justify-center gap-2 p-5">
+                        <div class="flex items-start justify-between gap-3">
+                            <p
+                                class="text-lg font-bold leading-tight tracking-[-0.015em] text-[#111418] dark:text-white">
+                                Gaming Purchase Approval Summary</p>
+                            <div
+                                class="shrink-0 rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700 dark:bg-green-900/50 dark:text-green-300">
+                                Completed</div>
+                        </div>
+                        <p class="text-sm font-normal leading-normal text-[#5f758c] dark:text-slate-400">
+                            A digital approval issued for an in-game purchase exceeding RM20. <span
+                                class="text-slate-400 dark:text-slate-500">Kelulusan digital untuk pembelian dalam
+                                permainan melebihi RM20.</span>
+                        </p>
+                        <p class="text-sm font-normal leading-normal text-[#5f758c] dark:text-slate-400">Reference ID:
+                            MYMULA-GAME-120925</p>
+                    </div>
+                    <!-- Details List -->
+                    <div class="grid grid-cols-1 px-5">
+                        <div
+                            class="grid grid-cols-[auto_1fr] items-center gap-x-4 border-t border-t-[#dbe0e6] py-4 dark:border-t-slate-800">
+                            <span class="material-symbols-outlined text-xl text-primary">person</span>
+                            <div>
+                                <p class="text-sm font-normal leading-normal text-[#111418] dark:text-slate-200">Ali</p>
+                                <p class="text-xs text-[#5f758c] dark:text-slate-400">Child Name (Nama Anak)</p>
+                            </div>
+                        </div>
+                        <div
+                            class="grid grid-cols-[auto_1fr] items-center gap-x-4 border-t border-t-[#dbe0e6] py-4 dark:border-t-slate-800">
+                            <span class="material-symbols-outlined text-xl text-primary">stadia_controller</span>
+                            <div>
+                                <p class="text-sm font-normal leading-normal text-[#111418] dark:text-slate-200">Mobile
+                                    Legends</p>
+                                <p class="text-xs text-[#5f758c] dark:text-slate-400">Game (Permainan)</p>
+                            </div>
+                        </div>
+                        <div
+                            class="grid grid-cols-[auto_1fr] items-center gap-x-4 border-t border-t-[#dbe0e6] py-4 dark:border-t-slate-800">
+                            <span class="material-symbols-outlined text-xl text-primary">card_giftcard</span>
+                            <div>
+                                <p class="text-sm font-normal leading-normal text-[#111418] dark:text-slate-200">RM50
+                                    Skin / Loot Box</p>
+                                <p class="text-xs text-[#5f758c] dark:text-slate-400">Item (Item)</p>
+                            </div>
+                        </div>
+                        <div
+                            class="grid grid-cols-[auto_1fr] items-center gap-x-4 border-t border-t-[#dbe0e6] py-4 dark:border-t-slate-800">
+                            <span class="material-symbols-outlined text-xl text-primary">payments</span>
+                            <div>
+                                <p class="text-sm font-normal leading-normal text-[#111418] dark:text-slate-200">RM50.00
+                                </p>
+                                <p class="text-xs text-[#5f758c] dark:text-slate-400">Amount (Jumlah)</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Timestamps -->
+                    <div class="border-t border-t-[#dbe0e6] px-5 py-2 dark:border-t-slate-800">
+                        <div class="grid grid-cols-[1fr_auto] items-center py-2">
+                            <p class="text-xs text-[#5f758c] dark:text-slate-400">Request Initiated (Permintaan
+                                Dimulakan)</p>
+                            <p class="text-xs font-medium text-[#111418] dark:text-slate-300">Jun 10, 10:05 AM</p>
+                        </div>
+                        <div class="grid grid-cols-[1fr_auto] items-center py-2">
+                            <p class="text-xs text-[#5f758c] dark:text-slate-400">Guardian Approval (Kelulusan Penjaga)
+                            </p>
+                            <p class="text-xs font-medium text-[#111418] dark:text-slate-300">Jun 11, 09:12 AM</p>
+                        </div>
+                        <div class="grid grid-cols-[1fr_auto] items-center py-2">
+                            <p class="text-xs text-[#5f758c] dark:text-slate-400">Digital Signature Completed
+                                (Tandatangan Digital Selesai)</p>
+                            <p class="text-xs font-medium text-[#111418] dark:text-slate-300">Jun 12, 02:45 PM</p>
+                        </div>
+                        <div class="grid grid-cols-[1fr_auto] items-center py-2">
+                            <p class="text-xs text-[#5f758c] dark:text-slate-400">Approval Delivered to Game (Kelulusan
+                                Dihantar)</p>
+                            <p class="text-xs font-medium text-[#111418] dark:text-slate-300">Jun 12, 03:10 PM</p>
+                        </div>
+                    </div>
+                    <!-- Signature Section -->
+                    <div class="flex flex-col gap-4 border-t border-t-[#dbe0e6] p-5 dark:border-t-slate-800">
+                        <p class="text-center text-sm font-medium text-[#111418] dark:text-white">Digitally Signed via
+                            MyMULA Smart ID</p>
+                        <div
+                            class="mx-auto flex h-20 w-full max-w-xs items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50 dark:border-slate-700 dark:bg-slate-800/50">
+                            <img alt="Guardian's digital signature"
+                                class="h-10 object-contain brightness-0 invert-[0.3]"
+                                data-alt="Guardian's digital signature"
+                                src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1ylZOjXzDn_wQIrZEXOVy6MH6_mqWHoT1CGoAPPaVg9nCiileksEjDZCMN4mA10XRbF7NJ2ya5_I92c32Q7lBvgl5Msz8YmR-Kbf80Xb7KT-gpbE1Cx0tjJbL8PQu-x4IgKJBp7zI-U5RuiacHjcItPYti2MFRay_POtImDPSoXW0xIPfmlXbjW44ZKB-JV2OlGSpCWD6EJEwQu5DVesyhXYr5cGCIRSfBYZA2V0oO6pUcJUIUsjL_5twlfD2_eJIP4YsMTcwBrk" />
+                        </div>
+                        <div class="text-center">
+                            <p class="text-xs text-[#5f758c] dark:text-slate-400">ID: ***12-5678</p>
+                            <p class="text-xs text-[#5f758c] dark:text-slate-400">Hash: a12b2c3…</p>
+                        </div>
+                        <div
+                            class="flex items-center justify-center gap-2 rounded-lg bg-primary/10 p-3 text-center text-xs text-primary/80 dark:bg-primary/20 dark:text-primary/90">
+                            <span class="material-symbols-outlined text-base">shield</span>
+                            <p>Your private information remains protected. <span
+                                    class="text-primary/60 dark:text-primary/70">Maklumat peribadi anda kekal
+                                    dilindungi.</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Consent Document Info -->
+            <div class="px-4 py-2">
+                <div class="flex items-center gap-3 rounded-lg bg-slate-100 p-3 dark:bg-slate-800">
+                    <span class="material-symbols-outlined text-xl text-primary">draft</span>
+                    <p class="flex-1 text-xs leading-snug text-[#5f758c] dark:text-slate-400">PDF Approval Document
+                        generated and securely stored. <span class="text-slate-400 dark:text-slate-500">Dokumen
+                            Kelulusan PDF dijana dan disimpan dengan selamat.</span></p>
+                </div>
+            </div>
+        </main>
+        <!-- Bottom Action Buttons -->
+        <footer
+            class="fixed bottom-0 left-0 z-10 w-full border-t border-t-slate-200 bg-white/80 p-4 backdrop-blur-sm dark:border-t-slate-800 dark:bg-background-dark/80">
+            <div class="flex flex-col gap-2">
+                <button
+                    class="flex h-12 w-full items-center justify-center rounded-full bg-primary text-base font-bold text-white">Download
+                    PDF</button>
+                <button
+                    class="flex h-12 w-full items-center justify-center rounded-full text-base font-bold text-primary">Share
+                    with Game Support</button>
+            </div>
+        </footer>
+    </div>
+</body>
+
+</html>

@@ -69,33 +69,27 @@
 </head>
 
 <body class="font-display bg-background-light dark:bg-background-dark">
-    <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden pb-20">
+    <div class="relative flex min-h-screen w-full flex-col overflow-x-hidden">
         <!-- Top App Bar -->
-        <div class="sticky top-0 z-10 gradient-header px-6 py-8 rounded-b-[2rem] shadow-lg mb-4">
+        <div class="sticky top-0 z-10 gradient-header px-6 py-6 rounded-b-[2rem] shadow-lg">
             <div class="flex items-center justify-between text-white mb-2">
                 <div class="flex items-center gap-4">
                     <div
                         class="size-14 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white text-2xl font-bold border-2 border-white/30">
-                        A
+                        S
                     </div>
                     <div>
                         <h1 class="text-white text-2xl font-bold leading-tight">
-                            Hi, Ahmad
+                            Hi, Sarah!
                         </h1>
                         <p class="text-white/80 text-sm font-medium">Have a great day!</p>
                     </div>
                 </div>
-                <a href="Notification.html"
-                    class="p-2 bg-white/20 backdrop-blur-md rounded-full hover:bg-white/30 transition-all relative">
-                    <span class="material-symbols-outlined text-white">notifications</span>
-                    <div class="absolute top-2 right-2 size-2.5 bg-red-400 rounded-full border-2 border-transparent">
-                    </div>
-                </a>
             </div>
         </div>
 
         <!-- Main Content -->
-        <div class="flex-1 px-5 -mt-6">
+        <div class="flex-1 px-5 py-6">
             <!-- Stats Cards -->
             <div class="grid grid-cols-2 gap-4 mb-8">
                 <!-- Linked Child Card -->
@@ -105,8 +99,12 @@
                         class="size-12 rounded-2xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center mb-4 text-primary">
                         <span class="material-symbols-outlined text-3xl">face</span>
                     </div>
-                    <div class="text-3xl font-bold text-[#111418] dark:text-white mb-1">1</div>
-                    <div class="text-sm font-medium text-[#60758a] dark:text-gray-400">Linked<br>Child</div>
+                    <div class="text-3xl font-bold text-[#111418] dark:text-white mb-1">
+                        1
+                    </div>
+                    <div class="text-sm font-medium text-[#60758a] dark:text-gray-400">
+                        Linked<br />Child
+                    </div>
                 </div>
 
                 <!-- Pending Requests Card -->
@@ -116,8 +114,12 @@
                         class="size-12 rounded-2xl bg-orange-50 dark:bg-orange-900/20 flex items-center justify-center mb-4 text-orange-500">
                         <span class="material-symbols-outlined text-3xl">folder_shared</span>
                     </div>
-                    <div id="pendingCount" class="text-3xl font-bold text-[#111418] dark:text-white mb-1">0</div>
-                    <div class="text-sm font-medium text-[#60758a] dark:text-gray-400">Pending<br>Requests</div>
+                    <div id="pendingCount" class="text-3xl font-bold text-[#111418] dark:text-white mb-1">
+                        0
+                    </div>
+                    <div class="text-sm font-medium text-[#60758a] dark:text-gray-400">
+                        Pending<br />Requests
+                    </div>
                 </div>
             </div>
 
@@ -135,28 +137,28 @@
                     class="glass-card rounded-3xl p-5 shadow-sm border border-white/50 dark:border-gray-800 flex items-center gap-4 hover:shadow-md transition-all">
                     <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=100&h=100&fit=crop"
                         alt="Ali profile"
-                        class="size-16 rounded-2xl object-cover ring-2 ring-gray-100 dark:ring-gray-800">
+                        class="size-16 rounded-2xl object-cover ring-2 ring-gray-100 dark:ring-gray-800" />
                     <div class="flex-1">
                         <div class="flex items-center gap-2 mb-1">
-                            <h3 class="text-[#111418] dark:text-white text-lg font-bold">Ali</h3>
+                            <h3 class="text-[#111418] dark:text-white text-lg font-bold">
+                                Ali
+                            </h3>
                             <span
                                 class="px-2 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-primary text-[10px] font-bold uppercase tracking-wider rounded-full">Junior</span>
                         </div>
-                        <p class="text-[#60758a] dark:text-gray-400 text-sm mb-2">Age 16</p>
+                        <p class="text-[#60758a] dark:text-gray-400 text-sm mb-2">
+                            Age 16
+                        </p>
                         <div class="flex items-center gap-1.5 text-green-600">
                             <span class="material-symbols-outlined text-[18px] fill">verified</span>
                             <span class="text-xs font-semibold">Account Linked</span>
                         </div>
                     </div>
-                    <button onclick="window.location.href='digital_curfew.html'"
-                        class="size-10 rounded-full bg-gray-50 dark:bg-gray-800 flex items-center justify-center text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                        <span class="material-symbols-outlined">chevron_right</span>
-                    </button>
                 </div>
             </div>
 
             <!-- Recent Activity Section -->
-            <div class="animate-slide-up" style="animation-delay: 0.4s">
+            <div class="animate-slide-up pb-24" style="animation-delay: 0.4s">
                 <div class="flex items-center justify-between mb-4 px-1">
                     <h2 class="text-[#111418] dark:text-white text-lg font-bold flex items-center gap-2">
                         <span class="material-symbols-outlined text-primary">history</span>
@@ -177,79 +179,65 @@
         </div>
 
         <!-- Bottom Navigation -->
-        <div
-            class="fixed bottom-0 left-0 right-0 bg-white dark:bg-background-dark border-t border-gray-200 dark:border-gray-800 safe-area-bottom z-50">
-            <div class="flex items-center justify-between px-12 py-3 mx-auto max-w-4xl">
-                <!-- Home -->
-                <a href="adult_home.html" class="flex flex-col items-center gap-1 text-primary">
-                    <span class="material-symbols-outlined text-[28px] fill"
-                        style="font-variation-settings: 'FILL' 1;">home</span>
-                    <span class="text-[10px] font-medium">Home</span>
+        <div class="sticky bottom-0 bg-white dark:bg-background-dark border-t border-[#f0f2f5] dark:border-gray-700">
+            <div class="flex h-[72px] justify-around px-4 pb-3 pt-2">
+                <a class="flex flex-1 flex-col items-center justify-end gap-1 text-primary" href="adult_home.html">
+                    <div class="flex h-8 items-center justify-center">
+                        <span class="material-symbols-outlined notranslate fill">home</span>
+                    </div>
+                    <p class="text-primary text-xs font-semibold">Home</p>
                 </a>
 
-                <!-- Requests -->
-                <a href="adult_requests.html"
-                    class="flex flex-col items-center gap-1 text-[#60758a] hover:text-primary transition-colors relative">
-                    <div class="relative">
-                        <span class="material-symbols-outlined text-[28px]">assignment</span>
+                <a class="flex flex-1 flex-col items-center justify-end gap-1 text-[#6c757d] dark:text-gray-400 hover:text-primary transition-colors"
+                    href="adult_requests.html">
+                    <div class="flex h-8 items-center justify-center relative">
+                        <span class="material-symbols-outlined notranslate">pending_actions</span>
                         <div id="navPendingBadge"
-                            class="hidden absolute -top-1.5 -right-1.5 size-4 bg-red-500 rounded-full flex items-center justify-center border-2 border-white dark:border-background-dark">
+                            class="hidden absolute -top-1 -right-3 size-4 bg-red-500 rounded-full flex items-center justify-center border-2 border-white dark:border-background-dark">
                             <span id="navPendingCount" class="text-white text-[9px] font-bold">0</span>
                         </div>
                     </div>
-                    <span class="text-[10px] font-medium">Requests</span>
+                    <p class="text-xs font-semibold">Requests</p>
                 </a>
 
-                <!-- Profile -->
-                <a href="adult_profile.html"
-                    class="flex flex-col items-center gap-1 text-[#60758a] hover:text-primary transition-colors">
-                    <span class="material-symbols-outlined text-[28px]">account_circle</span>
-                    <span class="text-[10px] font-medium">Profile</span>
+                <a class="flex flex-1 flex-col items-center justify-end gap-1 text-[#6c757d] dark:text-gray-400 hover:text-primary transition-colors"
+                    href="adult_profile.html">
+                    <div class="flex h-8 items-center justify-center">
+                        <span class="material-symbols-outlined notranslate">account_circle</span>
+                    </div>
+                    <p class="text-xs font-semibold">Profile</p>
                 </a>
             </div>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener("DOMContentLoaded", () => {
             initDashboard();
         });
 
         function initDashboard() {
-            // Load requests from Storage
-            // Initialize mock data if empty (for demo purposes)
-            let requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+            // Load requests from Storage (no mock data - badge only shows for real requests)
+            let requests = JSON.parse(
+                sessionStorage.getItem("child_requests") || "[]"
+            );
 
-            if (requests.length === 0 && !sessionStorage.getItem('child_requests_initialized')) {
-                // Seed some data for first run
-                requests = [
-                    {
-                        id: 'req_001',
-                        type: 'scholarship',
-                        title: 'PESP Scholarship - B40 Income Verification',
-                        childName: 'Ali',
-                        timestamp: Date.now() - 3600000, // 1 hour ago
-                        status: 'pending'
-                    }
-                ];
-                sessionStorage.setItem('child_requests', JSON.stringify(requests));
-                sessionStorage.setItem('child_requests_initialized', 'true');
-            }
-
-            // Update Counts
-            const pendingCount = requests.filter(r => r.status === 'pending').length;
+            // Update Counts - only count pending requests
+            const pendingCount = requests.filter(
+                (r) => r.status === "pending"
+            ).length;
 
             // 1. Stats Card
-            document.getElementById('pendingCount').textContent = pendingCount;
+            document.getElementById("pendingCount").textContent = pendingCount;
 
             // 2. Nav Badge
-            const badge = document.getElementById('navPendingBadge');
-            const badgeCount = document.getElementById('navPendingCount');
+            const badge = document.getElementById("navPendingBadge");
+            const badgeCount = document.getElementById("navPendingCount");
             if (pendingCount > 0) {
-                badge.classList.remove('hidden');
-                badgeCount.textContent = pendingCount > 9 ? '9+' : pendingCount;
+                badge.classList.remove("hidden");
+                badgeCount.textContent = pendingCount > 9 ? "9+" : pendingCount;
             } else {
-                badge.classList.add('hidden');
+                badge.classList.add("hidden");
             }
 
             // 3. Recent Activity
@@ -257,7 +245,7 @@
         }
 
         function updateRecentActivity(requests) {
-            const container = document.getElementById('recentActivityList');
+            const container = document.getElementById("recentActivityList");
 
             if (requests.length === 0) {
                 container.innerHTML = `
@@ -270,72 +258,86 @@
             }
 
             // Sort by timestamp desc and take top 3
-            const recent = requests.sort((a, b) => b.timestamp - a.timestamp).slice(0, 3);
+            const recent = requests
+                .sort((a, b) => b.timestamp - a.timestamp)
+                .slice(0, 3);
 
-            container.innerHTML = recent.map(req => `
+            container.innerHTML = recent
+                .map(
+                    (req) => `
                 <div onclick="window.location.href='adult_requests.html'" class="glass-card rounded-3xl p-4 shadow-sm border border-white/50 dark:border-gray-800 flex items-center gap-4 cursor-pointer hover:shadow-md transition-all group">
-                    <div class="size-12 rounded-2xl ${getTypeColor(req.type)} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
-                        <span class="material-symbols-outlined ${getTypeTextColor(req.type)}">${getTypeIcon(req.type)}</span>
+                    <div class="size-12 rounded-2xl ${getTypeColor(
+                        req.type
+                    )} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                        <span class="material-symbols-outlined ${getTypeTextColor(
+                        req.type
+                    )}">${getTypeIcon(req.type)}</span>
                     </div>
                     <div class="flex-1 min-w-0">
                         <h3 class="text-[#111418] dark:text-white font-semibold mb-1 truncate text-sm sm:text-base">
                             ${req.title}
                         </h3>
-                        <p class="text-[#60758a] dark:text-gray-400 text-xs sm:text-sm">From: ${req.childName} • ${getRelativeTime(req.timestamp)}</p>
+                        <p class="text-[#60758a] dark:text-gray-400 text-xs sm:text-sm">From: ${req.childName
+                        } • ${getRelativeTime(req.timestamp)}</p>
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
-                        <div class="px-2.5 py-1 ${getStatusColor(req.status)} rounded-full hidden sm:block">
-                            <span class="${getStatusTextColor(req.status)} text-xs font-bold uppercase tracking-wide">${req.status}</span>
+                        <div class="px-2.5 py-1 ${getStatusColor(
+                            req.status
+                        )} rounded-full hidden sm:block">
+                            <span class="${getStatusTextColor(
+                            req.status
+                        )} text-xs font-bold uppercase tracking-wide">${req.status
+                        }</span>
                         </div>
                         <button class="text-gray-400 dark:text-gray-500 group-hover:text-primary transition-colors">
                             <span class="material-symbols-outlined">chevron_right</span>
                         </button>
                     </div>
                 </div>
-            `).join('');
+            `
+                )
+                .join("");
         }
 
         // Helper functions
         function getTypeIcon(type) {
             const icons = {
-                scholarship: 'school',
-                sme: 'business_center',
-                dental: 'dentistry',
-                age_verification: 'verified_user'
+                scholarship: "school",
+                sme: "business_center",
+                dental: "dentistry",
+                age_verification: "verified_user",
             };
-            return icons[type] || 'description';
+            return icons[type] || "description";
         }
 
         function getTypeColor(type) {
             const colors = {
-                scholarship: 'bg-blue-50 dark:bg-blue-900/20',
-                sme: 'bg-green-50 dark:bg-green-900/20',
-                dental: 'bg-purple-50 dark:bg-purple-900/20',
-                age_verification: 'bg-orange-50 dark:bg-orange-900/20'
+                scholarship: "bg-blue-50 dark:bg-blue-900/20",
+                sme: "bg-green-50 dark:bg-green-900/20",
+                dental: "bg-purple-50 dark:bg-purple-900/20",
+                age_verification: "bg-orange-50 dark:bg-orange-900/20",
             };
-            return colors[type] || 'bg-gray-50';
+            return colors[type] || "bg-gray-50";
         }
 
         function getTypeTextColor(type) {
             const colors = {
-                scholarship: 'text-blue-500',
-                sme: 'text-green-500',
-                dental: 'text-purple-500',
-                age_verification: 'text-orange-500'
+                scholarship: "text-blue-500",
+                sme: "text-green-500",
+                dental: "text-purple-500",
+                age_verification: "text-orange-500",
             };
-            return colors[type] || 'text-gray-500';
+            return colors[type] || "text-gray-500";
         }
 
         function getStatusColor(status) {
-            return status === 'approved'
-                ? 'bg-green-50 dark:bg-green-900/20'
-                : 'bg-orange-50 dark:bg-orange-900/20';
+            return status === "approved"
+                ? "bg-green-50 dark:bg-green-900/20"
+                : "bg-orange-50 dark:bg-orange-900/20";
         }
 
         function getStatusTextColor(status) {
-            return status === 'approved'
-                ? 'text-green-600'
-                : 'text-orange-600';
+            return status === "approved" ? "text-green-600" : "text-orange-600";
         }
 
         function getRelativeTime(timestamp) {
@@ -346,7 +348,7 @@
 
             if (minutes < 60) return `${minutes}m ago`;
             if (hours < 24) return `${hours}h ago`;
-            return 'Yesterday';
+            return "Yesterday";
         }
     </script>
     <script src="google_translate.js"></script>
