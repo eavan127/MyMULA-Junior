@@ -68,7 +68,7 @@
       <div class="flex w-12 items-center justify-end relative">
         <button onclick="window.location.href='Notification.html'"
           class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 w-10 bg-transparent text-[#333333] dark:text-white gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
-          <span class="material-symbols-outlined !text-3xl">notifications</span>
+          <span class="material-symbols-outlined notranslate !text-3xl">notifications</span>
         </button>
         <div class="absolute top-1 right-1 h-2.5 w-2.5 rounded-full bg-red-500 border-2 border-background-light"></div>
       </div>
@@ -83,7 +83,7 @@
     <div id="continueSection" class="hidden px-4 pb-4">
       <div class="flex items-center justify-between mb-3">
         <h2 class="text-[#333333] dark:text-white text-base font-bold flex items-center gap-2">
-          <span class="material-symbols-outlined text-orange-500">pending_actions</span>
+          <span class="material-symbols-outlined notranslate text-orange-500">pending_actions</span>
           Continue Where You Left Off
         </h2>
       </div>
@@ -110,7 +110,7 @@
         <div class="flex items-start gap-4">
           <div
             class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-500 text-white shadow-sm">
-            <span class="material-symbols-outlined text-xl">schedule</span>
+            <span class="material-symbols-outlined notranslate text-xl">schedule</span>
           </div>
           <div class="flex-1">
             <p class="text-gray-900 dark:text-white text-sm font-bold mb-1">Curfew Status</p>
@@ -132,7 +132,7 @@
         class="flex items-center gap-3 rounded-xl bg-white dark:bg-gray-800 p-4 shadow-sm border border-gray-100 dark:border-gray-700">
         <div
           class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-600">
-          <span class="material-symbols-outlined text-xl">access_time</span>
+          <span class="material-symbols-outlined notranslate text-xl">access_time</span>
         </div>
         <div class="flex-1">
           <p class="text-[#101418] dark:text-white text-sm font-bold">Current Time</p>
@@ -148,7 +148,7 @@
         class="flex items-center gap-3 rounded-xl bg-white dark:bg-gray-800 p-4 shadow-sm border border-gray-100 dark:border-gray-700">
         <div
           class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30 text-primary">
-          <span class="material-symbols-outlined text-xl">history</span>
+          <span class="material-symbols-outlined notranslate text-xl">history</span>
         </div>
         <div class="flex-1">
           <p class="text-[#101418] dark:text-white text-sm font-bold">Latest Update</p>
@@ -169,7 +169,7 @@
       <a class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full text-primary"
         href="mainpage_home.html">
         <div class="flex h-8 items-center justify-center">
-          <span class="material-symbols-outlined fill">home</span>
+          <span class="material-symbols-outlined notranslate fill">home</span>
         </div>
         <p class="text-primary text-xs font-semibold leading-normal tracking-[0.015em]">Home</p>
       </a>
@@ -178,7 +178,7 @@
       <a class="flex flex-1 flex-col items-center justify-end gap-1 text-[#6c757d] dark:text-gray-400 hover:text-primary transition-colors"
         href="mainpage_applications.html">
         <div class="flex h-8 items-center justify-center">
-          <span class="material-symbols-outlined">description</span>
+          <span class="material-symbols-outlined notranslate">description</span>
         </div>
         <p class="text-xs font-semibold leading-normal tracking-[0.015em]">My Applications</p>
       </a>
@@ -187,7 +187,7 @@
       <a class="flex flex-1 flex-col items-center justify-end gap-1 text-[#6c757d] dark:text-gray-400 hover:text-primary transition-colors"
         href="mainpage_profile.html">
         <div class="flex h-8 items-center justify-center">
-          <span class="material-symbols-outlined">account_circle</span>
+          <span class="material-symbols-outlined notranslate">account_circle</span>
         </div>
         <p class="text-xs font-semibold leading-normal tracking-[0.015em]">Profile</p>
       </a>
@@ -207,7 +207,7 @@
               href="${app.link}">
               <div
                 class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-primary/20 text-primary dark:bg-primary/30 dark:text-blue-300">
-                <span class="material-symbols-outlined text-3xl">${app.icon}</span>
+                <span class="material-symbols-outlined notranslate text-3xl">${app.icon}</span>
               </div>
               <div class="flex flex-col gap-1 flex-1">
                 <p class="text-[#101418] dark:text-white text-base font-bold leading-tight">${app.title}</p>
@@ -222,7 +222,7 @@
                 </div>
               </div>
               <div class="text-[#5e758d] dark:text-gray-400">
-                <span class="material-symbols-outlined">chevron_right</span>
+                <span class="material-symbols-outlined notranslate">chevron_right</span>
               </div>
             </a>
           `).join('');
@@ -303,7 +303,7 @@
       card.className = 'flex items-center gap-3 rounded-xl bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 p-4 border border-orange-200 dark:border-orange-800 shadow-sm';
       card.innerHTML = `
         <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-${config.color}-100 dark:bg-${config.color}-900/30 text-${config.color}-500">
-          <span class="material-symbols-outlined text-2xl">${config.icon}</span>
+          <span class="material-symbols-outlined notranslate text-2xl">${config.icon}</span>
         </div>
         <div class="flex-1 min-w-0">
           <p class="text-[#101418] dark:text-white text-sm font-bold truncate">${config.name}</p>
@@ -312,7 +312,7 @@
         </div>
         <div class="flex gap-2 shrink-0">
           <button onclick="discardDraft('${type}')" class="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-red-100 dark:hover:bg-red-900/30 transition-colors" title="Discard">
-            <span class="material-symbols-outlined text-gray-500 hover:text-red-500 text-xl">delete</span>
+            <span class="material-symbols-outlined notranslate text-gray-500 hover:text-red-500 text-xl">delete</span>
           </button>
           <button onclick="resumeDraft('${type}')" class="px-4 py-2 rounded-lg bg-primary text-white font-bold text-sm shadow-sm hover:bg-primary/90 transition-colors">
             Continue
