@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>AI Support Chat - MyMULA</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;900&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d7ff2",
+                        "accent": "#4CA9FF",
+                        "background-light": "#F7F9FC",
+                        "background-dark": "#0f1923",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .material-symbols-outlined.fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        body {
+            min-height: 100dvh;
+        }
+
+        .chat-bubble-user {
+            background: linear-gradient(135deg, #0d7ff2 0%, #4CA9FF 100%);
+        }
+
+        .chat-bubble-ai {
+            background: #f1f5f9;
+        }
+
+        .typing-indicator span {
+            animation: blink 1.4s infinite both;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes blink {
+
+            0%,
+            80%,
+            100% {
+                opacity: 0.3;
+            }
+
+            40% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body class="font-display bg-background-light dark:bg-background-dark">
+    <div
+        class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden max-w-md mx-auto">
+
+        <div class="flex items-center bg-white dark:bg-gray-800 p-4 justify-between shadow-sm sticky top-0 z-10">
+            <a href="adult_profile.html"
+                class="p-2 -ml-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <span class="material-symbols-outlined text-[#333] dark:text-white">arrow_back</span>
+            </a>
+            <div class="flex items-center gap-2">
+                <div
+                    class="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white">
+                    <span class="material-symbols-outlined !text-lg">smart_toy</span>
+                </div>
+                <h1 class="text-lg font-bold text-[#333] dark:text-white">AI Support</h1>
+            </div>
+            <div class="w-10"></div>
+        </div>
+
+        <div id="chatContainer" class="flex-1 p-4 overflow-y-auto space-y-4">
+            <div class="flex gap-3">
+                <div
+                    class="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white shrink-0">
+                    <span class="material-symbols-outlined !text-base">smart_toy</span>
+                </div>
+                <div class="chat-bubble-ai dark:bg-gray-700 rounded-2xl rounded-tl-none p-4 max-w-[80%]">
+                    <p class="text-sm text-gray-800 dark:text-gray-200">Hello! 👋 I'm your MyMULA AI Assistant. How can
+                        I help you today?</p>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                        <button onclick="sendQuickReply('How can I link my guardian?')"
+                            class="text-xs px-3 py-1.5 bg-white dark:bg-gray-600 rounded-full border border-gray-200 dark:border-gray-500 text-primary dark:text-accent font-medium hover:bg-primary/10 transition-colors">Link
+                            my guardian</button>
+                        <button onclick="sendQuickReply('How do approvals work?')"
+                            class="text-xs px-3 py-1.5 bg-white dark:bg-gray-600 rounded-full border border-gray-200 dark:border-gray-500 text-primary dark:text-accent font-medium hover:bg-primary/10 transition-colors">Approval
+                            process</button>
+                        <button onclick="sendQuickReply('I need help with documents')"
+                            class="text-xs px-3 py-1.5 bg-white dark:bg-gray-600 rounded-full border border-gray-200 dark:border-gray-500 text-primary dark:text-accent font-medium hover:bg-primary/10 transition-colors">Document
+                            help</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="typingIndicator" class="hidden px-4 pb-2">
+            <div class="flex gap-3">
+                <div
+                    class="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white shrink-0">
+                    <span class="material-symbols-outlined !text-base">smart_toy</span>
+                </div>
+                <div class="chat-bubble-ai dark:bg-gray-700 rounded-2xl rounded-tl-none px-4 py-3">
+                    <div class="typing-indicator flex gap-1">
+                        <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                        <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                        <span class="w-2 h-2 bg-gray-400 rounded-full"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sticky bottom-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4">
+            <div class="flex gap-3 items-end">
+                <div class="flex-1 relative">
+                    <input type="text" id="messageInput" placeholder="Type your message..."
+                        class="w-full px-4 py-3 pr-12 bg-gray-100 dark:bg-gray-700 rounded-full border-0 focus:ring-2 focus:ring-primary text-sm text-gray-800 dark:text-white placeholder-gray-400"
+                        onkeypress="if(event.key === 'Enter') sendMessage()" />
+                </div>
+                <button onclick="sendMessage()"
+                    class="h-12 w-12 rounded-full bg-primary flex items-center justify-center text-white shadow-lg shadow-primary/30 hover:bg-primary/90 transition-colors shrink-0">
+                    <span class="material-symbols-outlined">send</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. YOUR GEMINI API KEY (Note: AIza... is a Gemini key, NOT OpenAI)
+        const API_KEY = 'AIzaSyDpBFA_fcl5h5DPa52SRrwlRd46Rp1Zwe4';
+
+        // 2. SYSTEM INSTRUCTIONS (The AI's "Personality")
+        const SYSTEM_PROMPT = `You are the MyMULA AI Assistant.
+    You are helpful, empathetic, and professional.
+    - If asked about linking a child: Explain they need to scan a Birth Certificate on the Profile page.
+    - If asked about approvals: Explain the parent receives a notification and uses Face ID to approve.
+    - Keep answers concise (under 100 words) and use emojis occasionally.
+    - You help parents and guardians manage their children's digital permissions.`;
+
+        // Store history for the UI and potentially for the backend
+        let conversationHistory = [];
+
+        async function getRealAIResponse(userMessage) {
+            try {
+                // Call our local Python backend
+                const response = await fetch('http://localhost:5000/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: userMessage,
+                        history: conversationHistory // Send history so backend has context
+                    })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server Error: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                const aiText = data.response;
+
+                // Add to local history
+                conversationHistory.push({ role: "user", parts: [{ text: userMessage }] });
+                conversationHistory.push({ role: "model", parts: [{ text: aiText }] });
+
+                return aiText;
+
+            } catch (error) {
+                console.error("Error calling Backend:", error);
+                return "I'm having trouble connecting to the MyMULA Intelligence Server. Make sure `py_chatbot_server.py` is running! 😓";
+            }
+        }
+
+        // Helper for Quick Reply buttons
+        function sendQuickReply(text) {
+            document.getElementById('messageInput').value = text;
+            sendMessage();
+        }
+
+        // 3. UPDATED ASYNC SEND MESSAGE FUNCTION
+        async function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            // Add user message to UI
+            addMessage(message, 'user');
+            input.value = '';
+
+            // Show typing indicator
+            const typingIndicator = document.getElementById('typingIndicator');
+            typingIndicator.classList.remove('hidden');
+            scrollToBottom();
+
+            // --- REAL AI CALL HAPPENS HERE ---
+            // We wait (await) for the fetch to finish before moving on
+            const aiResponse = await getRealAIResponse(message);
+
+            // Hide typing indicator
+            typingIndicator.classList.add('hidden');
+
+            // Add AI response to UI
+            addMessage(aiResponse, 'ai');
+        }
+
+        function addMessage(text, sender) {
+            const container = document.getElementById('chatContainer');
+            const div = document.createElement('div');
+            div.className = 'flex gap-3 ' + (sender === 'user' ? 'justify-end' : '');
+
+            if (sender === 'user') {
+                div.innerHTML = `
+    <div class="chat-bubble-user rounded-2xl rounded-tr-none p-4 max-w-[80%]">
+        <p class="text-sm text-white whitespace-pre-wrap">${escapeHtml(text)}</p>
+    </div>
+    `;
+            } else {
+                div.innerHTML = `
+    <div
+        class="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white shrink-0">
+        <span class="material-symbols-outlined !text-base">smart_toy</span>
+    </div>
+    <div class="chat-bubble-ai dark:bg-gray-700 rounded-2xl rounded-tl-none p-4 max-w-[80%]">
+        <p class="text-sm text-gray-800 dark:text-gray-200 whitespace-pre-wrap">${formatMarkdown(text)}</p>
+    </div>
+    `;
+            }
+
+            container.appendChild(div);
+            scrollToBottom();
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function formatMarkdown(text) {
+            // Basic markdown: **bold**
+            let formatted = escapeHtml(text).replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            // Basic markdown: *italic*
+            formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            // Basic markdown: Newlines to <br>
+            formatted = formatted.replace(/\n/g, '<br>');
+            return formatted;
+        }
+
+        function scrollToBottom() {
+            const container = document.getElementById('chatContainer');
+            container.scrollTop = container.scrollHeight;
+        }
+    </script>
+</body>
+
+</html>
