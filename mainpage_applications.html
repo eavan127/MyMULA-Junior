@@ -65,14 +65,16 @@
           </div>
         </div>
         <div class="flex w-12 items-center justify-end">
-          <button
+          <button onclick="window.location.href='Notification.html'"
             class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-12 text-[#1E1E1E] dark:text-white/90 gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
             <span class="material-symbols-outlined text-2xl">notifications</span>
           </button>
         </div>
       </div>
-      <p class="text-[#1E1E1E] dark:text-white tracking-light text-[28px] font-bold leading-tight">My Applications</p>
-      <p class="text-[#6F7A85] dark:text-white/70 text-base font-normal leading-normal -mt-1">Permohonan Saya</p>
+      <p id="page-title" class="text-[#1E1E1E] dark:text-white tracking-light text-[28px] font-bold leading-tight">My
+        Applications</p>
+      <p id="page-subtitle" class="text-[#6F7A85] dark:text-white/70 text-base font-normal leading-normal -mt-1">
+        Permohonan Saya</p>
     </div>
 
     <!-- Toggle -->
@@ -81,12 +83,14 @@
         <label
           class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-background-dark has-[:checked]:shadow-sm has-[:checked]:text-[#1E1E1E] dark:has-[:checked]:text-white text-[#6F7A85] dark:text-white/60 text-sm font-medium leading-normal">
           <span class="truncate">EN</span>
-          <input checked="" class="invisible w-0" name="language-toggle" type="radio" value="EN" />
+          <input checked="" class="invisible w-0" name="language-toggle" type="radio" value="EN" id="lang-en"
+            onchange="toggleLanguage('EN')" />
         </label>
         <label
           class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-md px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-background-dark has-[:checked]:shadow-sm has-[:checked]:text-[#1E1E1E] dark:has-[:checked]:text-white text-[#6F7A85] dark:text-white/60 text-sm font-medium leading-normal">
           <span class="truncate">BM</span>
-          <input class="invisible w-0" name="language-toggle" type="radio" value="BM" />
+          <input class="invisible w-0" name="language-toggle" type="radio" value="BM" id="lang-bm"
+            onchange="toggleLanguage('BM')" />
         </label>
       </div>
     </div>
@@ -306,6 +310,50 @@
       if (popup) {
         popup.classList.add('hidden');
         popup.classList.remove('flex');
+      }
+    }
+  </script>
+  <script>
+    function toggleLanguage(lang) {
+      const title = document.getElementById('page-title');
+      const subtitle = document.getElementById('page-subtitle');
+      const pespTitle = document.querySelector('#pesp-card .text-base');
+      const pespDesc = document.querySelector('#pesp-card .text-sm');
+      const smeTitle = document.querySelector('#sme-card .text-base');
+      const smeDesc = document.querySelector('#sme-card .text-sm');
+      const dentalTitle = document.querySelector('#dental-card .text-base');
+      const dentalDesc = document.querySelector('#dental-card .text-sm');
+      const navHome = document.querySelector('a[href="mainpage_home.html"] p');
+      const navApps = document.querySelector('a[href="mainpage_applications.html"] p');
+      const navProfile = document.querySelector('a[href="mainpage_profile.html"] p');
+
+
+      if (lang === 'BM') {
+        if (title) title.innerText = 'Permohonan Saya';
+        if (subtitle) subtitle.innerText = 'My Applications'; // Swap or keep relevant context
+        if (pespTitle) pespTitle.innerText = 'Biasiswa PESP';
+        if (pespDesc) pespDesc.innerText = 'Permohonan untuk pembiayaan pendidikan tinggi.';
+        if (smeTitle) smeTitle.innerText = 'Pendaftaran PKS';
+        if (smeDesc) smeDesc.innerText = 'Mendaftar perusahaan kecil dan sederhana.';
+        if (dentalTitle) dentalTitle.innerText = 'Pemeriksaan Gigi & Prosedur';
+        if (dentalDesc) dentalDesc.innerText = 'Kebenaran untuk rawatan gigi di klinik.';
+        if (navHome) navHome.innerText = 'Utama';
+        if (navApps) navApps.innerText = 'Permohonan';
+        if (navProfile) navProfile.innerText = 'Profil';
+
+      } else {
+        // EN
+        if (title) title.innerText = 'My Applications';
+        if (subtitle) subtitle.innerText = 'Permohonan Saya';
+        if (pespTitle) pespTitle.innerText = 'PESP Scholarship';
+        if (pespDesc) pespDesc.innerText = 'Application for tertiary education funding.';
+        if (smeTitle) smeTitle.innerText = 'SME Registration';
+        if (smeDesc) smeDesc.innerText = 'Registering a small to medium enterprise.';
+        if (dentalTitle) dentalTitle.innerText = 'Dental Checkup & Procedure';
+        if (dentalDesc) dentalDesc.innerText = 'Consent for dental treatment at clinic.';
+        if (navHome) navHome.innerText = 'Home';
+        if (navApps) navApps.innerText = 'My Applications';
+        if (navProfile) navProfile.innerText = 'Profile';
       }
     }
   </script>

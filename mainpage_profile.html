@@ -74,7 +74,7 @@
         Profile
       </h1>
       <div class="flex w-12 items-center justify-end relative">
-        <button
+        <button onclick="window.location.href='Notification.html'"
           class="flex max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-full h-10 w-10 bg-transparent text-[#333333] dark:text-white gap-2 text-base font-bold leading-normal tracking-[0.015em] min-w-0 p-0">
           <span class="material-symbols-outlined !text-3xl">notifications</span>
         </button>
@@ -137,7 +137,7 @@
                 <span class="material-symbols-outlined !text-xl">child_care</span>
               </div>
               <div>
-                <p class="text-sm font-semibold text-gray-900 dark:text-white">Birth Certificate</p>
+                <p id="birthCertTitle" class="text-sm font-semibold text-gray-900 dark:text-white">Birth Certificate</p>
                 <p class="text-xs text-orange-500 font-medium" id="birthCertStatus">Required</p>
               </div>
             </div>
@@ -145,7 +145,7 @@
             <button id="birthBtn"
               class="bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors p-2 rounded-lg text-xs font-bold"
               onclick="window.location.href='scan_document.html?type=birth'">
-              Scan
+              <span id="birthBtnText">Scan</span>
             </button>
           </div>
 
@@ -158,14 +158,14 @@
                 <span class="material-symbols-outlined !text-xl">school</span>
               </div>
               <div>
-                <p class="text-sm font-semibold text-gray-900 dark:text-white">SPM Certificate</p>
+                <p id="spmCertTitle" class="text-sm font-semibold text-gray-900 dark:text-white">SPM Certificate</p>
                 <p class="text-xs text-orange-500 font-medium" id="spmStatus">Required</p>
               </div>
             </div>
             <button id="spmBtn"
               class="bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors p-2 rounded-lg text-xs font-bold"
               onclick="window.location.href='scan_document.html?type=spm'">
-              Scan
+              <span id="spmBtnText">Scan</span>
             </button>
           </div>
 
@@ -177,18 +177,19 @@
                 <span class="material-symbols-outlined !text-xl">sports_soccer</span>
               </div>
               <div>
-                <p class="text-sm font-semibold text-gray-900 dark:text-white">Co-Curriculum</p>
+                <p id="coqCertTitle" class="text-sm font-semibold text-gray-900 dark:text-white">Co-Curriculum</p>
                 <p class="text-xs text-orange-500 font-medium" id="coqStatus">Required</p>
               </div>
             </div>
             <button id="coqBtn"
               class="bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors p-2 rounded-lg text-xs font-bold"
               onclick="window.location.href='scan_document.html?type=coq'">
-              Scan
+              <span id="coqBtnText">Scan</span>
             </button>
           </div>
         </div>
-        <button class="w-full bg-primary text-white font-bold py-3 px-4 rounded-xl shadow-md bounce-on-tap">
+        <button id="managePermBtn"
+          class="w-full bg-primary text-white font-bold py-3 px-4 rounded-xl shadow-md bounce-on-tap">
           Manage Permissions
         </button>
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
@@ -197,13 +198,15 @@
               <div class="bg-gray-100 dark:bg-gray-700 rounded-full p-2">
                 <span class="material-symbols-outlined text-primary !text-2xl">language</span>
               </div>
-              <p class="font-semibold text-gray-900 dark:text-white">Language</p>
+              <p id="langLabel" class="font-semibold text-gray-900 dark:text-white">Language</p>
             </div>
             <div class="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 p-1 rounded-full">
-              <button class="px-3 py-1 text-sm font-semibold text-white bg-primary rounded-full">
+              <button id="btnEN" onclick="changeLanguage('en')"
+                class="px-3 py-1 text-sm font-semibold text-white bg-primary rounded-full">
                 EN
               </button>
-              <button class="px-3 py-1 text-sm font-semibold text-gray-500 dark:text-gray-400">
+              <button id="btnBM" onclick="changeLanguage('bm')"
+                class="px-3 py-1 text-sm font-semibold text-gray-500 dark:text-gray-400 rounded-full">
                 BM
               </button>
             </div>
@@ -213,7 +216,7 @@
               <div class="bg-gray-100 dark:bg-gray-700 rounded-full p-2">
                 <span class="material-symbols-outlined text-primary !text-2xl">help_outline</span>
               </div>
-              <p class="font-semibold text-gray-900 dark:text-white">
+              <p id="helpLabel" class="font-semibold text-gray-900 dark:text-white">
                 Help &amp; Security
               </p>
             </div>
@@ -602,6 +605,65 @@
       </div>
     </div>
   </div>
+  <script>
+    // === LANGUAGE TOGGLE ===
+    function changeLanguage(lang) {
+      const btnEN = document.getElementById('btnEN');
+      const btnBM = document.getElementById('btnBM');
+      const profileTitle = document.querySelector('h1.text-center');
+      const linkedSectionTitle = document.querySelector('#guardianSection p.font-semibold');
+      const childDocsTitle = document.querySelector('h3.font-bold');
+      const addMoreText = document.querySelector('#addMoreSection button');
+      const logoutText = document.querySelector('button[onclick="handleLogout()"]');
+      const langLabel = document.getElementById('langLabel');
+      const helpLabel = document.getElementById('helpLabel');
+      const managePermBtn = document.getElementById('managePermBtn');
+      const birthCertTitle = document.getElementById('birthCertTitle');
+      const spmCertTitle = document.getElementById('spmCertTitle');
+      const coqCertTitle = document.getElementById('coqCertTitle');
+      const birthBtnText = document.getElementById('birthBtnText');
+      const spmBtnText = document.getElementById('spmBtnText');
+      const coqBtnText = document.getElementById('coqBtnText');
+
+      if (lang === 'bm') {
+        btnBM.className = 'px-3 py-1 text-sm font-semibold text-white bg-primary rounded-full';
+        btnEN.className = 'px-3 py-1 text-sm font-semibold text-gray-500 dark:text-gray-400 rounded-full';
+
+        if (profileTitle) profileTitle.innerText = 'Profil';
+        if (linkedSectionTitle) linkedSectionTitle.innerText = 'Penjaga Dihubungkan';
+        if (childDocsTitle) childDocsTitle.innerText = 'Dokumen Anak';
+        if (addMoreText) addMoreText.innerHTML = '<span class="material-symbols-outlined text-lg">add_circle</span> Tambah Dokumen';
+        if (langLabel) langLabel.innerText = 'Bahasa';
+        if (helpLabel) helpLabel.innerText = 'Bantuan & Keselamatan';
+        if (logoutText) logoutText.innerHTML = '<span class="material-symbols-outlined">logout</span> Log Keluar';
+        if (managePermBtn) managePermBtn.innerText = 'Urus Kebenaran';
+        if (birthCertTitle) birthCertTitle.innerText = 'Sijil Kelahiran';
+        if (spmCertTitle) spmCertTitle.innerText = 'Sijil SPM';
+        if (coqCertTitle) coqCertTitle.innerText = 'Ko-kurikulum';
+        if (birthBtnText) birthBtnText.innerText = 'Imbas';
+        if (spmBtnText) spmBtnText.innerText = 'Imbas';
+        if (coqBtnText) coqBtnText.innerText = 'Imbas';
+      } else {
+        btnEN.className = 'px-3 py-1 text-sm font-semibold text-white bg-primary rounded-full';
+        btnBM.className = 'px-3 py-1 text-sm font-semibold text-gray-500 dark:text-gray-400 rounded-full';
+
+        if (profileTitle) profileTitle.innerText = 'Profile';
+        if (linkedSectionTitle) linkedSectionTitle.innerText = 'Linked Guardian';
+        if (childDocsTitle) childDocsTitle.innerText = 'Child Documents';
+        if (addMoreText) addMoreText.innerHTML = '<span class="material-symbols-outlined text-lg">add_circle</span> Add More Documents';
+        if (langLabel) langLabel.innerText = 'Language';
+        if (helpLabel) helpLabel.innerText = 'Help & Security';
+        if (logoutText) logoutText.innerHTML = '<span class="material-symbols-outlined">logout</span> Log Out';
+        if (managePermBtn) managePermBtn.innerText = 'Manage Permissions';
+        if (birthCertTitle) birthCertTitle.innerText = 'Birth Certificate';
+        if (spmCertTitle) spmCertTitle.innerText = 'SPM Certificate';
+        if (coqCertTitle) coqCertTitle.innerText = 'Co-Curriculum';
+        if (birthBtnText) birthBtnText.innerText = 'Scan';
+        if (spmBtnText) spmBtnText.innerText = 'Scan';
+        if (coqBtnText) coqBtnText.innerText = 'Scan';
+      }
+    }
+  </script>
 </body>
 
 </html>
