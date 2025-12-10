@@ -96,44 +96,6 @@
       <!-- Applications will be loaded here -->
     </div>
 
-    <!-- Recent Activity Section -->
-    <div class="px-4 pb-3 pt-5">
-      <h2 class="text-[#333333] dark:text-white text-[22px] font-bold leading-tight tracking-[-0.015em]">Recent Activity
-      </h2>
-      <p class="text-[#6c757d] dark:text-gray-400 text-sm font-medium leading-normal">Digital Curfew & Controls</p>
-    </div>
-
-    <div class="flex flex-col gap-3 px-4">
-      <!-- Activity Item 1 -->
-      <div
-        class="flex items-center gap-3 rounded-xl bg-white dark:bg-gray-800 p-4 shadow-sm border border-gray-100 dark:border-gray-700">
-        <div
-          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30 text-primary">
-          <span class="material-symbols-outlined text-xl">timer</span>
-        </div>
-        <div class="flex-1">
-          <p class="text-[#101418] dark:text-white text-sm font-bold">Curfew Settings Updated</p>
-          <p id="recent-curfew-desc" class="text-gray-500 dark:text-gray-400 text-xs">Guardian adjusted curfew to 11:00
-            PM</p>
-        </div>
-        <span class="text-xs text-gray-400">2h ago</span>
-      </div>
-
-      <!-- Activity Item 2 -->
-      <div
-        class="flex items-center gap-3 rounded-xl bg-white dark:bg-gray-800 p-4 shadow-sm border border-gray-100 dark:border-gray-700">
-        <div
-          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 text-green-600">
-          <span class="material-symbols-outlined text-xl">check_circle</span>
-        </div>
-        <div class="flex-1">
-          <p class="text-[#101418] dark:text-white text-sm font-bold">TikTok Override Approved</p>
-          <p class="text-gray-500 dark:text-gray-400 text-xs">30 min usage granted</p>
-        </div>
-        <span class="text-xs text-gray-400">5h ago</span>
-      </div>
-    </div>
-
 
   </div>
   <div class="h-5 bg-transparent"></div>
@@ -325,25 +287,6 @@
         loadDraftApplications(); // Refresh the list
       }
     }
-  </script>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Update Recent Activity Curfew Time
-      const curfewStart = localStorage.getItem('curfew_start');
-      if (curfewStart) {
-        // Format time (e.g., 22:00 -> 10:00 PM)
-        const [h, m] = curfewStart.split(':');
-        const hour = parseInt(h);
-        const ampm = hour >= 12 ? 'PM' : 'AM';
-        const formattedHour = hour % 12 || 12;
-        const formattedTime = `${formattedHour}:${m} ${ampm}`;
-
-        const descEl = document.getElementById('recent-curfew-desc');
-        if (descEl) {
-          descEl.textContent = `Guardian adjusted curfew to ${formattedTime}`;
-        }
-      }
-    });
   </script>
 </body>
 
