@@ -234,61 +234,120 @@
             loadDocuments();
         });
 
+        const USER_PROFILE = {
+            name: 'Ali Bin Abu',
+            ic: '850612-10-XXXX'
+        };
+
         function loadDocuments() {
             const container = document.getElementById('documentsList');
-            // We use the same storage technique as child profile for simplicity
-            const additionalDocs = JSON.parse(localStorage.getItem('adult_additional_docs') || '[]');
+            const additionalDocs = JSON.parse(sessionStorage.getItem('adult_additional_docs') || '[]');
 
             // Generate HTML for pre-verified fixed docs
             const verifiedHtml = VERIFIED_DOCS.map(doc => `
-                <div class="flex items-center gap-4 bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm">
-                <div class="h-10 w-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-                    <span class="material-symbols-outlined notranslate text-green-500">${doc.icon || 'description'}</span>
-                </div>
-                <div class="flex-1">
-                    <p class="text-sm font-medium text-[#333] dark:text-white">${doc.name}</p>
-                    <p class="text-xs text-green-500">Verified by Government</p>
-                </div>
-                <span class="material-symbols-outlined notranslate text-green-500">verified</span>
+                <div class="flex items-center justify-between bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm">
+                    <div class="flex items-center gap-4 flex-1">
+                        <div class="h-10 w-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                            <span class="material-symbols-outlined notranslate text-green-500">${doc.icon || 'description'}</span>
+                        </div>
+                        <div class="flex-1">
+                            <p class="text-sm font-medium text-[#333] dark:text-white">${doc.name}</p>
+                            <p class="text-xs text-green-500">Verified by Government</p>
+                        </div>
+                    </div>
+                    <button onclick="viewMyDocument('${doc.name}')" class="text-xs font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors mr-2">
+                        View
+                    </button>
+                    <span class="material-symbols-outlined notranslate text-green-500">verified</span>
                 </div>
             `).join('');
 
             // Generate HTML for user-added docs
             const customHtml = additionalDocs.map(doc => {
-                const status = sessionStorage.getItem(`${doc.name}_status`);
+                const storageKey = doc.name;
+                const status = sessionStorage.getItem(`${storageKey}_status`);
                 const isVerified = status === 'verified';
                 const isWaiting = status === 'waiting';
+                const isRejected = status === 'rejected';
 
-                // Simulation: if waiting, auto-verify after 7 seconds for demo
+                // Simulation: if waiting, check data and verify after delay
                 if (isWaiting) {
                     setTimeout(() => {
-                        sessionStorage.setItem(`${doc.name}_status`, 'verified');
-                        // Simple reload or DOM update could happen here, but we'll let user refresh for now
-                        // or lazy update next time they visit
-                        loadDocuments();
-                    }, 7000);
+                        // Retrieve extracted data
+                        const dataStr = sessionStorage.getItem(`${storageKey}_data`);
+                        let isValid = false;
+
+                        if (dataStr) {
+                            const data = JSON.parse(dataStr);
+                            // intelligent check: fuzzy match or partial match
+                            // For demo, check if data.Name or data['Holder Name'] contains "Ali" or "Abu"
+                            const docName = (data.Name || data['Holder Name'] || data['Child Name'] || '').toUpperCase();
+                            const profileName = USER_PROFILE.name.toUpperCase();
+
+                            // Simple check: does document name contain part of user name?
+                            if (docName.includes('ALI') || docName.includes('ABU')) {
+                                isValid = true;
+                            }
+                        } else {
+                            // Legacy/Fallback: if no data but status waiting, assume valid for demo
+                            isValid = true;
+                        }
+
+                        if (isValid) {
+                            sessionStorage.setItem(`${storageKey}_status`, 'verified');
+                        } else {
+                            sessionStorage.setItem(`${storageKey}_status`, 'rejected');
+                        }
+                        loadDocuments(); // Reload to show new status
+                    }, 5000); // 5 seconds processing time
                 }
 
-                // If not waiting and not verified, assume verified for legacy/pre-existing items
-                // BUT for new items from scanning, we rely on sessionStorage status
-                // We'll treat 'undefined' status as 'Verified' for legacy items stored in localStorage before this change
-                const finalVerified = isVerified || (!isWaiting && !status);
+                // If undefined, treat as verified for legacy items (or make them pending? No, safer to assume old flow items are valid) 
+                // BUT for this specific task, if it's brand new and undefined, it shouldn't show up? 
+                // Actually `addDocument` redirects immediately so status should be set by scan page.
 
-                const statusText = isWaiting ? 'Pending Verification' : 'Verified';
-                const statusColor = isWaiting ? 'text-orange-500' : 'text-green-500';
-                const iconColor = isWaiting ? 'bg-orange-100 dark:bg-orange-900/30 text-orange-500' : 'bg-green-100 dark:bg-green-900/30 text-green-500';
-                const iconSymbol = isWaiting ? 'pending' : 'verified';
+                const finalVerified = isVerified; // Strict check
+
+                let statusText = 'Verified';
+                let statusColor = 'text-green-500';
+                let iconColor = 'bg-green-100 dark:bg-green-900/30 text-green-500';
+                let iconSymbol = 'verified';
+
+                if (isWaiting) {
+                    statusText = 'Pending Verification...';
+                    statusColor = 'text-orange-500';
+                    iconColor = 'bg-orange-100 dark:bg-orange-900/30 text-orange-500';
+                    iconSymbol = 'hourglass_top';
+                } else if (isRejected) {
+                    statusText = 'Verification Failed';
+                    statusColor = 'text-red-500';
+                    iconColor = 'bg-red-100 dark:bg-red-900/30 text-red-500';
+                    iconSymbol = 'error';
+                } else if (!status) {
+                    // Fallback for pre-existing localstorage items without session status
+                    statusText = 'Verified';
+                }
 
                 return `
-                    <div class="flex items-center gap-4 bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm">
-                    <div class="h-10 w-10 rounded-full ${iconColor} flex items-center justify-center">
-                        <span class="material-symbols-outlined notranslate">${doc.icon || 'description'}</span>
-                    </div>
-                    <div class="flex-1">
-                        <p class="text-sm font-medium text-[#333] dark:text-white">${doc.name}</p>
-                        <p class="text-xs ${statusColor}">${statusText}</p>
-                    </div>
-                    <span class="material-symbols-outlined notranslate ${statusColor}">${iconSymbol}</span>
+                    <div class="flex items-center justify-between bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm">
+                        <div class="flex items-center gap-4 flex-1">
+                            <div class="h-10 w-10 rounded-full ${iconColor} flex items-center justify-center">
+                                <span class="material-symbols-outlined notranslate">${doc.icon || 'description'}</span>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-sm font-medium text-[#333] dark:text-white">${doc.name}</p>
+                                <p class="text-xs ${statusColor}">${statusText}</p>
+                            </div>
+                        </div>
+                        
+                        ${finalVerified || (!status && !isWaiting && !isRejected) ? `
+                            <button onclick="viewMyDocument('${doc.name}')" class="text-xs font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors mr-2">
+                                View
+                            </button>
+                            <span class="material-symbols-outlined notranslate ${statusColor}">${iconSymbol}</span>
+                        ` : `
+                            <span class="material-symbols-outlined notranslate ${statusColor}">${iconSymbol}</span>
+                        `}
                     </div>
                 `;
             }).join('');
@@ -296,37 +355,118 @@
             container.innerHTML = verifiedHtml + customHtml;
         }
 
-        function showAddDocModal() {
-            document.getElementById('addDocModal').classList.remove('hidden');
-            document.getElementById('addDocModal').classList.add('flex');
-        }
+        window.viewMyDocument = function (docName) {
+            let data = {};
+            const dataStr = sessionStorage.getItem(`${docName}_data`);
 
-        function closeAddDocModal() {
-            document.getElementById('addDocModal').classList.add('hidden');
-            document.getElementById('addDocModal').classList.remove('flex');
-        }
-
-        function addDocument(docName) {
-            // Check if already added
-            const docs = JSON.parse(localStorage.getItem('adult_additional_docs') || '[]');
-            if (docs.find(d => d.name === docName)) {
-                alert("Document already added!");
-                return;
+            if (dataStr) {
+                data = JSON.parse(dataStr);
+            } else {
+                // Return static mock data for pre-verified documents
+                if (docName === 'Identity Card (MyKad)') {
+                    data = { "Name": USER_PROFILE.name, "IC Number": "850214-10-5566", "Address": "123 Jalan Ampang, KL", "Status": "Active" };
+                } else if (docName === 'Birth Certificate') {
+                    data = { "Name": USER_PROFILE.name, "Date of Birth": "14/02/1985", "Place of Birth": "Kuala Lumpur", "Father": "Abu Bakar", "Mother": "Siti Aminah" };
+                } else if (docName === 'Payslip / Income Statement') {
+                    data = { "Employee": USER_PROFILE.name, "Employer": "Tech Solutions Sdn Bhd", "Month": "November 2024", "Net Salary": "RM 4,500.00" };
+                } else if (docName === 'Income Tax (LHDN)') {
+                    data = { "Taxpayer": USER_PROFILE.name, "Year": "2023", "Tax ID": "SG 1234567890", "Status": "Cleared" };
+                } else if (docName === 'Family Status Document') {
+                    data = { "Head of Family": USER_PROFILE.name, "Spouse": "Amina Binti Ali", "Children": "2", "Status": "Married" };
+                } else {
+                    // Fallback generic
+                    data = {
+                        "Holder Name": USER_PROFILE.name,
+                        "Document": docName,
+                        "Status": "Verified",
+                        "Date": new Date().toLocaleDateString()
+                    };
+                }
             }
 
-            // Add to list first
-            docs.push({ name: docName, icon: 'description' }); // Default verify status logic handled in load
-            localStorage.setItem('adult_additional_docs', JSON.stringify(docs));
+            const modal = document.getElementById('viewDocModal');
+            const content = document.getElementById('viewDocContent');
 
-            closeAddDocModal();
+            // Update Modal Title & Icon
+            document.getElementById('viewDocTitle').innerText = docName;
+            // Try to find icon element to update it? The modal logic currently has hardcoded child_care
+            // Let's brute force update the icon in the header
+            const headerIcon = modal.querySelector('h3 .material-symbols-outlined');
+            if (headerIcon) {
+                headerIcon.textContent = 'description';
+                headerIcon.classList.remove('text-blue-500');
+                headerIcon.classList.add('text-green-500');
+            }
 
-            // Redirect to scan with Return URL
-            const returnUrl = encodeURIComponent('adult_profile.html');
-            window.location.href = `scan_document.html?type=custom&name=${encodeURIComponent(docName)}&return_url=${returnUrl}`;
+            let html = '<div class="space-y-3">';
+            Object.entries(data).forEach(([k, value]) => {
+                const label = k.charAt(0).toUpperCase() + k.slice(1);
+                html += `
+                    <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2 last:border-0 last:pb-0">
+                        <span class="text-gray-500 dark:text-gray-400 text-sm">${label}</span>
+                        <span class="font-semibold text-gray-900 dark:text-white text-sm text-right">${value}</span>
+                    </div>`;
+            });
+            html += '</div>';
+
+            content.innerHTML = html;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        window.showAddDocModal = function () {
+            const modal = document.getElementById('addDocModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+
+            // Add backdrop listener (safety)
+            modal.onclick = function (e) {
+                if (e.target === modal) {
+                    closeAddDocModal();
+                }
+            }
+        }
+
+        window.closeAddDocModal = function () {
+            const modal = document.getElementById('addDocModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        window.addDocument = function (docName) {
+            try {
+                // Check if already added
+                const docs = JSON.parse(sessionStorage.getItem('adult_additional_docs') || '[]');
+                if (docs.find(d => d.name === docName)) {
+                    alert("Document already added!");
+                    // Ensure modal closes even here if user wants?
+                    // No, usually they might want to pick another.
+                    // But if they are stuck, they can use the backdrop close now.
+                    return;
+                }
+
+                // Add to list first
+                docs.push({ name: docName, icon: 'description' }); // Default verify status logic handled in load
+                sessionStorage.setItem('adult_additional_docs', JSON.stringify(docs));
+
+                closeAddDocModal();
+
+                // Redirect to scan with Return URL
+                const returnUrl = encodeURIComponent('adult_profile.html');
+                setTimeout(() => {
+                    window.location.href = `scan_document.html?type=custom&name=${encodeURIComponent(docName)}&return_url=${returnUrl}`;
+                }, 100); // Small delay to allow UI update
+            } catch (e) {
+                console.error("Add Document Error:", e);
+                alert("An error occurred. Please try again.");
+                closeAddDocModal();
+            }
         }
 
         // === LOGOUT FUNCTIONALITY ===
-        function handleLogout() {
+        window.handleLogout = function () {
             if (confirm('Are you sure you want to log out?')) {
                 // Preserve session data for Demo Flow
                 window.location.href = 'index.html';
@@ -445,7 +585,7 @@
             </div>
         </div>
     </div>
-  <script src="google_translate.js"></script>
+    <script src="google_translate.js"></script>
 </body>
 
 </html>
