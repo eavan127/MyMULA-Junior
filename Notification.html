@@ -66,6 +66,14 @@
       <div class="size-8"></div>
     </div>
     <main class="flex-1 overflow-y-auto px-4 pb-24">
+      <!-- Completed Approvals Section -->
+      <div id="completedApprovalsSection" class="hidden">
+        <h2 class="pb-3 pt-4 text-lg font-bold text-gray-800">Completed Approvals</h2>
+        <div id="completedApprovalsList" class="space-y-3">
+          <!-- Completed approval notifications will be loaded here -->
+        </div>
+      </div>
+
       <div>
         <h2 class="pb-3 pt-4 text-lg font-bold text-gray-800">Suggested Applications for You</h2>
         <div class="space-y-3">
@@ -119,6 +127,57 @@
         </div>
       </div>
     </main>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        loadCompletedApprovals();
+      });
+
+      function loadCompletedApprovals() {
+        const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+        const approvedTransactions = requests.filter(r => r.type === 'transaction' && r.status === 'approved');
+
+        const section = document.getElementById('completedApprovalsSection');
+        const list = document.getElementById('completedApprovalsList');
+
+        if (approvedTransactions.length === 0) {
+          section.classList.add('hidden');
+          return;
+        }
+
+        section.classList.remove('hidden');
+        list.innerHTML = approvedTransactions.map(req => `
+          <div onclick="window.location.href='Transaction_Summary.html'" class="rounded-lg border border-green-200 bg-green-50 p-4 cursor-pointer hover:bg-green-100 transition-colors">
+            <div class="flex items-start gap-4">
+              <div class="mt-1 flex size-10 shrink-0 items-center justify-center rounded-full bg-green-100 text-green-600">
+                <span class="material-symbols-outlined notranslate">stadia_controller</span>
+              </div>
+              <div class="flex-1">
+                <p class="font-semibold text-gray-900">${req.title}</p>
+                <p class="mt-1 text-sm text-gray-600">Your gaming purchase request has been approved by your guardian.</p>
+                <p class="mt-1 text-xs text-gray-500">${formatTime(req.timestamp)}</p>
+                <div class="mt-3">
+                  <span class="inline-block rounded-full bg-green-200 px-3 py-1 text-xs font-semibold text-green-700">Approved ✓</span>
+                </div>
+              </div>
+              <span class="material-symbols-outlined notranslate text-gray-400">chevron_right</span>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      function formatTime(timestamp) {
+        const date = new Date(timestamp);
+        const now = new Date();
+        const diffMs = now - date;
+        const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+
+        if (diffHours < 1) return 'Just now';
+        if (diffHours < 24) return `${diffHours}h ago`;
+        if (diffHours < 48) return 'Yesterday';
+        return date.toLocaleDateString();
+      }
+    </script>
     <footer class="fixed bottom-0 z-10 w-full max-w-md border-t border-gray-200 bg-white">
       <nav class="flex h-16 items-center justify-around px-4">
         <a class="flex flex-col items-center gap-1 text-primary" href="#">
