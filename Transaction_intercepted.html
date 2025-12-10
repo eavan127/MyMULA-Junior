@@ -107,7 +107,7 @@
                     </p>
                 </div>
                 <div class="w-full flex flex-col gap-3 pt-2">
-                    <button
+                    <button onclick="askParentPermission()"
                         class="flex w-full cursor-pointer items-center justify-center rounded-lg h-12 bg-primary text-white text-base font-bold leading-normal tracking-wide">
                         Ask Parent for Permission
                     </button>
@@ -119,6 +119,39 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function askParentPermission() {
+            // Get existing requests from sessionStorage
+            let requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+
+            // Create new transaction request
+            const newRequest = {
+                id: 'req_trans_' + Date.now(),
+                type: 'transaction',
+                title: 'Gaming Purchase - Mobile Legends Premium Skin (RM50)',
+                childName: 'Ali',
+                timestamp: Date.now(),
+                status: 'pending',
+                details: {
+                    item: 'Mobile Legends – Premium Skin',
+                    amount: 'RM50.00',
+                    paymentMethod: 'MyMULA Wallet',
+                    spendingLimit: 'RM20.00'
+                }
+            };
+
+            // Add to requests array
+            requests.push(newRequest);
+
+            // Save back to sessionStorage
+            sessionStorage.setItem('child_requests', JSON.stringify(requests));
+
+            // Show confirmation and redirect
+            alert('Permission request sent to your Guardian! They will be notified.');
+            window.location.href = 'Transaction_Progress_Tracker.html';
+        }
+    </script>
 
 </body>
 

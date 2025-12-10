@@ -133,23 +133,41 @@
                     </div>
                 </div>
                 <div class="flex flex-col items-center gap-4 px-4 pb-8">
-                    <div class="relative h-40 w-40 overflow-hidden text-primary">
+                    <div onclick="startFaceScan()"
+                        class="relative h-40 w-40 overflow-hidden text-primary cursor-pointer hover:scale-105 transition-transform">
                         <span class="material-symbols-outlined !text-[160px]">
                             face
                         </span>
                         <div class="scanner-gradient"></div>
                     </div>
                     <h3 class="text-xl font-bold text-[#1D1D1F]">Authenticate to Confirm</h3>
-                    <p class="text-base text-neutral-600">Confirm with Face ID to finalize decision</p>
+                    <p class="text-base text-neutral-600">Tap Face ID to finalize decision</p>
                 </div>
                 <div class="flex flex-col items-center gap-4 px-4 pb-8 pt-2">
-                    <button
+                    <button onclick="window.location.href='adult_home.html'"
                         class="w-full max-w-sm cursor-pointer rounded-full bg-transparent p-3 text-sm font-bold text-primary">Cancel
                         Request</button>
                 </div>
             </div>
         </div>
     </div>
+
+    <script>
+        function startFaceScan() {
+            // Show scanning feedback
+            const scanArea = event.currentTarget;
+            scanArea.style.opacity = '0.7';
+
+            // Simulate face scan process
+            setTimeout(() => {
+                // Show success
+                alert('Face authenticated! Proceeding to digital signature...');
+
+                // Navigate to digital signature page
+                window.location.href = 'Transaction_Digital_Signature.html';
+            }, 1500);
+        }
+    </script>
 </body>
 
 </html>
