@@ -276,14 +276,21 @@
       // Check if the "Parent Signature" is saved
       const isApproved = sessionStorage.getItem('guardian_approved');
 
-      // Check for rejected requests in history
+      // Check for rejected requests first
       const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
       const scholarshipRequests = requests.filter(r => r.type === 'scholarship');
       const rejectedRequest = scholarshipRequests.find(r => r.status === 'rejected');
 
-      // PRIORITY: Approval flag takes precedence over rejection history
-      // (User may have asked again after rejection and got approved)
-      if (isApproved === 'true') {
+      if (rejectedRequest) {
+        // Show rejected status with red styling
+        const iconBox = document.getElementById('b40-icon-box');
+        iconBox.className = "text-red-600 dark:text-red-400 flex items-center justify-center rounded-lg bg-red-100 dark:bg-red-900/50 shrink-0 size-12";
+        document.getElementById('b40-icon-symbol').innerText = "cancel";
+
+        const statusText = document.getElementById('b40-status-text');
+        statusText.innerText = "Rejected";
+        statusText.className = "text-red-600 dark:text-red-400 text-base font-medium leading-normal";
+      } else if (isApproved === 'true') {
         // --- UPDATE THE UI TO GREEN ---
         const iconBox = document.getElementById('b40-icon-box');
         iconBox.className = "text-green-600 dark:text-green-400 flex items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/50 shrink-0 size-12";
@@ -297,15 +304,6 @@
         // --- SWAP BUTTONS ---
         document.getElementById('btn-ask-parent').classList.add('hidden');
         document.getElementById('btn-continue').classList.remove('hidden');
-      } else if (rejectedRequest) {
-        // Show rejected status with red styling (only if NOT approved)
-        const iconBox = document.getElementById('b40-icon-box');
-        iconBox.className = "text-red-600 dark:text-red-400 flex items-center justify-center rounded-lg bg-red-100 dark:bg-red-900/50 shrink-0 size-12";
-        document.getElementById('b40-icon-symbol').innerText = "cancel";
-
-        const statusText = document.getElementById('b40-status-text');
-        statusText.innerText = "Rejected";
-        statusText.className = "text-red-600 dark:text-red-400 text-base font-medium leading-normal";
       }
 
       // Save draft when navigating back
@@ -354,7 +352,7 @@
         };
 
         // Get existing requests or create empty array
-        const existingRequests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+        const existingRequests = JSON.parse(localStorage.getItem('child_requests') || '[]');
 
         // Add new request
         existingRequests.push(newRequest);

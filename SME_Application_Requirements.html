@@ -163,6 +163,84 @@
       console.log('SME Draft cleared - application submitted');
     }
 
+    // Check if the "Guardian Signature" is saved for SME
+    const isSmeApproved = sessionStorage.getItem('sme_guardian_approved');
+
+    // Check for rejected requests first
+    const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+    const smeRequests = requests.filter(r => r.type === 'sme');
+    const rejectedRequest = smeRequests.find(r => r.status === 'rejected');
+
+    if (rejectedRequest) {
+      // --- SHOW REJECTED STATUS IN RED ---
+      const regIconBox = document.getElementById('reg-form-icon-box');
+      if (regIconBox) regIconBox.className = "text-red-600 dark:text-red-400 flex items-center justify-center rounded-lg bg-red-100 dark:bg-red-900/50 shrink-0 size-12";
+
+      const regIcon = document.getElementById('reg-form-icon');
+      if (regIcon) regIcon.innerText = "cancel";
+
+      const regStatus = document.getElementById('reg-form-status');
+      if (regStatus) {
+        regStatus.innerText = "Rejected";
+        regStatus.className = "text-red-600 dark:text-red-400 text-base font-medium leading-normal";
+      }
+
+      const nameIconBox = document.getElementById('name-approval-icon-box');
+      if (nameIconBox) nameIconBox.className = "text-red-600 dark:text-red-400 flex items-center justify-center rounded-lg bg-red-100 dark:bg-red-900/50 shrink-0 size-12";
+
+      const nameIcon = document.getElementById('name-approval-icon');
+      if (nameIcon) nameIcon.innerText = "cancel";
+
+      const nameStatus = document.getElementById('name-approval-status');
+      if (nameStatus) {
+        nameStatus.innerText = "Rejected";
+        nameStatus.className = "text-red-600 dark:text-red-400 text-base font-medium leading-normal";
+      }
+    } else if (isSmeApproved === 'true') {
+      // --- UPDATE FORM A TO GREEN ---
+      const regIconBox = document.getElementById('reg-form-icon-box');
+      if (regIconBox) regIconBox.className = "text-green-600 dark:text-green-400 flex items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/50 shrink-0 size-12";
+
+      const regIcon = document.getElementById('reg-form-icon');
+      if (regIcon) regIcon.innerText = "check_circle";
+
+      const regStatus = document.getElementById('reg-form-status');
+      if (regStatus) {
+        regStatus.innerText = "Verified";
+        regStatus.className = "text-green-600 dark:text-green-400 text-base font-medium leading-normal";
+      }
+
+      // --- UPDATE NAME APPROVAL TO GREEN ---
+      const nameIconBox = document.getElementById('name-approval-icon-box');
+      if (nameIconBox) nameIconBox.className = "text-green-600 dark:text-green-400 flex items-center justify-center rounded-lg bg-green-100 dark:bg-green-900/50 shrink-0 size-12";
+
+      const nameIcon = document.getElementById('name-approval-icon');
+      if (nameIcon) nameIcon.innerText = "check_circle";
+
+      const nameStatus = document.getElementById('name-approval-status');
+      if (nameStatus) {
+        nameStatus.innerText = "Verified";
+        nameStatus.className = "text-green-600 dark:text-green-400 text-base font-medium leading-normal";
+      }
+
+      // --- SWAP BUTTONS ---
+      const btnAsk = document.getElementById('btn-ask-parent');
+      if (btnAsk) btnAsk.classList.add('hidden');
+
+      const btnContinue = document.getElementById('btn-continue');
+      if (btnContinue) btnContinue.classList.remove('hidden');
+    }
+
+    // Save draft when navigating back
+    const backButton = document.querySelector('[onclick*="mainpage_applications.html"]');
+    if (backButton) {
+      backButton.setAttribute('onclick', '');
+      backButton.addEventListener('click', (e) => {
+        saveDraft();
+        window.location.href = 'mainpage_home.html';
+      });
+    }
+
     // Save draft when page unloads
     window.addEventListener('beforeunload', () => {
       saveDraft();
