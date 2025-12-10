@@ -81,8 +81,8 @@
         class="relative flex min-h-screen w-full flex-col bg-background-light dark:bg-background-dark overflow-x-hidden max-w-md mx-auto">
 
         <div class="flex items-center bg-white dark:bg-gray-800 p-4 justify-between shadow-sm sticky top-0 z-10">
-            <a href="adult_profile.html"
-                class="p-2 -ml-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+            <a onclick="history.back()"
+                class="p-2 -ml-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer">
                 <span class="material-symbols-outlined notranslate text-[#333] dark:text-white">arrow_back</span>
             </a>
             <div class="flex items-center gap-2">
@@ -283,7 +283,7 @@
             container.scrollTop = container.scrollHeight;
         }
     </script>
-  <script src="google_translate.js"></script>
+    <script src="google_translate.js"></script>
 </body>
 
 </html>

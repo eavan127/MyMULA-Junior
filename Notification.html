@@ -135,26 +135,75 @@
 
       function loadCompletedApprovals() {
         const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
-        const approvedTransactions = requests.filter(r => r.type === 'transaction' && r.status === 'approved');
+        const approvedRequests = requests.filter(r => r.status === 'approved');
 
         const section = document.getElementById('completedApprovalsSection');
         const list = document.getElementById('completedApprovalsList');
 
-        if (approvedTransactions.length === 0) {
+        if (approvedRequests.length === 0) {
           section.classList.add('hidden');
           return;
         }
 
         section.classList.remove('hidden');
-        list.innerHTML = approvedTransactions.map(req => `
-          <div onclick="window.location.href='Transaction_Summary.html'" class="rounded-lg border border-green-200 bg-green-50 p-4 cursor-pointer hover:bg-green-100 transition-colors">
+        list.innerHTML = approvedRequests.map(req => {
+          // Get icon, color and redirect based on request type
+          let icon = 'check_circle';
+          let bgColor = 'bg-green-100';
+          let textColor = 'text-green-600';
+          let borderColor = 'border-green-200';
+          let sectionBg = 'bg-green-50';
+          let hoverBg = 'hover:bg-green-100';
+          let redirectUrl = '#';
+          let message = 'Your request has been approved.';
+
+          switch (req.type) {
+            case 'transaction':
+              icon = 'stadia_controller';
+              redirectUrl = 'Transaction_Summary.html';
+              message = 'Your gaming purchase request has been approved by your guardian.';
+              break;
+            case 'scholarship':
+              icon = 'school';
+              bgColor = 'bg-blue-100';
+              textColor = 'text-blue-600';
+              borderColor = 'border-blue-200';
+              sectionBg = 'bg-blue-50';
+              hoverBg = 'hover:bg-blue-100';
+              redirectUrl = 'scholarship_view_document.html';
+              message = 'Your scholarship application has been approved.';
+              break;
+            case 'sme':
+              icon = 'work';
+              bgColor = 'bg-purple-100';
+              textColor = 'text-purple-600';
+              borderColor = 'border-purple-200';
+              sectionBg = 'bg-purple-50';
+              hoverBg = 'hover:bg-purple-100';
+              redirectUrl = 'SME_view_document.html';
+              message = 'Your SME application has been approved.';
+              break;
+            case 'dental':
+              icon = 'health_and_safety';
+              bgColor = 'bg-red-100';
+              textColor = 'text-red-600';
+              borderColor = 'border-red-200';
+              sectionBg = 'bg-red-50';
+              hoverBg = 'hover:bg-red-100';
+              redirectUrl = 'Dental_Progress_Tracker.html';
+              message = 'Your dental application has been approved.';
+              break;
+          }
+
+          return `
+          <div onclick="window.location.href='${redirectUrl}'" class="rounded-lg border ${borderColor} ${sectionBg} p-4 cursor-pointer ${hoverBg} transition-colors">
             <div class="flex items-start gap-4">
-              <div class="mt-1 flex size-10 shrink-0 items-center justify-center rounded-full bg-green-100 text-green-600">
-                <span class="material-symbols-outlined notranslate">stadia_controller</span>
+              <div class="mt-1 flex size-10 shrink-0 items-center justify-center rounded-full ${bgColor} ${textColor}">
+                <span class="material-symbols-outlined notranslate">${icon}</span>
               </div>
               <div class="flex-1">
                 <p class="font-semibold text-gray-900">${req.title}</p>
-                <p class="mt-1 text-sm text-gray-600">Your gaming purchase request has been approved by your guardian.</p>
+                <p class="mt-1 text-sm text-gray-600">${message}</p>
                 <p class="mt-1 text-xs text-gray-500">${formatTime(req.timestamp)}</p>
                 <div class="mt-3">
                   <span class="inline-block rounded-full bg-green-200 px-3 py-1 text-xs font-semibold text-green-700">Approved ✓</span>
@@ -163,7 +212,7 @@
               <span class="material-symbols-outlined notranslate text-gray-400">chevron_right</span>
             </div>
           </div>
-        `).join('');
+        `}).join('');
       }
 
       function formatTime(timestamp) {
@@ -178,22 +227,7 @@
         return date.toLocaleDateString();
       }
     </script>
-    <footer class="fixed bottom-0 z-10 w-full max-w-md border-t border-gray-200 bg-white">
-      <nav class="flex h-16 items-center justify-around px-4">
-        <a class="flex flex-col items-center gap-1 text-primary" href="#">
-          <span class="material-symbols-outlined notranslate fill">home</span>
-          <span class="text-xs font-medium">Home</span>
-        </a>
-        <a class="flex flex-col items-center gap-1 text-gray-500" href="#">
-          <span class="material-symbols-outlined notranslate">description</span>
-          <span class="text-xs font-medium">Applications</span>
-        </a>
-        <a class="flex flex-col items-center gap-1 text-gray-500" href="#">
-          <span class="material-symbols-outlined notranslate">person</span>
-          <span class="text-xs font-medium">Profile</span>
-        </a>
-      </nav>
-    </footer>
+
   </div>
 
   <script src="google_translate.js"></script>

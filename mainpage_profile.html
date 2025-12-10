@@ -188,21 +188,40 @@
             </button>
           </div>
         </div>
-        <button id="managePermBtn"
-          class="w-full bg-primary text-white font-bold py-3 px-4 rounded-xl shadow-md bounce-on-tap">
-          Manage Permissions
-        </button>
+        <!-- Settings Section -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
+          <!-- Settings Header -->
+          <div class="p-4 flex items-center gap-3 border-b border-gray-100 dark:border-gray-700">
+            <span class="material-symbols-outlined notranslate text-gray-500">settings</span>
+            <p class="font-bold text-gray-900 dark:text-white">Settings</p>
+          </div>
 
-          <div onclick="window.location.href='ai_chatbox.html'"
-            class="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+          <!-- Notifications -->
+          <div onclick="window.location.href='Notification.html'"
+            class="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors border-b border-gray-100 dark:border-gray-700">
             <div class="flex items-center gap-4">
-              <div class="bg-gray-100 dark:bg-gray-700 rounded-full p-2">
-                <span class="material-symbols-outlined notranslate text-primary !text-2xl">help_outline</span>
-              </div>
-              <p id="helpLabel" class="font-semibold text-gray-900 dark:text-white">
-                Help &amp; Security
-              </p>
+              <span class="material-symbols-outlined notranslate text-gray-500">notifications</span>
+              <p class="font-medium text-gray-700 dark:text-gray-200">Notifications</p>
+            </div>
+            <span class="material-symbols-outlined notranslate text-gray-400">chevron_right</span>
+          </div>
+
+          <!-- Privacy & Security -->
+          <div onclick="window.location.href='Privacy_and_Security.html'"
+            class="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors border-b border-gray-100 dark:border-gray-700">
+            <div class="flex items-center gap-4">
+              <span class="material-symbols-outlined notranslate text-gray-500">security</span>
+              <p class="font-medium text-gray-700 dark:text-gray-200">Privacy & Security</p>
+            </div>
+            <span class="material-symbols-outlined notranslate text-gray-400">chevron_right</span>
+          </div>
+
+          <!-- Help & Support -->
+          <div onclick="window.location.href='ai_chatbox.html'"
+            class="p-4 flex items-center justify-between cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+            <div class="flex items-center gap-4">
+              <span class="material-symbols-outlined notranslate text-gray-500">help</span>
+              <p class="font-medium text-gray-700 dark:text-gray-200">Help & Support</p>
             </div>
             <span class="material-symbols-outlined notranslate text-gray-400">chevron_right</span>
           </div>

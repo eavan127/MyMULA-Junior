@@ -151,6 +151,30 @@
         </div>
       </div>
 
+      <!-- CARD 4: GAMING PURCHASE (Dynamic) -->
+      <div id="gaming-card" onclick="window.location.href='Transaction_Progress_Tracker.html'"
+        class="hidden flex flex-col gap-4 rounded-xl bg-white dark:bg-black/20 p-4 shadow-sm cursor-pointer">
+        <div class="flex items-center gap-4">
+          <div
+            class="text-[#1E1E1E] dark:text-white/90 flex items-center justify-center rounded-lg bg-pink-100 dark:bg-pink-900/30 shrink-0 size-12">
+            <span class="material-symbols-outlined notranslate text-2xl text-pink-500">stadia_controller</span>
+          </div>
+          <div class="flex flex-col justify-center flex-1">
+            <p id="gaming-title"
+              class="text-[#1E1E1E] dark:text-white text-base font-medium leading-normal line-clamp-1">Gaming Purchase
+              Request
+            </p>
+            <p class="text-[#6F7A85] dark:text-white/70 text-sm font-normal leading-normal line-clamp-2">In-game
+              purchase approval request.</p>
+          </div>
+        </div>
+        <div id="gaming-status-badge"
+          class="inline-flex items-center justify-center self-start rounded-full bg-[#FFC107]/20 px-3 py-1.5 text-xs font-medium text-[#B8860B] dark:text-[#FFD700]">
+          <div id="gaming-status-dot" class="mr-1.5 size-2 rounded-full bg-[#FFC107]"></div>
+          <span id="gaming-status-text">Awaiting Guardian Approval</span>
+        </div>
+      </div>
+
       <!-- Empty State Message (With ID 'empty-msg') -->
       <div id="empty-msg" class="text-center py-4 text-gray-400 text-sm">
         Start an application to see it here.
@@ -273,6 +297,61 @@
         }, 5000);
       }
     }
+
+    // 4. Check Gaming Purchase Requests
+    function checkGamingPurchaseRequests() {
+      const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+      const gamingRequest = requests.find(r => r.type === 'transaction');
+
+      if (gamingRequest) {
+        const gamingCard = document.getElementById('gaming-card');
+        if (gamingCard) {
+          gamingCard.classList.remove('hidden');
+
+          // Hide empty message
+          const msg = document.getElementById('empty-msg');
+          if (msg) msg.classList.add('hidden');
+
+          // Update title with actual request title
+          const title = document.getElementById('gaming-title');
+          if (title && gamingRequest.title) {
+            title.innerText = gamingRequest.title;
+          }
+
+          // Update status based on request status
+          if (gamingRequest.status === 'approved') {
+            updateGamingToApproved();
+          } else {
+            updateGamingToPending();
+          }
+        }
+      }
+    }
+
+    function updateGamingToPending() {
+      const badge = document.getElementById('gaming-status-badge');
+      if (badge) badge.className = "inline-flex items-center justify-center self-start rounded-full bg-[#FFC107]/20 px-3 py-1.5 text-xs font-medium text-[#B8860B] dark:text-[#FFD700]";
+
+      const dot = document.getElementById('gaming-status-dot');
+      if (dot) dot.className = "mr-1.5 size-2 rounded-full bg-[#FFC107]";
+
+      const text = document.getElementById('gaming-status-text');
+      if (text) text.innerText = "Awaiting Guardian Approval";
+    }
+
+    function updateGamingToApproved() {
+      const badge = document.getElementById('gaming-status-badge');
+      if (badge) badge.className = "inline-flex items-center justify-center self-start rounded-full bg-[#10B981]/20 px-3 py-1.5 text-xs font-medium text-[#10B981] dark:text-[#34D399]";
+
+      const dot = document.getElementById('gaming-status-dot');
+      if (dot) dot.className = "mr-1.5 size-2 rounded-full bg-[#10B981]";
+
+      const text = document.getElementById('gaming-status-text');
+      if (text) text.innerText = "Approved";
+    }
+
+    // Run gaming check on page load
+    checkGamingPurchaseRequests();
   </script>
 
   <!-- Approval Notification Popup -->
