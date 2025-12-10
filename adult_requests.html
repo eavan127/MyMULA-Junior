@@ -176,13 +176,28 @@
             const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
             const request = requests.find(r => r.id === requestId);
 
-            if (request && request.status === 'pending') {
-                // Store current request ID for approval flow
-                sessionStorage.setItem('current_approval_request', requestId);
+            if (!request) return;
 
+            // Store current request ID
+            sessionStorage.setItem('current_approval_request', requestId);
+
+            if (request.status === 'pending') {
                 // Route to appropriate approval page based on request type
                 if (request.type === 'transaction') {
                     window.location.href = 'Transaction_guardian_approval.html';
+                } else {
+                    window.location.href = 'request_received_guardian.html';
+                }
+            } else if (request.status === 'approved') {
+                // Route to summary/view page for approved requests
+                if (request.type === 'transaction') {
+                    window.location.href = 'Transaction_Summary.html';
+                } else if (request.type === 'scholarship') {
+                    window.location.href = 'scholarship_view_document.html';
+                } else if (request.type === 'sme') {
+                    window.location.href = 'SME_view_document.html';
+                } else if (request.type === 'dental') {
+                    window.location.href = 'Dental_Progress_Tracker.html';
                 } else {
                     window.location.href = 'request_received_guardian.html';
                 }
