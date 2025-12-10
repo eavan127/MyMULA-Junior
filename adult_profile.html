@@ -212,21 +212,64 @@
 
         function loadDocuments() {
             const container = document.getElementById('documentsList');
+            // We use the same storage technique as child profile for simplicity
             const additionalDocs = JSON.parse(localStorage.getItem('adult_additional_docs') || '[]');
-            const allDocs = [...VERIFIED_DOCS, ...additionalDocs];
 
-            container.innerHTML = allDocs.map(doc => `
-        <div class="flex items-center gap-4 bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm">
-          <div class="h-10 w-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
-            <span class="material-symbols-outlined text-green-500">${doc.icon || 'description'}</span>
-          </div>
-          <div class="flex-1">
-            <p class="text-sm font-medium text-[#333] dark:text-white">${doc.name}</p>
-            <p class="text-xs text-green-500">Verified by Government</p>
-          </div>
-          <span class="material-symbols-outlined text-green-500">verified</span>
-        </div>
-      `).join('');
+            // Generate HTML for pre-verified fixed docs
+            const verifiedHtml = VERIFIED_DOCS.map(doc => `
+                <div class="flex items-center gap-4 bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm">
+                <div class="h-10 w-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-green-500">${doc.icon || 'description'}</span>
+                </div>
+                <div class="flex-1">
+                    <p class="text-sm font-medium text-[#333] dark:text-white">${doc.name}</p>
+                    <p class="text-xs text-green-500">Verified by Government</p>
+                </div>
+                <span class="material-symbols-outlined text-green-500">verified</span>
+                </div>
+            `).join('');
+
+            // Generate HTML for user-added docs
+            const customHtml = additionalDocs.map(doc => {
+                const status = sessionStorage.getItem(`${doc.name}_status`);
+                const isVerified = status === 'verified';
+                const isWaiting = status === 'waiting';
+
+                // Simulation: if waiting, auto-verify after 7 seconds for demo
+                if (isWaiting) {
+                    setTimeout(() => {
+                        sessionStorage.setItem(`${doc.name}_status`, 'verified');
+                        // Simple reload or DOM update could happen here, but we'll let user refresh for now
+                        // or lazy update next time they visit
+                        loadDocuments();
+                    }, 7000);
+                }
+
+                // If not waiting and not verified, assume verified for legacy/pre-existing items
+                // BUT for new items from scanning, we rely on sessionStorage status
+                // We'll treat 'undefined' status as 'Verified' for legacy items stored in localStorage before this change
+                const finalVerified = isVerified || (!isWaiting && !status);
+
+                const statusText = isWaiting ? 'Pending Verification' : 'Verified';
+                const statusColor = isWaiting ? 'text-orange-500' : 'text-green-500';
+                const iconColor = isWaiting ? 'bg-orange-100 dark:bg-orange-900/30 text-orange-500' : 'bg-green-100 dark:bg-green-900/30 text-green-500';
+                const iconSymbol = isWaiting ? 'pending' : 'verified';
+
+                return `
+                    <div class="flex items-center gap-4 bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm">
+                    <div class="h-10 w-10 rounded-full ${iconColor} flex items-center justify-center">
+                        <span class="material-symbols-outlined">${doc.icon || 'description'}</span>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm font-medium text-[#333] dark:text-white">${doc.name}</p>
+                        <p class="text-xs ${statusColor}">${statusText}</p>
+                    </div>
+                    <span class="material-symbols-outlined ${statusColor}">${iconSymbol}</span>
+                    </div>
+                `;
+            }).join('');
+
+            container.innerHTML = verifiedHtml + customHtml;
         }
 
         function showAddDocModal() {
@@ -240,11 +283,22 @@
         }
 
         function addDocument(docName) {
+            // Check if already added
             const docs = JSON.parse(localStorage.getItem('adult_additional_docs') || '[]');
-            docs.push({ name: docName, icon: 'description', verified: true });
+            if (docs.find(d => d.name === docName)) {
+                alert("Document already added!");
+                return;
+            }
+
+            // Add to list first
+            docs.push({ name: docName, icon: 'description' }); // Default verify status logic handled in load
             localStorage.setItem('adult_additional_docs', JSON.stringify(docs));
+
             closeAddDocModal();
-            loadDocuments();
+
+            // Redirect to scan with Return URL
+            const returnUrl = encodeURIComponent('adult_profile.html');
+            window.location.href = `scan_document.html?type=custom&name=${encodeURIComponent(docName)}&return_url=${returnUrl}`;
         }
 
         function handleLogout() {

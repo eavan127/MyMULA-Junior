@@ -37,19 +37,26 @@
         @keyframes scan-line {
             0% {
                 top: 0;
+                opacity: 0;
             }
 
-            50% {
-                top: 100%;
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
             }
 
             100% {
-                top: 0;
+                top: 100%;
+                opacity: 0;
             }
         }
 
         .scan-animation {
-            animation: scan-line 2s linear infinite;
+            animation: scan-line 2.5s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.6);
         }
 
         .bounce-on-tap:active {
@@ -143,15 +150,20 @@
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const docType = urlParams.get('type') || 'generic';
+        // NEW: Get custom name if provided (e.g. for "Car Licenses")
+        const docName = urlParams.get('name');
+        // NEW: Get return URL, default to mainpage_profile
+        const returnUrl = urlParams.get('return_url') || 'mainpage_profile.html';
 
         // Update Title
         const titleMap = {
             'spm': 'Scan SPM Certificate',
             'coq': 'Scan Co-Curriculum',
             'birth': 'Scan Birth Certificate',
-            'guardian': 'Scan Guardian Birth Certificate' // Explicit title for clarity or just "Scan Birth Certificate"
+            'guardian': 'Scan Guardian Birth Certificate'
         };
-        document.getElementById('pageTitle').innerText = titleMap[docType] || 'Scan Document';
+        // Use custom name in title if available
+        document.getElementById('pageTitle').innerText = (docName ? `Scan ${docName}` : (titleMap[docType] || 'Scan Document'));
 
         function captureImage() {
             // Show processing
@@ -242,12 +254,42 @@
                         <span class="font-semibold">850214-10-5566</span>
                     </div>
                 `;
+            } else if (docName === 'Car Licenses' || (docName && docName.toLowerCase().includes('license'))) {
+                html = `
+                     <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
+                        <span class="text-gray-500 dark:text-gray-400">Holder Name</span>
+                        <span class="font-semibold">Ali Bin Abu</span>
+                    </div>
+                    <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
+                        <span class="text-gray-500 dark:text-gray-400">Class</span>
+                        <span class="font-semibold">D (Car)</span>
+                    </div>
+                     <div class="flex justify-between">
+                        <span class="text-gray-500 dark:text-gray-400">Expiry Date</span>
+                        <span class="font-semibold text-green-500">12/12/2026</span>
+                    </div>
+                `;
+            } else if (docName === 'Passport Number' || (docName && docName.toLowerCase().includes('passport'))) {
+                html = `
+                     <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
+                        <span class="text-gray-500 dark:text-gray-400">Country</span>
+                        <span class="font-semibold">Malaysia</span>
+                    </div>
+                    <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
+                        <span class="text-gray-500 dark:text-gray-400">Passport No</span>
+                        <span class="font-semibold">A12345678</span>
+                    </div>
+                     <div class="flex justify-between">
+                        <span class="text-gray-500 dark:text-gray-400">Valid Until</span>
+                        <span class="font-semibold text-green-500">10/05/2028</span>
+                    </div>
+                `;
             } else {
-                // Generic/Custom
+                // Generic/Custom/Education
                 html = `
                     <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
                         <span class="text-gray-500 dark:text-gray-400">Document Type</span>
-                        <span class="font-semibold">${docName || 'Document'}</span>
+                        <span class="font-semibold">${docName || docType || 'Document'}</span>
                     </div>
                      <div class="flex justify-between">
                         <span class="text-gray-500 dark:text-gray-400">Status</span>
@@ -279,20 +321,20 @@
                 sessionStorage.setItem(`${storageKey}_timestamp`, new Date().toISOString());
             }
 
-            // Save summary based on type
-            if (docType === 'spm') {
-                sessionStorage.setItem('spm_summary', '9 Subjects (5A 2B 2C)');
-            } else if (docType === 'coq') {
-                sessionStorage.setItem('coq_summary', 'Football Club (District)');
-            } else if (docType === 'birth') {
-                sessionStorage.setItem('birth_summary', 'Child MyKid/IC: 1234');
-            } else if (docType !== 'guardian') {
-                // Custom summary for non-guardian types
-                sessionStorage.setItem(`${storageKey}_summary`, 'Details Extracted');
+            // Save summary based on type (Shared logic)
+            let summary = 'Details Extracted';
+            if (docType === 'spm') summary = '9 Subjects (5A 2B 2C)';
+            else if (docType === 'coq') summary = 'Football Club (District)';
+            else if (docType === 'birth') summary = 'Child MyKid/IC: 1234';
+            else if (docName === 'Car Licenses') summary = 'Class D (Exp: 2026)';
+            else if (docName === 'Passport Number') summary = 'MYS (Exp: 2028)';
+
+            if (docType !== 'guardian') {
+                sessionStorage.setItem(`${storageKey}_summary`, summary);
             }
 
-            // Redirect
-            window.location.href = 'mainpage_profile.html';
+            // Redirect using the return URL
+            window.location.href = returnUrl;
         }
     </script>
 </body>
