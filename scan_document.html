@@ -188,8 +188,11 @@
 
         function generateMockData() {
             const container = document.getElementById('extractedDataList');
-            let html = '';
+            container.innerHTML = getMockDataHtml();
+        }
 
+        function getMockDataHtml() {
+            let html = '';
             if (docType === 'spm') {
                 html = `
                     <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
@@ -285,7 +288,6 @@
                     </div>
                 `;
             } else {
-                // Generic/Custom/Education
                 html = `
                     <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
                         <span class="text-gray-500 dark:text-gray-400">Document Type</span>
@@ -297,8 +299,7 @@
                     </div>
                 `;
             }
-
-            container.innerHTML = html;
+            return html;
         }
 
         function retakeScan() {
@@ -311,14 +312,59 @@
             // Determine key to save. If custom name, use that as the key prefix.
             const storageKey = (docType === 'generic' || docType === 'custom') && typeof docName !== 'undefined' && docName ? docName : docType;
 
+            // Generate full data object to save
+            let dataToSave = {};
+            if (docType === 'spm') {
+                dataToSave = { candidate: "Ali Bin Abu", year: "2023", subjects: "9 Subjects", grade: "5A 2B 2C" };
+            } else if (docType === 'coq') {
+                dataToSave = { activity: "Football Club", level: "District (MSSD)", achievement: "Runner-up", merit: "15 Points" };
+            } else if (docType === 'birth') {
+                dataToSave = { name: "Ali Bin Abu", mykid: "******-**-1234" };
+            } else if (docType === 'guardian') {
+                dataToSave = { child: "Ali Bin Abu", guardian: "Abu Bakar", ic: "850214-10-5566" };
+            } else if (docName === 'Car Licenses') {
+                dataToSave = { holder: "Ali Bin Abu", class: "D (Car)", expiry: "12/12/2026" };
+            } else if (docName === 'Passport Number') {
+                dataToSave = { country: "Malaysia", passport: "A12345678", valid: "10/05/2028" };
+            } else {
+                dataToSave = { type: docName || docType, status: "Readable" };
+            }
+
+            // Save key data for View functionality
+            sessionStorage.setItem(`${storageKey}_data`, JSON.stringify(dataToSave));
+
             // Special handling for guardian type
             if (docType === 'guardian') {
-                sessionStorage.setItem('guardian_status', 'waiting_verification');
-                sessionStorage.setItem('guardian_ic', '850214-10-5566');
+                // Mock Government DB Check
+                // Valid Adult: Sarah Tan (IC: 850612-10-5566) - Note: Using the ID from extracted data or input
+                // For this demo, let's assume the scanner read the correct ID: 850612-10-5566
+                // If the user manually entered something else in previous step, we'd check that.
+                // Here we simulate the check:
+
+                // Let's pretend the mock data generated IS the correct adult for the happy path, 
+                // but we check if the user "registered" (conceptually). 
+                // Since this is a demo, we will check against the HARDCODED Verified Adult IC.
+                const validAdultIC = "850214-10-5566"; // Matches the mock data generated above
+
+                if (dataToSave.ic === validAdultIC) {
+                    sessionStorage.setItem('guardian_status', 'verified'); // Auto-verify!
+                    sessionStorage.setItem('guardian_data', JSON.stringify(dataToSave));
+                    alert("Guardian Verified against Government Database!");
+                } else {
+                    alert("Error: Guardian not found in Government Database or ID mismatch.");
+                    return; // Stop submission
+                }
             } else {
                 // Save state for other types
-                sessionStorage.setItem(`${storageKey}_status`, 'waiting');
+                sessionStorage.setItem(`${storageKey}_status`, 'verified'); // Auto-verify documents for demo speed
                 sessionStorage.setItem(`${storageKey}_timestamp`, new Date().toISOString());
+
+                // Add to central list of document keys for Adult View
+                let docKeys = JSON.parse(sessionStorage.getItem('db_child_doc_keys') || '[]');
+                if (!docKeys.includes(storageKey)) {
+                    docKeys.push(storageKey);
+                    sessionStorage.setItem('db_child_doc_keys', JSON.stringify(docKeys));
+                }
             }
 
             // Save summary based on type (Shared logic)
