@@ -125,10 +125,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="px-4 pt-4 pb-2 flex flex-col items-center">
-                    <p class="font-script text-5xl text-[#101418] dark:text-white">Sarah Tan</p>
+                <div id="signatureContainer" class="px-4 pt-4 pb-2 flex flex-col items-center">
+                    <p id="signatureName" class="font-script text-5xl text-[#101418] dark:text-white">Sarah Tan</p>
                     <p class="text-slate-500 dark:text-slate-400 text-xs font-normal leading-normal pt-1">This is your
-                        saved signature from MyMULA Smart ID.</p>
+                        saved signature from MyMULA registration.</p>
                 </div>
                 <div class="px-4 pt-4 pb-4">
                     <div
@@ -188,6 +188,22 @@
             // Navigate back to home
             window.location.href = 'adult_home.html';
         }
+
+        // Load saved signature on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const signatureImage = localStorage.getItem('guardian_signature_image');
+            const adultName = sessionStorage.getItem('adult_name') || 'Sarah Tan';
+
+            if (signatureImage) {
+                const container = document.getElementById('signatureContainer');
+                container.innerHTML = `
+                    <img src="${signatureImage}" alt="Guardian Signature" class="h-20 object-contain mx-auto" />
+                    <p class="text-slate-500 dark:text-slate-400 text-xs font-normal leading-normal pt-1">This is your saved signature from MyMULA registration.</p>
+                `;
+            } else {
+                document.getElementById('signatureName').textContent = adultName;
+            }
+        });
     </script>
 </body>
 

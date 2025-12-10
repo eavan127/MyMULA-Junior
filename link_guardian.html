@@ -92,7 +92,8 @@
                         <p class="text-xs text-green-600 dark:text-green-400">Fastest way to link</p>
                     </div>
                 </div>
-                <span class="material-symbols-outlined notranslate text-gray-300 group-hover:text-green-500">chevron_right</span>
+                <span
+                    class="material-symbols-outlined notranslate text-gray-300 group-hover:text-green-500">chevron_right</span>
             </button>
         </div>
 
@@ -205,14 +206,16 @@
                     phone: "+6012-3456789"
                 };
 
-                sessionStorage.setItem('guardian_status', 'verified'); // Auto-verify: Simulating Government DB Match
+                // Store pending guardian IC for later verification by adult registration
+                sessionStorage.setItem('pending_guardian_ic', mockGuardianData.ic);
+                sessionStorage.setItem('guardian_status', 'waiting_verification');
                 sessionStorage.setItem('guardian_data', JSON.stringify(mockGuardianData));
 
                 // We also set the IC for consistency if used elsewhere
                 document.getElementById('icInput').value = mockGuardianData.ic;
 
-                // Create a brief verified feeling before redirecting
-                alert("Birth Certificate Scanned! Guardian Verified against Government Database.");
+                // Create a brief pending feeling before redirecting
+                alert("Birth Certificate Scanned! Guardian linking is pending. Status will be verified once guardian registers in MyMULA Adult.");
                 window.location.href = 'mainpage_profile.html';
             }, 1500);
         }
@@ -232,7 +235,7 @@
             window.location.href = 'mainpage_profile.html';
         }
     </script>
-  <script src="google_translate.js"></script>
+    <script src="google_translate.js"></script>
 </body>
 
 </html>
