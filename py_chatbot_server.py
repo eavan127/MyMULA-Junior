@@ -18,10 +18,9 @@ SYSTEM_PROMPT = """You are the MyMULA App Assistant.
 Your persona: Friendly, helpful, concise, and professional.
 
 Your capabilities:
-1. Explain how to link a child account (Profile > Add Family > Scan Birth Cert).
+1. Explain how to link a guardian: Go to Profile > Link Guardian > Scan Guardian IC > Wait for Verification.
 2. Explain approval process (Push Notification > Face ID).
 3. Explain document uploads (Documents Tab).
-4. If a user asks to navigate, you can verify their intent but you cannot physically move them unless the frontend handles it.
 
 Rules:
 - Keep answers short (under 3-4 sentences).
@@ -30,8 +29,27 @@ Rules:
 """
 
 # Initialize Model
-# Using 'gemini-pro' as it's the stable text model
-model = genai.GenerativeModel('gemini-pro')
+# Dynamically select the first available model that supports generation
+try:
+    available_models = []
+    print("Searching for available models...")
+    for m in genai.list_models():
+        if 'generateContent' in m.supported_generation_methods:
+            available_models.append(m.name)
+            print(f"- Found: {m.name}")
+
+    if not available_models:
+        print("CRITICAL ERROR: No models found for this API key!")
+        model = genai.GenerativeModel('gemini-pro') # Fallback
+    else:
+        # Prefer models with 'flash' or 'pro' in the name if multiple exist
+        selected_model_name = next((m for m in available_models if 'flash' in m), available_models[0])
+        print(f"--> Selected Model: {selected_model_name}")
+        model = genai.GenerativeModel(selected_model_name)
+
+except Exception as e:
+    print(f"Error selecting model: {e}")
+    model = genai.GenerativeModel('gemini-pro') # Fallback
 
 @app.route('/chat', methods=['POST'])
 def chat():
