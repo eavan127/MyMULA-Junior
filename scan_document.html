@@ -142,7 +142,8 @@
     <!-- Processing Overlay -->
     <div id="processingOverlay"
         class="fixed inset-0 bg-black/80 z-[60] hidden flex-col items-center justify-center text-white">
-        <span class="material-symbols-outlined notranslate animate-spin !text-4xl mb-4 text-primary">progress_activity</span>
+        <span
+            class="material-symbols-outlined notranslate animate-spin !text-4xl mb-4 text-primary">progress_activity</span>
         <p class="font-bold text-lg">Analyzing Document...</p>
         <p class="text-sm opacity-70">Extracting data via AI</p>
     </div>
@@ -322,10 +323,16 @@
                 dataToSave = { child: "Ali Bin Abu", guardian: "Abu Bakar", ic: "850214-10-5566" };
             } else if (docName === 'Car Licenses') {
                 dataToSave = { holder: "Ali Bin Abu", class: "D (Car)", expiry: "12/12/2026" };
-            } else if (docName === 'Passport Number') {
-                dataToSave = { country: "Malaysia", passport: "A12345678", valid: "10/05/2028" };
+            } else if (docName === 'Passport Number' || (docName && docName.toLowerCase().includes('passport'))) {
+                dataToSave = { holder: "Ali Bin Abu", country: "Malaysia", passport: "A12345678", valid: "10/05/2028" };
             } else {
-                dataToSave = { type: docName || docType, status: "Readable" };
+                // Generic fallback for Education, Bank, Property etc.
+                dataToSave = {
+                    type: docName || docType,
+                    holder: "Ali Bin Abu", // Crucial for new verification logic
+                    status: "Readable",
+                    date: new Date().toLocaleDateString()
+                };
             }
 
             // Save key data for View functionality
