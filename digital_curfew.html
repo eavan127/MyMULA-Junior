@@ -230,12 +230,43 @@
     });
 
     function loadSettings() {
+      // Load from localStorage if available
+      const savedEnabled = localStorage.getItem('curfew_enabled');
+      const savedStart = localStorage.getItem('curfew_start');
+      const savedEnd = localStorage.getItem('curfew_end');
+
+      if (savedEnabled !== null) {
+        appState.curfew.enabled = savedEnabled === 'true';
+      }
+      if (savedStart) {
+        appState.curfew.startTime = savedStart;
+      }
+      if (savedEnd) {
+        appState.curfew.endTime = savedEnd;
+      }
+
       document.getElementById('curfewToggle').checked = appState.curfew.enabled;
       document.getElementById('startTimeInput').value = appState.curfew.startTime;
       document.getElementById('endTimeInput').value = appState.curfew.endTime;
       document.getElementById('startTimeDisplay').textContent = formatTime(appState.curfew.startTime);
       document.getElementById('endTimeDisplay').textContent = formatTime(appState.curfew.endTime);
-      updateCurfewState();
+
+      // Update UI without showing toast on load
+      const enabled = appState.curfew.enabled;
+      const tiktokStatus = document.getElementById('tiktokStatus');
+      const tiktokBtn = document.getElementById('tiktokBtn');
+
+      if (!enabled) {
+        tiktokStatus.textContent = 'Not Restricted (Curfew Disabled)';
+        tiktokStatus.className = 'text-gray-500 text-sm';
+        tiktokBtn.disabled = true;
+        tiktokBtn.className = 'w-full text-center text-gray-400 text-sm font-semibold py-3 rounded-xl bg-gray-100 dark:bg-gray-800 cursor-not-allowed';
+      } else {
+        tiktokStatus.textContent = 'Restricted during Curfew Hours';
+        tiktokStatus.className = 'text-orange-500 text-sm';
+        tiktokBtn.disabled = false;
+        tiktokBtn.className = 'w-full text-center text-primary text-sm font-semibold py-3 rounded-xl bg-blue-50 dark:bg-blue-900/20 hover:bg-blue-100 dark:hover:bg-blue-900/30 active:scale-[0.98] transition-all';
+      }
     }
 
     function formatTime(timeStr) {
@@ -363,6 +394,12 @@
     }
 
     function saveSettings() {
+      // Save to localStorage so child's mainpage_home.html can read it
+      localStorage.setItem('curfew_enabled', appState.curfew.enabled ? 'true' : 'false');
+      localStorage.setItem('curfew_start', appState.curfew.startTime);
+      localStorage.setItem('curfew_end', appState.curfew.endTime);
+      localStorage.setItem('curfew_last_updated', new Date().toISOString());
+
       const summary = `Settings Saved & Pushed!
 
 Digital Curfew: ${appState.curfew.enabled ? 'Enabled' : 'Disabled'}
