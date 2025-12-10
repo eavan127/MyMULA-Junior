@@ -99,7 +99,8 @@
                         class="flex flex-col items-stretch justify-start rounded-lg bg-white dark:bg-slate-800 shadow-[0_2px_8px_rgba(0,0,0,0.08)] dark:shadow-none border border-slate-200 dark:border-slate-700">
                         <div class="flex w-full grow flex-col items-stretch justify-center gap-1 p-4">
                             <div class="flex items-center gap-2">
-                                <span class="material-symbols-outlined notranslate text-base text-primary">description</span>
+                                <span
+                                    class="material-symbols-outlined notranslate text-base text-primary">description</span>
                                 <p id="consentTitle" class="text-primary text-sm font-bold leading-normal">Consent Form
                                     Preview</p>
                             </div>
@@ -124,7 +125,8 @@
                         class="flex items-center gap-3 rounded-lg bg-primary/10 dark:bg-primary/20 p-3 border border-primary/20 dark:border-primary/30">
                         <div
                             class="flex items-center justify-center size-10 bg-white dark:bg-slate-800 rounded-lg shadow-sm">
-                            <span class="material-symbols-outlined notranslate text-primary text-2xl">verified_user</span>
+                            <span
+                                class="material-symbols-outlined notranslate text-primary text-2xl">verified_user</span>
                         </div>
                         <div class="flex flex-col">
                             <p class="text-primary text-sm font-bold leading-tight">Digitally Signed via MyMULA</p>
@@ -197,7 +199,18 @@
 
             // Load signature name from registration
             const adultName = sessionStorage.getItem('adult_name') || 'Ahmad';
-            document.getElementById('signatureName').textContent = adultName;
+
+            // Check for saved signature image
+            const signatureImage = localStorage.getItem('guardian_signature_image');
+            if (signatureImage) {
+                const container = document.getElementById('signatureName').parentElement;
+                container.innerHTML = `
+                    <img src="${signatureImage}" alt="Guardian Signature" class="h-20 object-contain mx-auto" />
+                    <p class="text-slate-500 dark:text-slate-400 text-xs font-normal leading-normal pt-1">This is your saved signature from MyMULA registration.</p>
+                `;
+            } else {
+                document.getElementById('signatureName').textContent = adultName;
+            }
 
             // Set consent description based on request type
             const descriptions = {
@@ -210,7 +223,7 @@
             document.getElementById('consentDescription').textContent = descriptions[type] || descriptions['scholarship'];
         });
     </script>
-  <script src="google_translate.js"></script>
+    <script src="google_translate.js"></script>
 </body>
 
 </html>

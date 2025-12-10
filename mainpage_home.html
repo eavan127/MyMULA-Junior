@@ -253,7 +253,7 @@
         name: 'Dental Checkup',
         icon: 'dentistry',
         color: 'purple',
-        resumeUrl: 'Dental_Healthcare_Consent.html'
+        resumeUrl: 'Dental_Application_Requirements.html'
       }
     };
 
@@ -272,7 +272,11 @@
       // Check each application type for drafts
       Object.keys(APP_TYPES).forEach(type => {
         const draftKey = `draft_${type}`;
-        const draft = sessionStorage.getItem(draftKey);
+        // Check sessionStorage first, then localStorage for persistence (specifically dental)
+        let draft = sessionStorage.getItem(draftKey);
+        if (!draft && type === 'dental') {
+          draft = localStorage.getItem(draftKey);
+        }
 
         if (draft) {
           try {

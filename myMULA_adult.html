@@ -146,7 +146,8 @@
                     onclick="scanDocument('ic')">
                     <div
                         class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-blue-100 dark:bg-blue-900/30">
-                        <span class="material-symbols-outlined notranslate text-3xl text-blue-600 dark:text-blue-400">badge</span>
+                        <span
+                            class="material-symbols-outlined notranslate text-3xl text-blue-600 dark:text-blue-400">badge</span>
                     </div>
                     <div class="flex-1">
                         <p class="text-[#101418] dark:text-white text-base font-bold">Identity Card (IC / MyKad)</p>
@@ -154,7 +155,8 @@
                         <div id="icStatus" class="mt-1 hidden">
                             <span id="icStatusBadge"
                                 class="inline-flex items-center gap-1 text-xs font-medium text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">
-                                <span class="material-symbols-outlined notranslate text-sm animate-spin">sync</span> Awaiting
+                                <span class="material-symbols-outlined notranslate text-sm animate-spin">sync</span>
+                                Awaiting
                                 Verification
                             </span>
                         </div>
@@ -178,12 +180,14 @@
                         <div id="birthStatus" class="mt-1 hidden">
                             <span id="birthStatusBadge"
                                 class="inline-flex items-center gap-1 text-xs font-medium text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">
-                                <span class="material-symbols-outlined notranslate text-sm animate-spin">sync</span> Awaiting
+                                <span class="material-symbols-outlined notranslate text-sm animate-spin">sync</span>
+                                Awaiting
                                 Verification
                             </span>
                         </div>
                     </div>
-                    <span class="material-symbols-outlined notranslate text-[#5e758d] dark:text-gray-400">photo_camera</span>
+                    <span
+                        class="material-symbols-outlined notranslate text-[#5e758d] dark:text-gray-400">photo_camera</span>
                 </div>
 
                 <!-- 3. Payslip -->
@@ -201,12 +205,14 @@
                         <div id="payslipStatus" class="mt-1 hidden">
                             <span id="payslipStatusBadge"
                                 class="inline-flex items-center gap-1 text-xs font-medium text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">
-                                <span class="material-symbols-outlined notranslate text-sm animate-spin">sync</span> Awaiting
+                                <span class="material-symbols-outlined notranslate text-sm animate-spin">sync</span>
+                                Awaiting
                                 Verification
                             </span>
                         </div>
                     </div>
-                    <span class="material-symbols-outlined notranslate text-[#5e758d] dark:text-gray-400">photo_camera</span>
+                    <span
+                        class="material-symbols-outlined notranslate text-[#5e758d] dark:text-gray-400">photo_camera</span>
                 </div>
 
                 <!-- 4. Income Tax -->
@@ -224,12 +230,14 @@
                         <div id="taxStatus" class="mt-1 hidden">
                             <span id="taxStatusBadge"
                                 class="inline-flex items-center gap-1 text-xs font-medium text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">
-                                <span class="material-symbols-outlined notranslate text-sm animate-spin">sync</span> Awaiting
+                                <span class="material-symbols-outlined notranslate text-sm animate-spin">sync</span>
+                                Awaiting
                                 Verification
                             </span>
                         </div>
                     </div>
-                    <span class="material-symbols-outlined notranslate text-[#5e758d] dark:text-gray-400">photo_camera</span>
+                    <span
+                        class="material-symbols-outlined notranslate text-[#5e758d] dark:text-gray-400">photo_camera</span>
                 </div>
 
                 <!-- 5. Family Status -->
@@ -247,12 +255,14 @@
                         <div id="familyStatus" class="mt-1 hidden">
                             <span id="familyStatusBadge"
                                 class="inline-flex items-center gap-1 text-xs font-medium text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">
-                                <span class="material-symbols-outlined notranslate text-sm animate-spin">sync</span> Awaiting
+                                <span class="material-symbols-outlined notranslate text-sm animate-spin">sync</span>
+                                Awaiting
                                 Verification
                             </span>
                         </div>
                     </div>
-                    <span class="material-symbols-outlined notranslate text-[#5e758d] dark:text-gray-400">photo_camera</span>
+                    <span
+                        class="material-symbols-outlined notranslate text-[#5e758d] dark:text-gray-400">photo_camera</span>
                 </div>
 
                 <!-- Section: Signature -->
@@ -739,11 +749,18 @@
             sessionStorage.setItem('adult_name', 'Ahmad');
             sessionStorage.setItem('adult_documents', JSON.stringify(docStates));
 
+            // Save signature image to LOCAL STORAGE for persistence across different apps
+            const canvas = document.getElementById('signaturePad');
+            if (hasSignature) {
+                const signatureImage = canvas.toDataURL('image/png');
+                localStorage.setItem('guardian_signature_image', signatureImage);
+            }
+
             document.getElementById('successModal').classList.remove('hidden');
             document.getElementById('successModal').classList.add('flex');
         }
     </script>
-  <script src="google_translate.js"></script>
+    <script src="google_translate.js"></script>
 </body>
 
 </html>

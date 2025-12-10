@@ -78,7 +78,7 @@
     </div>
 
     <!-- Toggle -->
-    
+
 
     <!-- Application Cards List -->
     <div class="flex-grow flex flex-col gap-4 px-4 pb-28">
@@ -163,7 +163,8 @@
         class="flex h-[72px] justify-around border-t border-[#f0f2f5] bg-white/80 px-4 pb-3 pt-2 dark:border-gray-700 dark:bg-background-dark/80 backdrop-blur-lg">
         <a class="flex flex-1 flex-col items-center justify-end gap-1 text-[#6c757d] dark:text-gray-400 hover:text-primary transition-colors"
           href="mainpage_home.html">
-          <div class="flex h-8 items-center justify-center"><span class="material-symbols-outlined notranslate">home</span></div>
+          <div class="flex h-8 items-center justify-center"><span
+              class="material-symbols-outlined notranslate">home</span></div>
           <p class="text-xs font-semibold leading-normal tracking-[0.015em]">Home</p>
         </a>
         <a class="flex flex-1 flex-col items-center justify-end gap-1 rounded-full text-primary"
@@ -219,7 +220,7 @@
     }
 
     // 3. Check Dental (NEW CODE)
-    const isDentalSubmitted = sessionStorage.getItem('dental_application_submitted');
+    const isDentalSubmitted = localStorage.getItem('dental_application_submitted');
     const dentalStatus = sessionStorage.getItem('dental_application_status');
     const timerStarted = sessionStorage.getItem('dental_timer_started');
 
@@ -298,7 +299,7 @@
       }
     }
   </script>
-  
+
   <script src="google_translate.js"></script>
 </body>
 
