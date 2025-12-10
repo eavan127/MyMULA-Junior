@@ -198,20 +198,21 @@
                 // Simulate reading value and setting pending status
                 // The mock data should include the adult details as requested
                 const mockGuardianData = {
-                    name: "Ahmad",
-                    ic: "800101-14-1234",
-                    phone: "+6012-3456789",
-                    relation: "Father"
+                    child: "Ali Bin Abu",
+                    guardian: "Abu Bakar",
+                    ic: "850214-10-5566",
+                    relation: "Father",
+                    phone: "+6012-3456789"
                 };
 
-                sessionStorage.setItem('guardian_status', 'waiting_verification');
+                sessionStorage.setItem('guardian_status', 'verified'); // Auto-verify: Simulating Government DB Match
                 sessionStorage.setItem('guardian_data', JSON.stringify(mockGuardianData));
 
-                // We also set the IC for consistency if used elsewhere, though guardian_data is more comprehensive
+                // We also set the IC for consistency if used elsewhere
                 document.getElementById('icInput').value = mockGuardianData.ic;
 
                 // Create a brief verified feeling before redirecting
-                alert("Birth Certificate Scanned! Verification Pending.");
+                alert("Birth Certificate Scanned! Guardian Verified against Government Database.");
                 window.location.href = 'mainpage_profile.html';
             }, 1500);
         }

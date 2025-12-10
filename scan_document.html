@@ -188,8 +188,11 @@
 
         function generateMockData() {
             const container = document.getElementById('extractedDataList');
-            let html = '';
+            container.innerHTML = getMockDataHtml();
+        }
 
+        function getMockDataHtml() {
+            let html = '';
             if (docType === 'spm') {
                 html = `
                     <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
@@ -285,7 +288,6 @@
                     </div>
                 `;
             } else {
-                // Generic/Custom/Education
                 html = `
                     <div class="flex justify-between border-b border-gray-100 dark:border-gray-700 pb-2">
                         <span class="text-gray-500 dark:text-gray-400">Document Type</span>
@@ -297,8 +299,7 @@
                     </div>
                 `;
             }
-
-            container.innerHTML = html;
+            return html;
         }
 
         function retakeScan() {
@@ -311,30 +312,86 @@
             // Determine key to save. If custom name, use that as the key prefix.
             const storageKey = (docType === 'generic' || docType === 'custom') && typeof docName !== 'undefined' && docName ? docName : docType;
 
-            // Special handling for guardian type
-            if (docType === 'guardian') {
-                sessionStorage.setItem('guardian_status', 'waiting_verification');
-                sessionStorage.setItem('guardian_ic', '850214-10-5566');
+            // Generate full data object to save
+            let dataToSave = {};
+            if (docType === 'spm') {
+                dataToSave = { candidate: "Ali Bin Abu", year: "2023", subjects: "9 Subjects", grade: "5A 2B 2C" };
+            } else if (docType === 'coq') {
+                dataToSave = { activity: "Football Club", level: "District (MSSD)", achievement: "Runner-up", merit: "15 Points" };
+            } else if (docType === 'birth') {
+                dataToSave = { name: "Ali Bin Abu", mykid: "******-**-1234", guardian_ic: "850214-10-5566", guardian_name: "Abu Bakar" };
+            } else if (docType === 'guardian') {
+                dataToSave = { child: "Ali Bin Abu", guardian: "Abu Bakar", ic: "850214-10-5566" };
+            } else if (docName === 'Car Licenses') {
+                dataToSave = { holder: "Ali Bin Abu", class: "D (Car)", expiry: "12/12/2026" };
+            } else if (docName === 'Passport Number') {
+                dataToSave = { country: "Malaysia", passport: "A12345678", valid: "10/05/2028" };
             } else {
-                // Save state for other types
-                sessionStorage.setItem(`${storageKey}_status`, 'waiting');
+                dataToSave = { type: docName || docType, status: "Readable" };
+            }
+
+            // Save key data for View functionality
+            sessionStorage.setItem(`${storageKey}_data`, JSON.stringify(dataToSave));
+
+            // Valid Adult IC for checking
+            const validAdultIC = "850214-10-5566";
+
+            // Special handling for guardian link or Birth Cert (which contains guardian info)
+            if (docType === 'guardian' || docType === 'birth') {
+                // Determine which IC to check
+                const icToCheck = docType === 'guardian' ? dataToSave.ic : dataToSave.guardian_ic;
+
+                if (icToCheck === validAdultIC) {
+                    sessionStorage.setItem('guardian_status', 'verified'); // Auto-verify!
+
+                    // If it was a birth cert scan, we should also construct the Guardian Data object for the profile
+                    if (docType === 'birth') {
+                        const guardianMock = { child: dataToSave.name, guardian: dataToSave.guardian_name, ic: dataToSave.guardian_ic, relation: "Father" };
+                        sessionStorage.setItem('guardian_data', JSON.stringify(guardianMock));
+                    } else {
+                        sessionStorage.setItem('guardian_data', JSON.stringify(dataToSave));
+                    }
+
+                    if (docType === 'guardian') {
+                        alert("Guardian Verified against Government Database!");
+                    } else {
+                        // For Birth Cert, we just implicitly verify guardian too
+                        console.log("Guardian implicitly verified via Birth Cert.");
+                    }
+                } else if (docType === 'guardian') {
+                    alert("Error: Guardian not found in Government Database or ID mismatch.");
+                    return; // Stop submission
+                }
+            }
+
+            if (docType !== 'guardian') {
+                // Save state for all other types (including birth)
+                sessionStorage.setItem(`${storageKey}_status`, 'verified');
                 sessionStorage.setItem(`${storageKey}_timestamp`, new Date().toISOString());
             }
 
-            // Save summary based on type (Shared logic)
-            let summary = 'Details Extracted';
-            if (docType === 'spm') summary = '9 Subjects (5A 2B 2C)';
-            else if (docType === 'coq') summary = 'Football Club (District)';
-            else if (docType === 'birth') summary = 'Child MyKid/IC: 1234';
-            else if (docName === 'Car Licenses') summary = 'Class D (Exp: 2026)';
-            else if (docName === 'Passport Number') summary = 'MYS (Exp: 2028)';
-
-            if (docType !== 'guardian') {
-                sessionStorage.setItem(`${storageKey}_summary`, summary);
+            // Add to central list of document keys for Adult View
+            let docKeys = JSON.parse(sessionStorage.getItem('db_child_doc_keys') || '[]');
+            if (!docKeys.includes(storageKey)) {
+                docKeys.push(storageKey);
+                sessionStorage.setItem('db_child_doc_keys', JSON.stringify(docKeys));
             }
+        }
 
-            // Redirect using the return URL
-            window.location.href = returnUrl;
+        // Save summary based on type (Shared logic)
+        let summary = 'Details Extracted';
+        if (docType === 'spm') summary = '9 Subjects (5A 2B 2C)';
+        else if (docType === 'coq') summary = 'Football Club (District)';
+        else if (docType === 'birth') summary = 'Child MyKid/IC: 1234';
+        else if (docName === 'Car Licenses') summary = 'Class D (Exp: 2026)';
+        else if (docName === 'Passport Number') summary = 'MYS (Exp: 2028)';
+
+        if (docType !== 'guardian') {
+            sessionStorage.setItem(`${storageKey}_summary`, summary);
+        }
+
+        // Redirect using the return URL
+        window.location.href = returnUrl;
         }
     </script>
 </body>
