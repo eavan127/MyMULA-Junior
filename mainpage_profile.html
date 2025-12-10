@@ -372,17 +372,40 @@
         if (section) section.classList.remove('hidden');
       }
 
+      // === Add Document Modal Logic ===
       function addCustomDocument() {
-        const name = prompt("Enter document name (e.g., Car License):");
-        if (!name) return;
+        // Open the modal instead of prompt
+        const modal = document.getElementById('addDocModal');
+        modal.classList.remove('hidden');
+        // Animation entry
+        const panel = modal.querySelector('div');
+        panel.classList.remove('scale-95', 'opacity-0');
+        panel.classList.add('scale-100', 'opacity-100');
+      }
+
+      window.closeAddDocModal = function () {
+        const modal = document.getElementById('addDocModal');
+        modal.classList.add('hidden');
+      }
+
+      window.selectDocumentType = function (name) {
+        closeAddDocModal();
 
         let list = JSON.parse(sessionStorage.getItem('custom_docs_list') || '[]');
-        if (!list.includes(name)) {
-          list.push(name);
-          sessionStorage.setItem('custom_docs_list', JSON.stringify(list));
+        if (list.includes(name)) {
+          alert(name + " is already added.");
+          return;
         }
 
+        list.push(name);
+        sessionStorage.setItem('custom_docs_list', JSON.stringify(list));
         renderCustomDocRow(name);
+
+        // Optional: Auto scroll to new item
+        setTimeout(() => {
+          const el = document.getElementById(`doc-row-${name}`);
+          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
       }
 
       function loadCustomDocs() {
@@ -391,39 +414,53 @@
       }
 
       function renderCustomDocRow(name) {
+        const decodedName = decodeURIComponent(name);
         const container = document.getElementById('customDocsContainer');
-        if (document.getElementById(`doc-row-${name}`)) return;
+        if (document.getElementById(`doc-row-${decodedName}`)) return;
+
+        // Ensure we retrieve status using the exact same key format
+        const storageKey = decodedName;
+        const status = sessionStorage.getItem(`${storageKey}_status`);
+        const isWaiting = status === 'waiting';
+        const isVerified = status === 'verified';
+
+        const statusText = isWaiting ? 'Pending Verification' : (isVerified ? 'Verified' : 'Not Uploaded');
+        const statusClass = isWaiting ? 'text-orange-500' : (isVerified ? 'text-green-500' : 'text-gray-400');
 
         const rowHtml = `
-          <div id="doc-row-${name}" class="flex items-center justify-between border-t border-gray-100 dark:border-gray-700 pt-3 mt-3">
+          <div id="doc-row-${decodedName}" class="flex items-center justify-between border-t border-gray-100 dark:border-gray-700 pt-3 mt-3">
             <div class="flex items-center gap-3">
               <div class="w-10 h-10 rounded-full bg-teal-50 dark:bg-teal-900/20 flex items-center justify-center text-teal-500">
                 <span class="material-symbols-outlined !text-xl">description</span>
               </div>
               <div>
-                <p class="text-sm font-semibold text-gray-900 dark:text-white">${name}</p>
-                <p class="text-xs text-gray-400" id="custom_${name}Status">Not Uploaded</p>
+                <p class="text-sm font-semibold text-gray-900 dark:text-white">${decodedName}</p>
+                <p class="text-xs ${statusClass}" id="custom_${decodedName}Status">${statusText}</p>
               </div>
             </div>
-            <button id="custom_${name}Btn"
+            <button id="custom_${decodedName}Btn"
               class="bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors p-2 rounded-lg text-xs font-bold"
-              onclick="window.location.href='scan_document.html?type=custom&name=${encodeURIComponent(name)}'">
-              Scan
+              onclick="window.location.href='scan_document.html?type=custom&name=${encodeURIComponent(decodedName)}'">
+              ${isVerified ? 'View' : 'Scan'}
             </button>
           </div>
         `;
 
         container.insertAdjacentHTML('beforeend', rowHtml);
 
-        const status = sessionStorage.getItem(`${name}_status`);
-        if (status === 'waiting') {
-          updateDocStatus(null, 'Waiting Verification', 'text-orange-500', true, `custom_${name}`);
+        // Auto-update simulation if waiting
+        if (isWaiting) {
           setTimeout(() => {
-            sessionStorage.setItem(`${name}_status`, 'verified');
-            updateDocStatus(null, 'Verified', 'text-green-500', true, `custom_${name}`);
+            sessionStorage.setItem(`${storageKey}_status`, 'verified');
+            // Update UI directly without reload
+            const statusEl = document.getElementById(`custom_${decodedName}Status`);
+            if (statusEl) {
+              statusEl.innerText = 'Verified';
+              statusEl.className = 'text-xs text-green-500';
+            }
+            const btn = document.getElementById(`custom_${decodedName}Btn`);
+            if (btn) btn.innerText = 'View';
           }, 4000);
-        } else if (status === 'verified') {
-          updateDocStatus(null, 'Verified', 'text-green-500', true, `custom_${name}`);
         }
       }
 
@@ -467,6 +504,41 @@
       }
     }
   </script>
+
+  <!-- Add Document Modal -->
+  <div id="addDocModal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+    <div
+      class="bg-white dark:bg-gray-800 rounded-xl w-full max-w-sm overflow-hidden shadow-2xl transform transition-all scale-100">
+      <div class="p-4 border-b border-gray-100 dark:border-gray-700 flex justify-between items-center">
+        <h3 class="font-bold text-lg text-gray-900 dark:text-white">Add Document</h3>
+        <button onclick="closeAddDocModal()"
+          class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+      <div class="p-4 space-y-3">
+        <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">Select a document type to add:</p>
+
+        <button onclick="selectDocumentType('Car Licenses')"
+          class="w-full flex items-center gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors text-left group">
+          <div
+            class="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 group-hover:bg-blue-100">
+            <span class="material-symbols-outlined">directions_car</span>
+          </div>
+          <span class="font-semibold text-gray-700 dark:text-gray-200">Car Licenses</span>
+        </button>
+
+        <button onclick="selectDocumentType('Passport Number')"
+          class="w-full flex items-center gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors text-left group">
+          <div
+            class="w-10 h-10 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center text-red-500 group-hover:bg-red-100">
+            <span class="material-symbols-outlined">flight</span>
+          </div>
+          <span class="font-semibold text-gray-700 dark:text-gray-200">Passport Number</span>
+        </button>
+      </div>
+    </div>
+  </div>
 </body>
 
 </html>

@@ -195,9 +195,24 @@
 
             setTimeout(() => {
                 closeScan();
-                // Simulate reading value
-                document.getElementById('icInput').value = "850214-10-5566";
-                alert("Birth Certificate Scanned! IC Extracted.");
+                // Simulate reading value and setting pending status
+                // The mock data should include the adult details as requested
+                const mockGuardianData = {
+                    name: "Ahmad",
+                    ic: "800101-14-1234",
+                    phone: "+6012-3456789",
+                    relation: "Father"
+                };
+
+                sessionStorage.setItem('guardian_status', 'waiting_verification');
+                sessionStorage.setItem('guardian_data', JSON.stringify(mockGuardianData));
+
+                // We also set the IC for consistency if used elsewhere, though guardian_data is more comprehensive
+                document.getElementById('icInput').value = mockGuardianData.ic;
+
+                // Create a brief verified feeling before redirecting
+                alert("Birth Certificate Scanned! Verification Pending.");
+                window.location.href = 'mainpage_profile.html';
             }, 1500);
         }
 
