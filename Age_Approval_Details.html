@@ -142,11 +142,9 @@
           <div class="flex flex-col gap-4 border-t border-t-[#dbe0e6] p-5 dark:border-t-slate-800">
             <p class="text-center text-sm font-medium text-[#111418] dark:text-white">Digitally Signed via MyMULA Smart
               ID</p>
-            <div
+            <div id="signatureContainer"
               class="mx-auto flex h-20 w-full max-w-xs items-center justify-center rounded-lg border border-dashed border-slate-300 bg-slate-50 dark:border-slate-700 dark:bg-slate-800/50">
-              <img alt="Guardian's digital signature" class="h-10 object-contain brightness-0 invert-[0.3]"
-                data-alt="Guardian's digital signature"
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1ylZOjXzDn_wQIrZEXOVy6MH6_mqWHoT1CGoAPPaVg9nCiileksEjDZCMN4mA10XRbF7NJ2ya5_I92c32Q7lBvgl5Msz8YmR-Kbf80Xb7KT-gpbE1Cx0tjJbL8PQu-x4IgKJBp7zI-U5RuiacHjcItPYti2MFRay_POtImDPSoXW0xIPfmlXbjW44ZKB-JV2OlGSpCWD6EJEwQu5DVesyhXYr5cGCIRSfBYZA2V0oO6pUcJUIUsjL_5twlfD2_eJIP4YsMTcwBrk" />
+              <img id="signatureImage" alt="Guardian's digital signature" class="h-16 object-contain" src="" />
             </div>
             <div class="text-center">
               <p class="text-xs text-[#5f758c] dark:text-slate-400">ID: ***12-5678</p>
@@ -174,15 +172,30 @@
     <!-- Bottom Action Buttons -->
     <footer
       class="fixed bottom-0 left-0 z-10 w-full border-t border-t-slate-200 bg-white/80 p-4 backdrop-blur-sm dark:border-t-slate-800 dark:bg-background-dark/80">
-      <div class="flex flex-col gap-2">
-        <button
-          class="flex h-12 w-full items-center justify-center rounded-full bg-primary text-base font-bold text-white">Download
-          PDF</button>
-        <button class="flex h-12 w-full items-center justify-center rounded-full text-base font-bold text-primary">Share
-          with Game Support</button>
+      <div class="flex justify-center">
+        <button onclick="window.location.href='adult_home.html'"
+          class="flex h-12 w-full max-w-md items-center justify-center rounded-full bg-primary text-base font-bold text-white">Back
+          to Home</button>
       </div>
     </footer>
   </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Load the guardian's signature from localStorage
+      const signatureImage = localStorage.getItem('guardian_signature_image');
+      const signatureContainer = document.getElementById('signatureContainer');
+      const signatureImg = document.getElementById('signatureImage');
+
+      if (signatureImage) {
+        signatureImg.src = signatureImage;
+        signatureImg.style.display = 'block';
+      } else {
+        // Fallback: show placeholder text if no signature found
+        signatureContainer.innerHTML = '<p class="text-sm text-slate-400">Signature not available</p>';
+      }
+    });
+  </script>
   <script src="google_translate.js"></script>
 </body>
 
