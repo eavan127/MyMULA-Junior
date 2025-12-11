@@ -86,24 +86,7 @@
             </div>
         </div>
 
-        <!-- NEW: Linked Child Documents Section -->
-        <div id="childDocsSection" class="hidden px-4 py-2 mb-4">
-            <div class="bg-blue-50 dark:bg-blue-900/10 rounded-xl p-4 border border-blue-100 dark:border-blue-800">
-                <div class="flex items-center justify-between mb-3">
-                    <h3 class="text-base font-bold text-[#333] dark:text-white flex items-center gap-2">
-                        <span class="material-symbols-outlined notranslate text-blue-500">child_care</span>
-                        Linked Child's Documents
-                    </h3>
-                    <span class="text-xs font-bold text-blue-600 bg-blue-100 px-2 py-1 rounded-full">Ali Bin Abu</span>
-                </div>
-
-                <div class="flex flex-col gap-2" id="childDocsList">
-                    <!-- Child Docs Loaded Here -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Add Documents Section -->
+        <!-- Add Documents Section (Guardian's Own) -->
         <div class="px-4 py-2">
             <h3 class="text-base font-bold text-[#333] dark:text-white mb-3 flex items-center gap-2">
                 <span class="material-symbols-outlined notranslate text-primary">add_circle</span>
@@ -121,6 +104,24 @@
                 </div>
                 <span class="material-symbols-outlined notranslate text-gray-400">add</span>
             </button>
+        </div>
+
+        <!-- Linked Child Documents Section - Syncs with Junior's documents -->
+        <div id="childDocsSection" class="hidden px-4 py-4 mb-4">
+            <div class="bg-blue-50 dark:bg-blue-900/10 rounded-xl p-4 border border-blue-100 dark:border-blue-800">
+                <div class="flex items-center justify-between mb-3">
+                    <h3 class="text-base font-bold text-[#333] dark:text-white flex items-center gap-2">
+                        <span class="material-symbols-outlined notranslate text-blue-500">child_care</span>
+                        Linked Child's Documents
+                    </h3>
+                    <span id="childNameBadge"
+                        class="text-xs font-bold text-blue-600 bg-blue-100 px-2 py-1 rounded-full">Ali</span>
+                </div>
+
+                <div class="flex flex-col gap-2" id="childDocsList">
+                    <!-- Child Docs Loaded Here in real-time -->
+                </div>
+            </div>
         </div>
 
         <!-- Settings Section -->
@@ -240,6 +241,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             loadDocuments();
+            loadChildDocuments(); // Load linked child's documents from junior's sessionStorage
         });
 
         const USER_PROFILE = {
@@ -518,7 +520,7 @@
 
         // === CHILD DOCS LOGIC ===
         function loadChildDocuments() {
-            // Check if connected
+            // Check if connected - sessionStorage only (clears when tab closes)
             const guardianStatus = sessionStorage.getItem('guardian_status');
 
             if (guardianStatus === 'verified') {
@@ -526,44 +528,72 @@
                 const section = document.getElementById('childDocsSection');
                 section.classList.remove('hidden');
 
-                // Get keys
-                // We include standard ones + dynamic ones
-                let keys = JSON.parse(sessionStorage.getItem('db_child_doc_keys') || '[]');
+                // Get child's name from junior_profile
+                const juniorProfile = JSON.parse(sessionStorage.getItem('junior_profile') || '{}');
+                const childName = juniorProfile.name || 'Ali';
+                const childNameBadge = document.getElementById('childNameBadge');
+                if (childNameBadge) {
+                    childNameBadge.textContent = childName;
+                }
 
-                // Also check for Standard Docs explicitly if they exist in session but not in key list
-                const standardKeys = ['spm', 'birth', 'coq'];
-                standardKeys.forEach(k => {
-                    if (sessionStorage.getItem(`${k}_status`) === 'verified' && !keys.includes(k)) {
-                        keys.push(k);
+                // Build list of child's documents
+                let childDocs = [];
+
+                // Check standard docs (IC, SPM, Birth, CoQ) from junior's sessionStorage
+                const standardDocMap = {
+                    'ic': { name: 'Identity Card (MyKad)', icon: 'badge' },
+                    'spm': { name: 'SPM Certificate', icon: 'school' },
+                    'birth': { name: 'Birth Certificate', icon: 'article' },
+                    'coq': { name: 'Co-Curriculum Certificate', icon: 'emoji_events' }
+                };
+
+                Object.keys(standardDocMap).forEach(key => {
+                    const status = sessionStorage.getItem(`${key}_status`);
+                    if (status === 'verified') {
+                        childDocs.push({
+                            key: key,
+                            name: standardDocMap[key].name,
+                            icon: standardDocMap[key].icon,
+                            status: 'verified'
+                        });
                     }
                 });
 
-                if (keys.length === 0) {
-                    container.innerHTML = '<p class="text-sm text-gray-500 italic">No documents shared yet.</p>';
+                // Check junior's additional/custom documents
+                const juniorCustomDocs = JSON.parse(sessionStorage.getItem('additional_docs') || '[]');
+                juniorCustomDocs.forEach(doc => {
+                    const status = sessionStorage.getItem(`${doc.name}_status`);
+                    if (status === 'verified') {
+                        childDocs.push({
+                            key: doc.name,
+                            name: doc.name,
+                            icon: doc.icon || 'description',
+                            status: 'verified'
+                        });
+                    }
+                });
+
+                if (childDocs.length === 0) {
+                    container.innerHTML = '<p class="text-sm text-gray-500 italic">No verified documents from child yet.</p>';
                     return;
                 }
 
-                container.innerHTML = keys.map(key => {
-                    // Get nice name
-                    let name = key;
-                    if (name === 'spm') name = 'SPM Certificate';
-                    if (name === 'birth') name = 'Birth Certificate';
-                    if (name === 'coq') name = 'Co-Curriculum';
-
-                    return `
-                        <div class="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3 shadow-sm">
-                             <div class="flex items-center gap-3">
-                                 <div class="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                                     <span class="material-symbols-outlined notranslate text-blue-500 text-sm">description</span>
-                                 </div>
-                                 <p class="text-sm font-medium text-[#333] dark:text-white">${decodeURIComponent(name)}</p>
+                container.innerHTML = childDocs.map(doc => `
+                    <div class="flex items-center justify-between bg-white dark:bg-gray-800 rounded-lg p-3 shadow-sm">
+                         <div class="flex items-center gap-3">
+                             <div class="h-8 w-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                                 <span class="material-symbols-outlined notranslate text-blue-500 text-sm">${doc.icon}</span>
                              </div>
-                             <button onclick="viewChildDocument('${key}')" class="text-xs font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors">
-                                 View
-                             </button>
-                        </div>
-                     `;
-                }).join('');
+                             <div>
+                                 <p class="text-sm font-medium text-[#333] dark:text-white">${doc.name}</p>
+                                 <p class="text-xs text-green-500">Verified</p>
+                             </div>
+                         </div>
+                         <button onclick="viewChildDocument('${doc.key}')" class="text-xs font-bold text-blue-600 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-lg transition-colors">
+                             View
+                         </button>
+                    </div>
+                 `).join('');
             }
         }
 
@@ -603,8 +633,6 @@
             modal.classList.remove('flex');
         }
 
-        // Call load
-        loadChildDocuments();
     </script>
 
     <!-- View Document Modal (Unique to Adult View) -->
