@@ -148,8 +148,9 @@
 
   <script>
     src = "google_translate.js"
-    // Save dental application status to sessionStorage
+    // Save dental application status to localStorage with timestamp
     localStorage.setItem('dental_application_submitted', 'true');
+    localStorage.setItem('dental_submitted_time', Date.now().toString());
     sessionStorage.setItem('dental_application_status', 'processing');
 
     function goToHome() {

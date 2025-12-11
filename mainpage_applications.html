@@ -144,6 +144,12 @@
               class="text-[#6F7A85] dark:text-white/70 text-sm font-normal leading-normal line-clamp-2">Consent for
               dental treatment at clinic.</p>
           </div>
+          <!-- Delete Button - shown when pending/approved by guardian -->
+          <button id="dental-delete-btn" onclick="event.stopPropagation(); deleteApplication('dental')"
+            class="hidden p-2 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors"
+            title="Delete application">
+            <span class="material-symbols-outlined notranslate">delete</span>
+          </button>
         </div>
         <div id="dental-status-badge"
           class="inline-flex items-center justify-center self-start rounded-full bg-[#FFC107]/20 px-3 py-1.5 text-xs font-medium text-[#B8860B] dark:text-[#FFD700]">
@@ -250,6 +256,8 @@
       const dentalRequest = requests.find(r => r.type === 'dental');
       const isDentalSubmitted = localStorage.getItem('dental_application_submitted');
       const dentalDraft = localStorage.getItem('draft_dental');
+      const dentalClinicApproved = localStorage.getItem('dental_clinic_approved');
+      const submittedTime = localStorage.getItem('dental_submitted_time');
 
       // Show card if there's a dental request in progress or submitted
       if (dentalRequest || isDentalSubmitted === 'true' || dentalDraft) {
@@ -260,21 +268,112 @@
           if (msg) msg.classList.add('hidden');
         }
 
-        // Update status based on request status
-        if (dentalRequest) {
+        // Priority: Clinic approved > Submitted (processing) > Guardian approved/rejected/pending > Draft
+        if (dentalClinicApproved === 'true') {
+          // Clinic has approved - show approved
+          updateDentalToSuccess();
+        } else if (isDentalSubmitted === 'true') {
+          // Check if 5 seconds have passed since submission
+          if (submittedTime) {
+            const elapsedMs = Date.now() - parseInt(submittedTime);
+            if (elapsedMs >= 5000) {
+              // 5 seconds passed - approve immediately
+              localStorage.setItem('dental_clinic_approved', 'true');
+              updateDentalToSuccess();
+              showClinicApprovalNotification();
+              addDentalScheduleToNotifications();
+            } else {
+              // Show processing and wait for remaining time
+              updateDentalToProcessing();
+              const remainingMs = 5000 - elapsedMs;
+              setTimeout(() => {
+                localStorage.setItem('dental_clinic_approved', 'true');
+                updateDentalToSuccess();
+                showClinicApprovalNotification();
+                addDentalScheduleToNotifications();
+              }, remainingMs);
+            }
+          } else {
+            // No timestamp - set one now and start 5s timer
+            localStorage.setItem('dental_submitted_time', Date.now().toString());
+            updateDentalToProcessing();
+            setTimeout(() => {
+              localStorage.setItem('dental_clinic_approved', 'true');
+              updateDentalToSuccess();
+              showClinicApprovalNotification();
+              addDentalScheduleToNotifications();
+            }, 5000);
+          }
+        } else if (dentalRequest) {
+          // Guardian approval stage
           if (dentalRequest.status === 'approved') {
             updateDentalToApproved();
           } else if (dentalRequest.status === 'rejected') {
             updateDentalToRejected();
           } else if (dentalRequest.status === 'pending') {
-            updateDentalToPending();
+            updateDentalToAwaitingGuardian();
           }
-        } else if (isDentalSubmitted === 'true') {
-          updateDentalToSuccess();
         } else if (dentalDraft) {
           updateDentalToDraft();
         }
       }
+    }
+
+    // NEW: Processing state - after submit, waiting for clinic
+    function updateDentalToProcessing() {
+      const badge = document.getElementById('dental-status-badge');
+      if (badge) badge.className = "inline-flex items-center justify-center self-start rounded-full bg-[#FFC107]/20 px-3 py-1.5 text-xs font-medium text-[#B8860B] dark:text-[#FFD700]";
+
+      const dot = document.getElementById('dental-status-dot');
+      if (dot) dot.className = "mr-1.5 size-2 rounded-full bg-[#FFC107]";
+
+      const text = document.getElementById('dental-status-text');
+      if (text) text.innerText = "Processing";
+
+      const desc = document.getElementById('dental-description');
+      if (desc) desc.innerText = "Waiting for clinic approval";
+
+      // Hide delete button - cannot cancel after submission
+      const deleteBtn = document.getElementById('dental-delete-btn');
+      if (deleteBtn) deleteBtn.classList.add('hidden');
+    }
+
+    // Awaiting Guardian - pending request sent
+    function updateDentalToAwaitingGuardian() {
+      const badge = document.getElementById('dental-status-badge');
+      if (badge) badge.className = "inline-flex items-center justify-center self-start rounded-full bg-blue-100 dark:bg-blue-900/20 px-3 py-1.5 text-xs font-medium text-blue-600 dark:text-blue-400";
+
+      const dot = document.getElementById('dental-status-dot');
+      if (dot) dot.className = "mr-1.5 size-2 rounded-full bg-blue-500";
+
+      const text = document.getElementById('dental-status-text');
+      if (text) text.innerText = "Awaiting Guardian";
+
+      const desc = document.getElementById('dental-description');
+      if (desc) desc.innerText = "Waiting for parent/guardian approval";
+
+      // Show delete button for pending requests
+      const deleteBtn = document.getElementById('dental-delete-btn');
+      if (deleteBtn) deleteBtn.classList.remove('hidden');
+    }
+
+    // Show clinic approval notification popup
+    function showClinicApprovalNotification() {
+      const popup = document.getElementById('approval-popup');
+      if (popup) {
+        popup.classList.remove('hidden');
+        popup.classList.add('flex');
+        setTimeout(() => {
+          popup.classList.add('hidden');
+          popup.classList.remove('flex');
+        }, 5000);
+      }
+    }
+
+    // Add dental schedule to notifications storage
+    function addDentalScheduleToNotifications() {
+      // Set flag for notification page to show dental schedule
+      localStorage.setItem('dental_schedule_ready', 'true');
     }
 
     function updateDentalToDraft() {
@@ -317,6 +416,10 @@
 
       const desc = document.getElementById('dental-description');
       if (desc) desc.innerText = "Guardian approved - Click to continue";
+
+      // Show delete button for approved requests
+      const deleteBtn = document.getElementById('dental-delete-btn');
+      if (deleteBtn) deleteBtn.classList.remove('hidden');
     }
 
     function updateDentalToRejected() {
@@ -331,6 +434,10 @@
 
       const desc = document.getElementById('dental-description');
       if (desc) desc.innerText = "Guardian rejected - Click to try again";
+
+      // Show delete button for rejected requests
+      const deleteBtn = document.getElementById('dental-delete-btn');
+      if (deleteBtn) deleteBtn.classList.remove('hidden');
     }
 
     function updateDentalToSuccess() {
@@ -341,17 +448,26 @@
       if (dot) dot.className = "mr-1.5 size-2 rounded-full bg-[#10B981]";
 
       const text = document.getElementById('dental-status-text');
-      if (text) text.innerText = "Submitted";
+      if (text) text.innerText = "Approved";
 
       const desc = document.getElementById('dental-description');
-      if (desc) desc.innerText = "Application submitted successfully";
+      if (desc) desc.innerText = "Clinic approved - View details";
+
+      // Hide delete button - application is complete
+      const deleteBtn = document.getElementById('dental-delete-btn');
+      if (deleteBtn) deleteBtn.classList.add('hidden');
     }
 
-    // Handle dental card click - route to appropriate page
+    // Handle dental card click - route to appropriate page based on state
     function handleDentalCardClick() {
+      const dentalClinicApproved = localStorage.getItem('dental_clinic_approved');
       const isDentalSubmitted = localStorage.getItem('dental_application_submitted');
-      if (isDentalSubmitted === 'true') {
-        // Already submitted - go to progress tracker
+
+      if (dentalClinicApproved === 'true') {
+        // Clinic approved - go to dental details
+        window.location.href = 'Dental_view_document.html';
+      } else if (isDentalSubmitted === 'true') {
+        // Submitted but waiting - go to progress tracker
         window.location.href = 'Dental_Progress_Tracker.html';
       } else {
         // Not submitted - go to requirements page
@@ -365,15 +481,22 @@
         return;
       }
 
-      // Remove from child_requests
+      // Mark request as 'deleted' in child_requests so parents can see
       const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
-      const updatedRequests = requests.filter(r => r.type !== type);
+      const updatedRequests = requests.map(r => {
+        if (r.type === type) {
+          return { ...r, status: 'deleted', deletedAt: new Date().toISOString() };
+        }
+        return r;
+      });
       sessionStorage.setItem('child_requests', JSON.stringify(updatedRequests));
 
       // Clear related storage items
       if (type === 'dental') {
         localStorage.removeItem('dental_application_submitted');
         localStorage.removeItem('draft_dental');
+        localStorage.removeItem('dental_clinic_approved');
+        localStorage.removeItem('dental_submitted_time');
         sessionStorage.removeItem('dental_guardian_approved');
         sessionStorage.removeItem('dental_medical_history');
         sessionStorage.removeItem('dental_application_status');

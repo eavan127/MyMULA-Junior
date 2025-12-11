@@ -468,6 +468,7 @@
       isSubmitting = true; // Set flag to block auto-save
       clearDraft();
       localStorage.setItem('dental_application_submitted', 'true');
+      localStorage.setItem('dental_submitted_time', Date.now().toString());
       // Clear guardian approval so new applications start fresh
       sessionStorage.removeItem('dental_guardian_approved');
       // Navigate to Progress Tracker
