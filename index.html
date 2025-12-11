@@ -115,16 +115,24 @@
     // Clean up old localStorage data on fresh session start
     if (!sessionStorage.getItem('session_started')) {
       // This is a fresh browser session - clear old demo data from localStorage
-      // localStorage.removeItem('guardian_approved');
-      // localStorage.removeItem('sme_guardian_approved');
-      // localStorage.removeItem('application_submitted');
-      // localStorage.removeItem('sme_application_submitted');
-      // localStorage.removeItem('child_requests');
-      // localStorage.removeItem('draft_scholarship');
-      // localStorage.removeItem('draft_sme');
-      // localStorage.removeItem('draft_dental');
+      localStorage.removeItem('guardian_approved');
+      localStorage.removeItem('sme_guardian_approved');
+      localStorage.removeItem('application_submitted');
+      localStorage.removeItem('sme_application_submitted');
+      localStorage.removeItem('dental_application_submitted');
+      localStorage.removeItem('child_requests');
+      localStorage.removeItem('draft_scholarship');
+      localStorage.removeItem('draft_sme');
+      localStorage.removeItem('draft_dental');
+      localStorage.removeItem('guardian_signature_image');
+      localStorage.removeItem('guardian_status');
+      localStorage.removeItem('guardian_just_verified');
       localStorage.removeItem('adult_registered');
       localStorage.removeItem('adult_documents');
+      localStorage.removeItem('curfew_enabled');
+      localStorage.removeItem('curfew_start');
+      localStorage.removeItem('curfew_end');
+      localStorage.removeItem('curfew_last_updated');
       sessionStorage.setItem('session_started', 'true');
       console.log('Fresh session - cleared old localStorage demo data');
     }
