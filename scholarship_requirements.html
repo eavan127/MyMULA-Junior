@@ -346,18 +346,13 @@
           status: 'pending'
         };
 
-        // Get existing requests from both storages (localStorage first for persistence)
-        const existingRequests = JSON.parse(localStorage.getItem('child_requests') || sessionStorage.getItem('child_requests') || '[]');
-
-        // Remove any existing scholarship request (to avoid duplicates)
-        const filteredRequests = existingRequests.filter(r => r.type !== 'scholarship');
+        // Get existing requests or create empty array from SESSION STORAGE
+        const existingRequests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
 
         // Add new request
-        filteredRequests.push(newRequest);
-
-        // Sync to BOTH storages for real-time updates across tabs
-        sessionStorage.setItem('child_requests', JSON.stringify(filteredRequests));
-        localStorage.setItem('child_requests', JSON.stringify(filteredRequests));
+        existingRequests.push(newRequest);
+        sessionStorage.setItem('child_requests', JSON.stringify(existingRequests));
+        // Sync to sessionStorage
 
         // Store current request ID for approval flow
         sessionStorage.setItem('current_approval_request', requestId);

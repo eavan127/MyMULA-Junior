@@ -110,10 +110,9 @@
                     </div>
                 </div>
                 <!-- Digital Signature Display -->
-                <div id="signatureContainer" class="px-4 pt-4 pb-2 flex flex-col items-center">
+                <div class="px-4 pt-4 pb-2 flex flex-col items-center">
                     <p id="signatureName" class="font-script text-5xl text-[#101418] dark:text-white">Ahmad</p>
-                    <p id="signatureHint"
-                        class="text-slate-500 dark:text-slate-400 text-xs font-normal leading-normal pt-1">This is your
+                    <p class="text-slate-500 dark:text-slate-400 text-xs font-normal leading-normal pt-1">This is your
                         saved signature from MyMULA registration.</p>
                 </div>
                 <!-- Security Stamp Row -->
@@ -205,24 +204,16 @@
             // Load signature name from registration
             const adultName = sessionStorage.getItem('adult_name') || 'Ahmad';
 
-            // Check for saved signature image from myMULA_adult.html registration
+            // Check for saved signature image
             const signatureImage = localStorage.getItem('guardian_signature_image');
-            const signatureContainer = document.getElementById('signatureContainer');
-            const signatureNameEl = document.getElementById('signatureName');
-            const signatureHintEl = document.getElementById('signatureHint');
-
-            if (signatureImage && signatureContainer) {
-                // Display the actual drawn signature from myMULA_adult.html
-                signatureContainer.innerHTML = `
-                    <img src="${signatureImage}" alt="Guardian Digital Signature" class="h-24 max-w-full object-contain mx-auto bg-slate-50 dark:bg-slate-700/50 rounded-lg p-2 border border-slate-200 dark:border-slate-600" />
-                    <p class="text-slate-500 dark:text-slate-400 text-xs font-normal leading-normal pt-2">This is your saved signature from MyMULA registration.</p>
+            if (signatureImage) {
+                const container = document.getElementById('signatureName').parentElement;
+                container.innerHTML = `
+                    <img src="${signatureImage}" alt="Guardian Signature" class="h-20 object-contain mx-auto" />
+                    <p class="text-slate-500 dark:text-slate-400 text-xs font-normal leading-normal pt-1">This is your saved signature from MyMULA registration.</p>
                 `;
-            } else if (signatureNameEl) {
-                // Fallback: Show text name if no signature image
-                signatureNameEl.textContent = adultName;
-                if (signatureHintEl) {
-                    signatureHintEl.textContent = 'Digital signature not found - showing name instead.';
-                }
+            } else {
+                document.getElementById('signatureName').textContent = adultName;
             }
 
             // Set consent description based on request type
