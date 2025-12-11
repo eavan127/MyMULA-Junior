@@ -139,8 +139,14 @@
 
             emptyState.classList.add('hidden');
 
-            container.innerHTML = requests.map(req => `
-        <div onclick="handleRequestClick('${req.id}')" class="flex items-center gap-4 bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm cursor-pointer hover:shadow-md transition-all active:scale-[0.98]">
+            container.innerHTML = requests.map(req => {
+                const isApproved = req.status === 'approved';
+                const clickHandler = isApproved ? '' : `onclick="handleRequestClick('${req.id}')"`;
+                const cursorClass = isApproved ? '' : 'cursor-pointer hover:shadow-md active:scale-[0.98]';
+                const arrowHtml = isApproved ? '' : `<span class="material-symbols-outlined notranslate text-gray-400">chevron_right</span>`;
+
+                return `
+        <div ${clickHandler} class="flex items-center gap-4 bg-white dark:bg-gray-800 rounded-xl p-4 shadow-sm ${cursorClass} transition-all">
           <div class="h-12 w-12 rounded-full ${getTypeColor(req.type)} flex items-center justify-center">
             <span class="material-symbols-outlined notranslate ${getTypeTextColor(req.type)}">${getTypeIcon(req.type)}</span>
           </div>
@@ -151,10 +157,11 @@
           </div>
           <div class="flex flex-col items-end gap-2">
             <span class="text-xs px-2 py-1 rounded-full ${getStatusColor(req.status)}">${req.status}</span>
-            <span class="material-symbols-outlined notranslate text-gray-400">chevron_right</span>
+            ${arrowHtml}
           </div>
         </div>
-      `).join('');
+      `;
+            }).join('');
         }
 
         function filterRequests(filter) {

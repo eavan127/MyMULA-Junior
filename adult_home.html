@@ -335,37 +335,44 @@
 
             container.innerHTML = sortedRequests
                 .map(
-                    (req) => `
-                <div onclick="handleActivityClick('${req.id}', '${req.type}', '${req.status}')" class="glass-card rounded-3xl p-4 shadow-sm border border-white/50 dark:border-gray-800 flex items-center gap-4 cursor-pointer hover:shadow-md transition-all group">
+                    (req) => {
+                        const isApproved = req.status === 'approved';
+                        const clickHandler = isApproved ? '' : `onclick="handleActivityClick('${req.id}', '${req.type}', '${req.status}')"`;
+                        const cursorClass = isApproved ? '' : 'cursor-pointer hover:shadow-md';
+                        const arrowHtml = isApproved ? '' : `<button class="text-gray-400 dark:text-gray-500 group-hover:text-primary transition-colors">
+                            <span class="material-symbols-outlined">chevron_right</span>
+                        </button>`;
+
+                        return `
+                <div ${clickHandler} class="glass-card rounded-3xl p-4 shadow-sm border border-white/50 dark:border-gray-800 flex items-center gap-4 ${cursorClass} transition-all group">
                     <div class="size-12 rounded-2xl ${getTypeColor(
-                        req.type
-                    )} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                            req.type
+                        )} flex items-center justify-center shrink-0 ${isApproved ? '' : 'group-hover:scale-110'} transition-transform">
                         <span class="material-symbols-outlined ${getTypeTextColor(
-                        req.type
-                    )}">${getTypeIcon(req.type)}</span>
+                            req.type
+                        )}">${getTypeIcon(req.type)}</span>
                     </div>
                     <div class="flex-1 min-w-0">
                         <h3 class="text-[#111418] dark:text-white font-semibold mb-1 truncate text-sm sm:text-base">
                             ${req.title}
                         </h3>
                         <p class="text-[#60758a] dark:text-gray-400 text-xs sm:text-sm">From: ${req.childName
-                        } • ${getRelativeTime(req.timestamp || req.approvedAt)}</p>
+                            } • ${getRelativeTime(req.timestamp || req.approvedAt)}</p>
                     </div>
                     <div class="flex items-center gap-2 shrink-0">
                         <div class="px-2.5 py-1 ${getStatusColor(
-                            req.status
-                        )} rounded-full">
+                                req.status
+                            )} rounded-full">
                             <span class="${getStatusTextColor(
-                            req.status
-                        )} text-xs font-bold uppercase tracking-wide">${req.status
-                        }</span>
+                                req.status
+                            )} text-xs font-bold uppercase tracking-wide">${req.status
+                            }</span>
                         </div>
-                        <button class="text-gray-400 dark:text-gray-500 group-hover:text-primary transition-colors">
-                            <span class="material-symbols-outlined">chevron_right</span>
-                        </button>
+                        ${arrowHtml}
                     </div>
                 </div>
-            `
+            `;
+                    }
                 )
                 .join("");
         }
