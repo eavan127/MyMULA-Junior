@@ -130,16 +130,8 @@
     }
 
     function launchAdultApp() {
-      // Check if user is already registered (sessionStorage clears when browser closes)
-      const isRegistered = sessionStorage.getItem('adult_registered') === 'true';
-
-      if (isRegistered) {
-        // Already registered - go directly to adult home
-        window.location.href = 'adult_home.html';
-      } else {
-        // Not registered - go to registration page
-        window.location.href = 'myMULA_adult.html';
-      }
+      // Navigate to the MyMULA main app onboarding page
+      window.location.href = 'myMULA_main_app.html';
     }
   </script>
 

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>MyMULA Onboarding - MyMULA Ecosystem</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;900&amp;display=swap"
+        rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#0d7ff2",
+                        "background-light": "#f5f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "1.5rem",
+                        "2xl": "1rem",
+                        "3xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        body {
+            min-height: 100dvh;
+        }
+    </style>
+</head>
+
+<body class="font-display bg-gradient-to-br from-blue-50 to-blue-100 min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden">
+        <!-- Header -->
+        <div class="bg-white px-6 py-4 flex justify-between items-center border-b border-gray-100">
+            <h1 class="text-lg font-semibold text-gray-800">MyMULA (Main) Onboarding</h1>
+            <span class="text-sm text-gray-500 font-medium">EN / BM</span>
+        </div>
+
+        <!-- Main Content -->
+        <div class="px-6 py-8">
+            <!-- Icon Grid with Central Card -->
+            <div class="relative mb-8">
+                <!-- Background card -->
+                <div class="bg-gradient-to-br from-blue-50 to-blue-100 rounded-3xl p-8 relative min-h-[280px]">
+                    <!-- Floating Icons -->
+                    <div class="absolute top-4 left-4 bg-white p-3 rounded-xl shadow-md">
+                        <span class="material-symbols-outlined text-blue-600">school</span>
+                    </div>
+
+                    <div class="absolute top-4 left-20 bg-yellow-400 p-2 rounded-lg shadow-md w-8 h-8"></div>
+
+                    <div class="absolute top-4 right-4 bg-white px-3 py-1 rounded-lg shadow-md">
+                        <span class="text-blue-600 font-bold text-sm">MY</span>
+                    </div>
+
+                    <div class="absolute top-20 right-4 bg-white p-3 rounded-xl shadow-md">
+                        <span class="material-symbols-outlined text-blue-600">shield</span>
+                    </div>
+
+                    <div class="absolute top-1/3 left-4 bg-white p-3 rounded-xl shadow-md">
+                        <span class="material-symbols-outlined text-blue-600">account_balance_wallet</span>
+                    </div>
+
+                    <div class="absolute bottom-16 left-4 bg-white p-3 rounded-xl shadow-md">
+                        <span class="material-symbols-outlined text-blue-600">shopping_bag</span>
+                    </div>
+
+                    <div class="absolute top-1/3 right-4 bg-white p-3 rounded-xl shadow-md">
+                        <span class="material-symbols-outlined text-blue-600">account_balance</span>
+                    </div>
+
+                    <div class="absolute bottom-16 right-4 bg-white p-3 rounded-xl shadow-md">
+                        <span class="material-symbols-outlined text-blue-700">verified_user</span>
+                    </div>
+
+                    <!-- Center Card -->
+                    <div class="relative z-10 bg-white rounded-2xl shadow-xl p-8 mx-auto max-w-[200px]">
+                        <div class="absolute top-2 right-2 bg-white p-2 rounded-lg shadow-sm">
+                            <span class="material-symbols-outlined text-blue-600 text-lg">newspaper</span>
+                        </div>
+
+                        <div class="flex justify-center mb-4">
+                            <div class="bg-blue-600 rounded-full p-6 shadow-lg">
+                                <div class="w-12 h-12 flex items-center justify-center">
+                                    <span class="material-symbols-outlined text-white text-4xl">person</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="h-3 bg-gray-200 rounded w-full"></div>
+                            <div class="h-3 bg-gray-200 rounded w-3/4"></div>
+                        </div>
+
+                        <div class="absolute bottom-4 right-4 bg-green-500 rounded-full p-1 shadow-md">
+                            <span class="material-symbols-outlined text-white text-lg">check_circle</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Title and Description -->
+            <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-gray-900 mb-3">MyMULA</h2>
+                <p class="text-gray-600 text-sm leading-relaxed">
+                    Secure National Digital Identity &<br />
+                    Comprehensive Financial Services
+                </p>
+            </div>
+
+            <!-- Carousel Slide -->
+            <div id="carousel-container" class="bg-gradient-to-br from-blue-50 to-white rounded-2xl p-6 mb-6 shadow-sm">
+                <div class="flex items-start gap-4">
+                    <div class="bg-blue-600 rounded-xl p-3 flex-shrink-0">
+                        <span id="slide-icon" class="material-symbols-outlined text-white">account_balance_wallet</span>
+                    </div>
+                    <div class="flex-1">
+                        <h3 id="slide-title" class="font-bold text-gray-900 mb-2">Smart e-Wallet & Payments</h3>
+                        <p id="slide-description" class="text-sm text-gray-600 leading-relaxed">
+                            Manage instant transfers and secure payments nationwide.
+                        </p>
+                    </div>
+                    <button class="text-blue-600 flex-shrink-0">
+                        <span class="material-symbols-outlined">info</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Pagination Dots -->
+            <div id="pagination" class="flex justify-center gap-2 mb-8">
+                <button onclick="goToSlide(0)" class="h-2 w-8 rounded-full bg-blue-600 transition-all"></button>
+                <button onclick="goToSlide(1)" class="h-2 w-2 rounded-full bg-gray-300 transition-all"></button>
+                <button onclick="goToSlide(2)" class="h-2 w-2 rounded-full bg-gray-300 transition-all"></button>
+            </div>
+
+            <!-- Action Button -->
+            <div>
+                <button onclick="window.location.href='adult_home.html'"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-4 rounded-2xl shadow-lg transition-all flex items-center justify-center gap-3">
+                    <span class="material-symbols-outlined">fingerprint</span>
+                    Continue with Smart ID
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const slides = [
+            {
+                title: "Smart e-Wallet & Payments",
+                description: "Manage instant transfers and secure payments nationwide.",
+                icon: "account_balance_wallet"
+            },
+            {
+                title: "Digital Identity Verification",
+                description: "Secure and seamless identity verification for all services.",
+                icon: "verified_user"
+            },
+            {
+                title: "Comprehensive Services",
+                description: "Access government services, education, and financial tools in one place.",
+                icon: "apps"
+            }
+        ];
+
+        let currentSlide = 0;
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlide();
+        }
+
+        function updateSlide() {
+            const slide = slides[currentSlide];
+            document.getElementById('slide-title').textContent = slide.title;
+            document.getElementById('slide-description').textContent = slide.description;
+            document.getElementById('slide-icon').textContent = slide.icon;
+
+            // Update pagination dots
+            const dots = document.querySelectorAll('#pagination button');
+            dots.forEach((dot, i) => {
+                if (i === currentSlide) {
+                    dot.className = 'h-2 w-8 rounded-full bg-blue-600 transition-all';
+                } else {
+                    dot.className = 'h-2 w-2 rounded-full bg-gray-300 transition-all';
+                }
+            });
+        }
+
+        // Auto-advance slides every 4 seconds
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % slides.length;
+            updateSlide();
+        }, 4000);
+    </script>
+    <script src="google_translate.js"></script>
+</body>
+
+</html>
