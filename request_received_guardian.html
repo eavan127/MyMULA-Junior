@@ -96,17 +96,12 @@
         </button>
         <div class="flex items-center justify-between p-4 pb-2">
           <div class="flex w-24 items-center justify-start">
-            <button
-              class="flex max-w-[480px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-full border border-neutral-300 dark:border-neutral-700 bg-transparent px-3 py-1.5 text-sm font-bold text-neutral-700 dark:text-neutral-300">
-              <span>EN</span>
-              <span class="material-symbols-outlined notranslate text-base">swap_horiz</span>
-              <span>BM</span>
-            </button>
+            <!-- Language toggle removed -->
           </div>
           <h2 class="flex-1 text-center text-lg font-bold tracking-tight text-[#1D1D1F] dark:text-neutral-100">Guardian
             Approval</h2>
           <div class="flex w-24 items-center justify-end">
-            <button
+            <button onclick="cancelRequest()"
               class="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-transparent text-[#1D1D1F] dark:text-neutral-100">
               <span class="material-symbols-outlined notranslate">close</span>
             </button>
@@ -183,7 +178,8 @@
     function cancelRequest() {
       if (confirm('Are you sure you want to reject this request?')) {
         const requestId = sessionStorage.getItem('current_approval_request');
-        const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+        // Get requests from either storage
+        let requests = JSON.parse(localStorage.getItem('child_requests') || sessionStorage.getItem('child_requests') || '[]');
 
         // Update request status to rejected
         const updatedRequests = requests.map(req => {
@@ -193,11 +189,23 @@
           return req;
         });
 
+        // Sync to both storages
         sessionStorage.setItem('child_requests', JSON.stringify(updatedRequests));
+        localStorage.setItem('child_requests', JSON.stringify(updatedRequests));
         sessionStorage.removeItem('current_approval_request');
 
         alert('Request has been rejected.');
-        window.location.href = 'adult_home.html';
+
+        // Navigate based on source parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const source = urlParams.get('source');
+        if (source === 'adult_home') {
+          window.location.href = 'adult_home.html';
+        } else if (source === 'adult_requests') {
+          window.location.href = 'adult_requests.html';
+        } else {
+          window.location.href = 'mainpage_home.html';
+        }
       }
     }
   </script>

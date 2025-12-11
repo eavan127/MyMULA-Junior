@@ -85,45 +85,57 @@
           </p>
         </div>
         <div class="grid grid-cols-[40px_1fr] gap-x-2">
+          <!-- Step 1: Guardian Approval -->
           <div class="flex flex-col items-center gap-1">
-            <div class="flex items-center justify-center size-10 rounded-full bg-status-green text-white">
+            <div id="step-1-icon"
+              class="flex items-center justify-center size-10 rounded-full bg-status-grey text-white transition-colors duration-300">
               <span class="material-symbols-outlined">shield_person</span>
             </div>
-            <div class="w-[2px] bg-status-green h-full grow"></div>
+            <div id="step-1-line" class="w-[2px] bg-status-grey h-full grow transition-colors duration-300"></div>
           </div>
           <div class="flex flex-1 flex-col pb-6 pt-2">
-            <p class="text-[#101418] dark:text-white text-base font-medium leading-normal">Guardian Approval</p>
+            <p id="step-1-title" class="text-[#101418] dark:text-white text-base font-medium leading-normal">Guardian
+              Approval</p>
             <p class="text-[#5e758d] dark:text-gray-400 text-sm font-normal leading-normal">Kelulusan Penjaga</p>
-            <p class="text-[#5e758d] dark:text-gray-400 text-sm font-normal leading-normal mt-1">Jun 10, 10:05 AM</p>
+            <p id="step-1-date" class="text-[#5e758d] dark:text-gray-400 text-sm font-normal leading-normal mt-1">
+              Pending...</p>
           </div>
+
+          <!-- Step 2: SSM Name Verification -->
           <div class="flex flex-col items-center gap-1">
-            <div class="w-[2px] bg-status-green h-2"></div>
-            <div class="flex items-center justify-center size-10 rounded-full bg-status-green text-white">
+            <div id="step-2-top-line" class="w-[2px] bg-status-grey h-2 transition-colors duration-300"></div>
+            <div id="step-2-icon"
+              class="flex items-center justify-center size-10 rounded-full bg-status-grey text-white transition-colors duration-300">
               <span class="material-symbols-outlined">gavel</span>
             </div>
-            <div class="w-[2px] bg-status-green h-full grow"></div>
+            <div id="step-2-line" class="w-[2px] bg-status-grey h-full grow transition-colors duration-300"></div>
           </div>
           <div class="flex flex-1 flex-col pb-6 pt-2">
             <p class="text-[#101418] dark:text-white text-base font-medium leading-normal">SSM Name Verification</p>
             <p class="text-[#5e758d] dark:text-gray-400 text-sm font-normal leading-normal">Pengesahan Nama SSM</p>
-            <p class="text-[#5e758d] dark:text-gray-400 text-sm font-normal leading-normal mt-1">Jun 11, 09:12 AM</p>
+            <p id="step-2-date" class="text-[#5e758d] dark:text-gray-400 text-sm font-normal leading-normal mt-1">--</p>
           </div>
+
+          <!-- Step 3: Submitted -->
           <div class="flex flex-col items-center gap-1">
-            <div class="w-[2px] bg-status-green h-2"></div>
-            <div class="flex items-center justify-center size-10 rounded-full bg-status-yellow text-white">
+            <div id="step-3-top-line" class="w-[2px] bg-status-grey h-2 transition-colors duration-300"></div>
+            <div id="step-3-icon"
+              class="flex items-center justify-center size-10 rounded-full bg-status-grey text-white transition-colors duration-300">
               <span class="material-symbols-outlined">upload_file</span>
             </div>
-            <div class="w-[2px] bg-status-grey h-full grow"></div>
+            <div id="step-3-line" class="w-[2px] bg-status-grey h-full grow transition-colors duration-300"></div>
           </div>
           <div class="flex flex-1 flex-col pb-6 pt-2">
             <p class="text-[#101418] dark:text-white text-base font-medium leading-normal">Submitted</p>
             <p class="text-[#5e758d] dark:text-gray-400 text-sm font-normal leading-normal">Telah Dihantar</p>
-            <p class="text-[#5e758d] dark:text-gray-400 text-sm font-normal leading-normal mt-1">Jun 12, 02:45 PM</p>
+            <p id="step-3-date" class="text-[#5e758d] dark:text-gray-400 text-sm font-normal leading-normal mt-1">--</p>
           </div>
+
+          <!-- Step 4: Registered -->
           <div class="flex flex-col items-center gap-1">
-            <div class="w-[2px] bg-status-grey h-2"></div>
-            <div
-              class="flex items-center justify-center size-10 rounded-full bg-status-grey/40 text-[#5e758d] dark:bg-gray-700 dark:text-gray-400">
+            <div id="step-4-top-line" class="w-[2px] bg-status-grey h-2 transition-colors duration-300"></div>
+            <div id="step-4-icon"
+              class="flex items-center justify-center size-10 rounded-full bg-status-grey/40 text-[#5e758d] dark:bg-gray-700 dark:text-gray-400 transition-colors duration-300">
               <span class="material-symbols-outlined">thumb_up</span>
             </div>
           </div>
@@ -143,8 +155,90 @@
     </div>
   </div>
   <script>
-    // Save that SME form is SUBMITTED
-    localStorage.setItem('sme_application_submitted', 'true');
+    document.addEventListener('DOMContentLoaded', () => {
+      // Ensure application is marked as submitted when visiting this page
+      localStorage.setItem('sme_application_submitted', 'true');
+
+      updateProgress();
+      // Poll for changes every 2 seconds
+      setInterval(updateProgress, 2000);
+    });
+
+    function updateProgress() {
+      // Check localStorage first for cross-tab updates
+      const isApproved = localStorage.getItem('sme_guardian_approved') === 'true' || sessionStorage.getItem('sme_guardian_approved') === 'true';
+
+      // Also check child_requests for rejected status
+      const requests = JSON.parse(localStorage.getItem('child_requests') || sessionStorage.getItem('child_requests') || '[]');
+      const smeRequest = requests.find(r => r.type === 'sme' && r.status !== 'deleted');
+      const isRejected = smeRequest && smeRequest.status === 'rejected';
+
+      // Update Step 1: Guardian Approval
+      const step1Icon = document.getElementById('step-1-icon');
+      const step1Line = document.getElementById('step-1-line');
+      const step1Date = document.getElementById('step-1-date');
+
+      if (isRejected) {
+        step1Icon.className = "flex items-center justify-center size-10 rounded-full bg-red-500 text-white transition-colors duration-300";
+        step1Line.className = "w-[2px] bg-red-500 h-full grow transition-colors duration-300";
+        step1Date.textContent = "Rejected by Guardian";
+        step1Date.className = "text-red-500 text-sm font-medium leading-normal mt-1";
+      } else if (isApproved) {
+        step1Icon.className = "flex items-center justify-center size-10 rounded-full bg-status-green text-white transition-colors duration-300";
+        step1Line.className = "w-[2px] bg-status-green h-full grow transition-colors duration-300";
+        step1Date.textContent = "Approved";
+        step1Date.className = "text-status-green text-sm font-medium leading-normal mt-1";
+      } else {
+        step1Icon.className = "flex items-center justify-center size-10 rounded-full bg-status-yellow text-white transition-colors duration-300";
+        step1Line.className = "w-[2px] bg-status-grey h-full grow transition-colors duration-300";
+        step1Date.textContent = "Waiting for Guardian...";
+        step1Date.className = "text-status-yellow text-sm font-medium leading-normal mt-1";
+      }
+
+      // Update Step 2: SSM Name Verification
+      const step2TopLine = document.getElementById('step-2-top-line');
+      const step2Icon = document.getElementById('step-2-icon');
+      const step2Line = document.getElementById('step-2-line');
+      const step2Date = document.getElementById('step-2-date');
+
+      if (isApproved) {
+        step2TopLine.className = "w-[2px] bg-status-green h-2 transition-colors duration-300";
+        step2Icon.className = "flex items-center justify-center size-10 rounded-full bg-status-yellow text-white transition-colors duration-300";
+        step2Line.className = "w-[2px] bg-status-grey h-full grow transition-colors duration-300";
+        step2Date.textContent = "In Progress";
+        step2Date.className = "text-status-yellow text-sm font-medium leading-normal mt-1";
+      } else {
+        step2TopLine.className = "w-[2px] bg-status-grey h-2 transition-colors duration-300";
+        step2Icon.className = "flex items-center justify-center size-10 rounded-full bg-status-grey text-white transition-colors duration-300";
+        step2Date.textContent = "Pending";
+        step2Date.className = "text-gray-400 text-sm font-normal leading-normal mt-1";
+      }
+
+      // Update Step 3: Submitted
+      const step3TopLine = document.getElementById('step-3-top-line');
+      const step3Icon = document.getElementById('step-3-icon');
+      const step3Line = document.getElementById('step-3-line');
+      const step3Date = document.getElementById('step-3-date');
+
+      if (isApproved) {
+        // Pending subsequent steps
+        step3TopLine.className = "w-[2px] bg-status-grey h-2 transition-colors duration-300";
+      } else {
+        step3TopLine.className = "w-[2px] bg-status-grey h-2 transition-colors duration-300";
+      }
+      // Always gray for now as we don't have logic for step 3 completion
+      step3Icon.className = "flex items-center justify-center size-10 rounded-full bg-status-grey text-white transition-colors duration-300";
+      step3Line.className = "w-[2px] bg-status-grey h-full grow transition-colors duration-300";
+      step3Date.textContent = isApproved ? "Pending" : "--";
+      step3Date.className = "text-gray-400 text-sm font-normal leading-normal mt-1";
+
+      // Update Step 4: Registered
+      const step4TopLine = document.getElementById('step-4-top-line');
+      const step4Icon = document.getElementById('step-4-icon');
+
+      step4TopLine.className = "w-[2px] bg-status-grey h-2 transition-colors duration-300";
+      step4Icon.className = "flex items-center justify-center size-10 rounded-full bg-status-grey/40 text-[#5e758d] dark:bg-gray-700 dark:text-gray-400 transition-colors duration-300";
+    }
   </script>
 </body>
 

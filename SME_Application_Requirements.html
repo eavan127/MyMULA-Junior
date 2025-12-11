@@ -274,17 +274,21 @@
       // Add new request
       existingRequests.push(newRequest);
       sessionStorage.setItem('child_requests', JSON.stringify(existingRequests));
-      // Sync to sessionStorage
+      // Sync to localStorage for cross-tab persistence
+      localStorage.setItem('child_requests', JSON.stringify(existingRequests));
 
 
       // Store current request ID for approval flow
       sessionStorage.setItem('current_approval_request', requestId);
 
+      // Set submitted flag so it appears in applications list
+      localStorage.setItem('sme_application_submitted', 'true');
+
       // Show notification and navigate
       alert('SME Registration request sent to your parent/guardian! They will need to approve using Face ID and signature.');
 
-      // Go back to home (simulating "request sent" state)
-      window.location.href = 'mainpage_home.html';
+      // Go to progress tracker
+      window.location.href = 'SME_Application_Progress_Tracker.html';
     }
 
     // === DYNAMIC REQUIREMENTS LOADING ===

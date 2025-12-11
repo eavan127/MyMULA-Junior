@@ -205,13 +205,15 @@
         });
 
         function handleBackButton() {
-            const isJunior = sessionStorage.getItem('current_user_type') === 'junior' ||
-                document.referrer.includes('Transaction_Progress_Tracker');
+            const urlParams = new URLSearchParams(window.location.search);
+            const source = urlParams.get('source');
 
-            if (isJunior) {
-                window.location.href = 'mainpage_home.html';
-            } else {
+            if (source === 'adult_home') {
                 window.location.href = 'adult_home.html';
+            } else if (source === 'adult_requests') {
+                window.location.href = 'adult_requests.html';
+            } else {
+                window.location.href = 'mainpage_home.html';
             }
         }
     </script>

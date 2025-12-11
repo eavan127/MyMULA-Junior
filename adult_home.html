@@ -381,7 +381,8 @@
                     dental: 'Dental_Progress_Tracker.html',
                     transaction: 'Age_Approval_Details.html'
                 };
-                window.location.href = viewPages[type] || 'adult_requests.html';
+                const targetPage = viewPages[type] || 'adult_requests.html';
+                window.location.href = `${targetPage}?source=adult_home`;
             } else {
                 // Navigate to approval pages for pending requests
                 const approvalPages = {
@@ -390,7 +391,8 @@
                     dental: 'request_received_guardian.html',
                     transaction: 'Transaction_guardian_approval.html'
                 };
-                window.location.href = approvalPages[type] || 'adult_requests.html';
+                const targetPage = approvalPages[type] || 'adult_requests.html';
+                window.location.href = `${targetPage}?source=adult_home`;
             }
         }
 

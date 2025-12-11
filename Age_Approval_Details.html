@@ -173,12 +173,24 @@
     <footer
       class="fixed bottom-0 left-0 z-10 w-full border-t border-t-slate-200 bg-white/80 p-4 backdrop-blur-sm dark:border-t-slate-800 dark:bg-background-dark/80">
       <div class="flex justify-center">
-        <button onclick="window.location.href='adult_home.html'"
+        <button onclick="handleBackNavigation()"
           class="flex h-12 w-full max-w-md items-center justify-center rounded-full bg-primary text-base font-bold text-white">Back
           to Home</button>
       </div>
     </footer>
   </div>
+
+  <script>
+    function handleBackNavigation() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const source = urlParams.get('source');
+      if (source === 'adult_home') {
+        window.location.href = 'adult_home.html';
+      } else {
+        window.location.href = 'mainpage_home.html';
+      }
+    }
+  </script>
 
   <script>
     document.addEventListener('DOMContentLoaded', function () {

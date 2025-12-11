@@ -54,7 +54,7 @@
     <div class="relative flex min-h-screen w-full flex-col group/design-root overflow-x-hidden">
         <header
             class="sticky top-0 z-10 flex h-16 shrink-0 items-center justify-between border-b border-b-slate-200 bg-white/80 px-4 backdrop-blur-sm dark:border-b-slate-800 dark:bg-background-dark/80">
-            <button onclick="window.location.href='SME_Application_Progress_Tracker.html'"
+            <button onclick="handleBackNavigation()"
                 class="flex size-10 shrink-0 items-center justify-center text-[#111418] dark:text-white">
                 <span class="material-symbols-outlined text-2xl notranslate">arrow_back</span>
             </button>
@@ -72,9 +72,9 @@
                             <p
                                 class="text-lg font-bold leading-tight tracking-[-0.015em] text-[#111418] dark:text-white">
                                 SME Registration Summary</p>
-                            <div
+                            <div id="doc-top-status-badge"
                                 class="shrink-0 rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
-                                In Progress</div>
+                                Pending</div>
                         </div>
                         <p class="text-sm font-normal leading-normal text-[#5f758c] dark:text-slate-400">
                             A registration for your SME business under SSM. <span
@@ -140,28 +140,31 @@
                                 <br /><span class="font-normal text-slate-400 dark:text-slate-500">Permintaan
                                     Dimulakan</span>
                             </p>
-                            <p class="text-xs font-medium text-[#111418] dark:text-slate-300">Jun 10, 10:05 AM</p>
+                            <p id="doc-date-initiated" class="text-xs font-medium text-[#111418] dark:text-slate-300">--
+                            </p>
                         </div>
                         <div class="grid grid-cols-[1fr_auto] items-center py-2">
                             <p class="text-xs font-bold text-[#5f758c] dark:text-slate-400">Guardian Approval
                                 <br /><span class="font-normal text-slate-400 dark:text-slate-500">Kelulusan
                                     Penjaga</span>
                             </p>
-                            <p class="text-xs font-medium text-[#111418] dark:text-slate-300">Jun 11, 09:12 AM</p>
+                            <p id="doc-date-approved" class="text-xs font-medium text-[#111418] dark:text-slate-300">
+                                Pending</p>
                         </div>
                         <div class="grid grid-cols-[1fr_auto] items-center py-2">
                             <p class="text-xs font-bold text-[#5f758c] dark:text-slate-400">SSM Name Verified
                                 <br /><span class="font-normal text-slate-400 dark:text-slate-500">Pengesahan Nama
                                     SSM</span>
                             </p>
-                            <p class="text-xs font-medium text-[#111418] dark:text-slate-300">Jun 12, 02:45 PM</p>
+                            <p id="doc-date-verified" class="text-xs font-medium text-[#111418] dark:text-slate-300">
+                                Pending</p>
                         </div>
                         <div class="grid grid-cols-[1fr_auto] items-center py-2">
                             <p class="text-xs font-bold text-[#5f758c] dark:text-slate-400">Registration Completed
                                 <br /><span class="font-normal text-slate-400 dark:text-slate-500">Pendaftaran
                                     Selesai</span>
                             </p>
-                            <div
+                            <div id="doc-status-badge"
                                 class="rounded-full bg-slate-200 px-3 py-1 text-xs font-medium text-slate-600 dark:bg-slate-700 dark:text-slate-300">
                                 Pending</div>
                         </div>
@@ -181,13 +184,122 @@
         <footer
             class="fixed bottom-0 left-0 z-10 w-full border-t border-t-slate-200 bg-white/80 p-4 backdrop-blur-sm dark:border-t-slate-800 dark:bg-background-dark/80">
             <div class="flex flex-col gap-2">
-                <button onclick="window.location.href='mainpage_home.html'"
+                <button onclick="handleBackNavigation()"
                     class="flex h-12 w-full items-center justify-center rounded-full bg-primary text-base font-bold text-white">Back
                     to Home</button>
             </div>
         </footer>
     </div>
 
+    <script>
+        function handleBackNavigation() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const source = urlParams.get('source');
+            if (source === 'adult_home') {
+                window.location.href = 'adult_home.html';
+            } else if (source === 'adult_requests') {
+                window.location.href = 'adult_requests.html';
+            } else {
+                window.location.href = 'mainpage_home.html';
+            }
+        }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            updateDocumentTimings();
+            setInterval(updateDocumentTimings, 2000); // Poll for changes
+        });
+
+        function updateDocumentTimings() {
+            // Check localStorage first for cross-tab updates
+            const isApproved = localStorage.getItem('sme_guardian_approved') === 'true' || sessionStorage.getItem('sme_guardian_approved') === 'true';
+
+            // Also check child_requests for rejected status
+            const requests = JSON.parse(localStorage.getItem('child_requests') || sessionStorage.getItem('child_requests') || '[]');
+            const smeRequest = requests.find(r => r.type === 'sme' && r.status !== 'deleted');
+            const isRejected = smeRequest && smeRequest.status === 'rejected';
+
+            const now = new Date();
+            const dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+
+            // 1. Request Initiated - Assume today/recent for demo purposes
+            const initiatedEl = document.getElementById('doc-date-initiated');
+            // Store initiation time to keep it consistent per session
+            let initTime = sessionStorage.getItem('sme_init_time');
+            if (!initTime) {
+                initTime = new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                sessionStorage.setItem('sme_init_time', initTime);
+            }
+            if (initiatedEl) initiatedEl.textContent = initTime;
+
+            // 2. Guardian Approval
+            const approvedEl = document.getElementById('doc-date-approved');
+            if (approvedEl) {
+                if (isRejected) {
+                    approvedEl.textContent = "Rejected by Guardian";
+                    approvedEl.className = "text-xs font-bold text-red-600 dark:text-red-400";
+                    sessionStorage.removeItem('sme_approve_time');
+                } else if (isApproved) {
+                    // In a real app, we'd store the approval timestamp. For now, show "Approved" or a mock time
+                    // Let's use a stored time or "Just now" if recently approved
+                    let approveTime = sessionStorage.getItem('sme_approve_time');
+                    if (!approveTime) {
+                        approveTime = new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+                        sessionStorage.setItem('sme_approve_time', approveTime);
+                    }
+                    approvedEl.textContent = approveTime;
+                    approvedEl.className = "text-xs font-bold text-green-600 dark:text-green-400";
+                } else {
+                    approvedEl.textContent = "Pending Guardian Action";
+                    approvedEl.className = "text-xs font-medium text-orange-500 dark:text-orange-400";
+                    sessionStorage.removeItem('sme_approve_time'); // Reset if un-approved (e.g. debug)
+                }
+            }
+
+            // 3. SSM Verified
+            const verifiedEl = document.getElementById('doc-date-verified');
+            if (verifiedEl) {
+                if (isApproved) {
+                    verifiedEl.textContent = "Processing...";
+                    verifiedEl.className = "text-xs font-medium text-blue-500 dark:text-blue-400";
+                } else {
+                    verifiedEl.textContent = "Pending";
+                    verifiedEl.className = "text-xs font-medium text-slate-400";
+                }
+            }
+
+            // 4. Registration Status (Bottom List)
+            const statusBadge = document.getElementById('doc-status-badge');
+            if (statusBadge) {
+                if (isRejected) {
+                    statusBadge.textContent = "Rejected";
+                    statusBadge.className = "rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700 dark:bg-red-900/50 dark:text-red-300";
+                } else if (isApproved) {
+                    statusBadge.textContent = "In Progress";
+                    statusBadge.className = "rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-700 dark:bg-blue-900/50 dark:text-blue-300";
+                } else {
+                    statusBadge.textContent = "Pending";
+                    statusBadge.className = "rounded-full bg-slate-200 px-3 py-1 text-xs font-medium text-slate-600 dark:bg-slate-700 dark:text-slate-300";
+                }
+            }
+
+            // 5. Top Status Badge
+            const topBadge = document.getElementById('doc-top-status-badge');
+            if (topBadge) {
+                if (isRejected) {
+                    topBadge.textContent = "Guardian Rejected";
+                    topBadge.className = "shrink-0 rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700 dark:bg-red-900/50 dark:text-red-300";
+                } else if (isApproved) {
+                    topBadge.textContent = "Guardian Approved";
+                    topBadge.className = "shrink-0 rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700 dark:bg-green-900/50 dark:text-green-300";
+                } else {
+                    topBadge.textContent = "Awaiting Guardian";
+                    topBadge.className = "shrink-0 rounded-full bg-amber-100 px-3 py-1 text-xs font-medium text-amber-700 dark:bg-amber-900/50 dark:text-amber-300";
+                }
+            }
+        }
+    </script>
 </body>
 
 </html>
