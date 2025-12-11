@@ -338,19 +338,19 @@
     }
 
     function checkActiveApplications(section, container) {
+      const requests = JSON.parse(localStorage.getItem('child_requests') || sessionStorage.getItem('child_requests') || '[]');
+
       // Check for submitted SME application
       const isSmeSubmitted = localStorage.getItem('sme_application_submitted') === 'true';
 
       // Check if guardian has already approved
       const isSmeApproved = localStorage.getItem('sme_guardian_approved') === 'true' || sessionStorage.getItem('sme_guardian_approved') === 'true';
 
-      // Get SME request from storage to check for rejection
-      const requests = JSON.parse(localStorage.getItem('child_requests') || sessionStorage.getItem('child_requests') || '[]');
       const smeRequest = requests.find(r => r.type === 'sme' && r.status !== 'deleted');
-      const isRejected = smeRequest && smeRequest.status === 'rejected';
+      const isSmeRejected = smeRequest && smeRequest.status === 'rejected';
 
       // Only show the card if submitted but NOT yet approved and NOT rejected
-      if (isSmeSubmitted && !isSmeApproved && !isRejected) {
+      if (isSmeSubmitted && !isSmeApproved && !isSmeRejected) {
         // Render card
         const card = document.createElement('div');
         card.id = 'sme-status-card'; // Unique ID for real-time updates
@@ -375,9 +375,38 @@
 
         container.appendChild(card);
         section.classList.remove('hidden');
-      } else {
-        // If not submitted, approved, or rejected, we don't show the card
-        // Rely on loadDraftApplications logic for hiding section if empty
+      }
+
+      // Check for scholarship request
+      const scholarshipRequest = requests.find(r => r.type === 'scholarship' && r.status !== 'deleted');
+      const isScholarshipApproved = localStorage.getItem('scholarship_guardian_approved') === 'true' || sessionStorage.getItem('scholarship_guardian_approved') === 'true';
+      const isScholarshipRejected = scholarshipRequest && scholarshipRequest.status === 'rejected';
+
+      // Only show the card if there is a pending scholarship request
+      if (scholarshipRequest && scholarshipRequest.status === 'pending' && !isScholarshipApproved && !isScholarshipRejected) {
+        const card = document.createElement('div');
+        card.id = 'scholarship-status-card';
+        // Use blue theme for Scholarship
+        card.className = 'flex items-center gap-3 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 p-4 border border-blue-200 dark:border-blue-800 shadow-sm';
+
+        card.innerHTML = `
+          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-500">
+            <span class="material-symbols-outlined notranslate text-2xl">school</span>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-[#101418] dark:text-white text-sm font-bold truncate">PESP Scholarship</p>
+            <p id="scholarship-status-text" class="text-orange-600 dark:text-orange-400 text-xs font-medium">Awaiting Guardian Approval</p>
+            <p class="text-gray-500 dark:text-gray-400 text-xs">Application Submitted</p>
+          </div>
+          <div class="flex gap-2 shrink-0">
+             <button onclick="window.location.href='progress_tracker.html'" class="px-4 py-2 rounded-lg bg-primary text-white font-bold text-sm shadow-sm hover:bg-primary/90 transition-colors">
+              View Status
+            </button>
+          </div>
+        `;
+
+        container.appendChild(card);
+        section.classList.remove('hidden');
       }
     }
 
@@ -398,6 +427,32 @@
           loadDraftApplications();
         }
       } else if (isSmeSubmitted && smeRequest) {
+        if (!card) {
+          // Card doesn't exist but should (e.g. just submitted in another tab)
+          loadDraftApplications();
+        }
+        // If card exists and still pending, no update needed
+      } else {
+        // Not submitted or deleted
+        if (card) {
+          loadDraftApplications();
+        }
+      }
+    }
+
+    function updateScholarshipRealTime() {
+      const requests = JSON.parse(localStorage.getItem('child_requests') || sessionStorage.getItem('child_requests') || '[]');
+      const scholarshipRequest = requests.find(r => r.type === 'scholarship' && r.status !== 'deleted');
+      const isScholarshipApproved = localStorage.getItem('scholarship_guardian_approved') === 'true' || sessionStorage.getItem('scholarship_guardian_approved') === 'true';
+      const card = document.getElementById('scholarship-status-card');
+
+      // If approved or rejected, remove the card
+      if (isScholarshipApproved || (scholarshipRequest && scholarshipRequest.status === 'rejected') || (scholarshipRequest && scholarshipRequest.status === 'approved')) {
+        if (card) {
+          // Card exists but should be removed (approved or rejected)
+          loadDraftApplications();
+        }
+      } else if (scholarshipRequest && scholarshipRequest.status === 'pending') {
         if (!card) {
           // Card doesn't exist but should (e.g. just submitted in another tab)
           loadDraftApplications();
@@ -518,8 +573,12 @@
       setInterval(updateRecentActivity, 2000);
       // Check SME status every 2 seconds
       setInterval(updateSmeRealTime, 2000);
+      // Check scholarship status every 2 seconds
+      setInterval(updateScholarshipRealTime, 2000);
       // Check transaction status every 2 seconds
       setInterval(updateTransactionCardStatus, 2000);
+      // Reload draft applications every 2 seconds to reflect status changes
+      setInterval(loadDraftApplications, 2000);
     });
 
     function updateRecentActivity() {

@@ -98,10 +98,10 @@
               tertiary education funding.</p>
           </div>
         </div>
-        <div
+        <div id="pesp-status-badge"
           class="inline-flex items-center justify-center self-start rounded-full bg-[#FFC107]/20 px-3 py-1.5 text-xs font-medium text-[#B8860B] dark:text-[#FFD700]">
-          <div class="mr-1.5 size-2 rounded-full bg-[#FFC107]"></div>
-          Processing
+          <div id="pesp-status-dot" class="mr-1.5 size-2 rounded-full bg-[#FFC107]"></div>
+          <span id="pesp-status-text">Guardian Approval Needed</span>
         </div>
       </div>
 
@@ -216,14 +216,73 @@
   </div>
 
   <script>
-    // 1. Check PESP (Existing code)
-    const isPespSubmitted = localStorage.getItem('application_submitted');
-    if (isPespSubmitted === 'true') {
-      const card = document.getElementById('pesp-card');
-      if (card) card.classList.remove('hidden');
-      const msg = document.getElementById('empty-msg');
-      if (msg) msg.classList.add('hidden');
+    // 1. Check PESP Scholarship (Real-time)
+    function checkPespStatus() {
+      const pespCard = document.getElementById('pesp-card');
+
+      // Check child_requests for scholarship request status
+      const requests = JSON.parse(localStorage.getItem('child_requests') || sessionStorage.getItem('child_requests') || '[]');
+      const scholarshipRequest = requests.find(r => r.type === 'scholarship' && r.status !== 'deleted');
+
+      if (scholarshipRequest) {
+        if (pespCard) {
+          pespCard.classList.remove('hidden');
+
+          // Hide empty message if PESP card is shown
+          const msg = document.getElementById('empty-msg');
+          if (msg) msg.classList.add('hidden');
+
+          const badge = document.getElementById('pesp-status-badge');
+          const dot = document.getElementById('pesp-status-dot');
+          const text = document.getElementById('pesp-status-text');
+
+          if (scholarshipRequest.status === 'rejected') {
+            // Red for rejected - disable card
+            if (badge) badge.className = "inline-flex items-center justify-center self-start rounded-full bg-red-100 dark:bg-red-900/20 px-3 py-1.5 text-xs font-medium text-red-600 dark:text-red-400";
+            if (dot) dot.className = "mr-1.5 size-2 rounded-full bg-red-500";
+            if (text) text.innerText = "Guardian Rejected";
+            // Disable card - remove click and add visual disabled styling
+            pespCard.onclick = null;
+            pespCard.classList.add('opacity-50', 'pointer-events-none', 'grayscale');
+            pespCard.classList.remove('cursor-pointer');
+          } else if (scholarshipRequest.status === 'approved' || localStorage.getItem('scholarship_guardian_approved') === 'true') {
+            // Green for approved - enable card
+            if (badge) badge.className = "inline-flex items-center justify-center self-start rounded-full bg-green-100 dark:bg-green-900/20 px-3 py-1.5 text-xs font-medium text-green-600 dark:text-green-400";
+            if (dot) dot.className = "mr-1.5 size-2 rounded-full bg-green-500";
+            if (text) text.innerText = "Guardian Approved";
+            // Enable card
+            pespCard.onclick = function () { window.location.href = 'progress_tracker.html'; };
+            pespCard.classList.remove('opacity-50', 'pointer-events-none', 'grayscale');
+            pespCard.classList.add('cursor-pointer');
+          } else {
+            // Yellow for pending - enable card
+            if (badge) badge.className = "inline-flex items-center justify-center self-start rounded-full bg-[#FFC107]/20 px-3 py-1.5 text-xs font-medium text-[#B8860B] dark:text-[#FFD700]";
+            if (dot) dot.className = "mr-1.5 size-2 rounded-full bg-[#FFC107]";
+            if (text) text.innerText = "Guardian Approval Needed";
+            // Enable card
+            pespCard.onclick = function () { window.location.href = 'progress_tracker.html'; };
+            pespCard.classList.remove('opacity-50', 'pointer-events-none', 'grayscale');
+            pespCard.classList.add('cursor-pointer');
+          }
+        }
+      } else {
+        // Also check if application was submitted via the old method
+        const isPespSubmitted = localStorage.getItem('application_submitted');
+        if (isPespSubmitted === 'true' && pespCard) {
+          pespCard.classList.remove('hidden');
+          const msg = document.getElementById('empty-msg');
+          if (msg) msg.classList.add('hidden');
+        } else {
+          // If not submitted or deleted, hide card
+          if (pespCard) pespCard.classList.add('hidden');
+          checkEmptyState(); // Check if we need to show empty message
+        }
+      }
     }
+
+    // Call immediately and then poll
+    checkPespStatus();
+    setInterval(checkPespStatus, 2000);
 
     // 2. Check SME (NEW CODE)
     // 2. Check SME (Real-time)
