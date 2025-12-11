@@ -250,7 +250,60 @@
       if (text) text.innerText = "Processing";
     }
 
-    // 3. Check Dental - Check child_requests for accurate status
+    // 3. Check Gaming Transaction - show card when approved
+    function checkGamingStatus() {
+      const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+      const transactionRequest = requests.find(r => r.type === 'transaction' && r.status !== 'deleted');
+
+      if (transactionRequest && transactionRequest.status === 'approved') {
+        const gamingCard = document.getElementById('gaming-card');
+        if (gamingCard) {
+          gamingCard.classList.remove('hidden');
+          const msg = document.getElementById('empty-msg');
+          if (msg) msg.classList.add('hidden');
+        }
+
+        // Update to Approved status (green)
+        const badge = document.getElementById('gaming-status-badge');
+        if (badge) badge.className = "inline-flex items-center justify-center self-start rounded-full bg-[#10B981]/20 px-3 py-1.5 text-xs font-medium text-[#10B981] dark:text-[#34D399]";
+
+        const dot = document.getElementById('gaming-status-dot');
+        if (dot) dot.className = "mr-1.5 size-2 rounded-full bg-[#10B981]";
+
+        const text = document.getElementById('gaming-status-text');
+        if (text) text.innerText = "Approved";
+
+        const title = document.getElementById('gaming-title');
+        if (title) title.innerText = "Gaming Purchase Approved";
+      } else if (transactionRequest && transactionRequest.status === 'pending') {
+        const gamingCard = document.getElementById('gaming-card');
+        if (gamingCard) {
+          gamingCard.classList.remove('hidden');
+          const msg = document.getElementById('empty-msg');
+          if (msg) msg.classList.add('hidden');
+        }
+
+        // Update to Pending status (yellow)
+        const badge = document.getElementById('gaming-status-badge');
+        if (badge) badge.className = "inline-flex items-center justify-center self-start rounded-full bg-[#FFC107]/20 px-3 py-1.5 text-xs font-medium text-[#B8860B] dark:text-[#FFD700]";
+
+        const dot = document.getElementById('gaming-status-dot');
+        if (dot) dot.className = "mr-1.5 size-2 rounded-full bg-[#FFC107]";
+
+        const text = document.getElementById('gaming-status-text');
+        if (text) text.innerText = "Awaiting Guardian";
+
+        const title = document.getElementById('gaming-title');
+        if (title) title.innerText = "Gaming Purchase Request";
+      }
+    }
+
+    // Call on page load
+    document.addEventListener('DOMContentLoaded', () => {
+      checkGamingStatus();
+    });
+
+    // 4. Check Dental - Check child_requests for accurate status
     function checkDentalStatus() {
       const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
       const dentalRequest = requests.find(r => r.type === 'dental');

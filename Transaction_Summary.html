@@ -150,9 +150,9 @@
             </div>
         </main>
         <!-- Bottom Action Button -->
-        <footer
+        <footer id="footer-actions"
             class="fixed bottom-0 left-0 z-10 w-full border-t border-t-slate-200 bg-white/80 p-4 backdrop-blur-sm dark:border-t-slate-800 dark:bg-background-dark/80">
-            <button onclick="window.location.href='adult_requests.html'"
+            <button id="footer-btn" onclick="handleBackButton()"
                 class="flex h-12 w-full items-center justify-center rounded-full bg-primary text-base font-bold text-white">
                 Back to Requests
             </button>
@@ -161,6 +161,17 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // Determine if accessed from junior or adult context
+            const isJunior = sessionStorage.getItem('current_user_type') === 'junior' ||
+                document.referrer.includes('Transaction_Progress_Tracker');
+
+            const btn = document.getElementById('footer-btn');
+            if (isJunior) {
+                btn.textContent = 'Back to Home';
+            } else {
+                btn.textContent = 'Back to Requests';
+            }
+
             // Format date and time
             function formatDateTime(date) {
                 const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -192,6 +203,17 @@
             const deliveredTime = new Date(now.getTime() + 3 * 60000);
             document.getElementById('time-delivered').textContent = formatDateTime(deliveredTime);
         });
+
+        function handleBackButton() {
+            const isJunior = sessionStorage.getItem('current_user_type') === 'junior' ||
+                document.referrer.includes('Transaction_Progress_Tracker');
+
+            if (isJunior) {
+                window.location.href = 'mainpage_home.html';
+            } else {
+                window.location.href = 'adult_home.html';
+            }
+        }
     </script>
 </body>
 

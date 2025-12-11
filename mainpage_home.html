@@ -156,6 +156,23 @@
         </div>
         <span id="home-update-time" class="text-xs text-gray-400">Just now</span>
       </div>
+
+      <!-- Transaction Intercepted Card - Dynamic based on status -->
+      <div id="transaction-card" onclick="handleTransactionCardClick()"
+        class="flex items-center gap-3 rounded-xl bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 p-4 shadow-sm border border-red-200 dark:border-red-800 cursor-pointer hover:shadow-md transition-all">
+        <div
+          class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 text-red-500">
+          <span class="material-symbols-outlined notranslate text-xl">block</span>
+        </div>
+        <div class="flex-1">
+          <p id="transaction-card-title" class="text-[#101418] dark:text-white text-sm font-bold">Transaction
+            Intercepted</p>
+          <p id="transaction-card-subtitle" class="text-red-500 dark:text-red-400 text-xs">A suspicious transaction was
+            blocked</p>
+        </div>
+        <span id="transaction-card-status" class="hidden px-2 py-1 rounded-full text-[10px] font-bold uppercase"></span>
+        <span class="material-symbols-outlined notranslate text-gray-400">chevron_right</span>
+      </div>
     </div>
 
 
@@ -477,6 +494,74 @@
       hours = hours % 12;
       hours = hours ? hours : 12;
       return `${hours}:${m} ${ampm}`;
+    }
+  </script>
+
+  <!-- Transaction Card Logic -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      updateTransactionCardStatus();
+    });
+
+    function updateTransactionCardStatus() {
+      const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+      const transactionRequest = requests.find(r => r.type === 'transaction' && r.status !== 'deleted');
+
+      const card = document.getElementById('transaction-card');
+      const title = document.getElementById('transaction-card-title');
+      const subtitle = document.getElementById('transaction-card-subtitle');
+      const statusBadge = document.getElementById('transaction-card-status');
+      const iconDiv = card.querySelector('.rounded-full');
+      const icon = iconDiv.querySelector('.material-symbols-outlined');
+
+      if (!transactionRequest) {
+        // No transaction request - show default intercepted state
+        card.className = "flex items-center gap-3 rounded-xl bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 p-4 shadow-sm border border-red-200 dark:border-red-800 cursor-pointer hover:shadow-md transition-all";
+        iconDiv.className = "flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 text-red-500";
+        icon.textContent = "block";
+        title.textContent = "Transaction Intercepted";
+        subtitle.textContent = "A suspicious transaction was blocked";
+        subtitle.className = "text-red-500 dark:text-red-400 text-xs";
+        statusBadge.classList.add('hidden');
+      } else if (transactionRequest.status === 'pending') {
+        // Request pending
+        card.className = "flex items-center gap-3 rounded-xl bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 p-4 shadow-sm border border-orange-200 dark:border-orange-800 cursor-pointer hover:shadow-md transition-all";
+        iconDiv.className = "flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-500";
+        icon.textContent = "hourglass_top";
+        title.textContent = "Gaming Purchase Request";
+        subtitle.textContent = "Waiting for guardian approval";
+        subtitle.className = "text-orange-500 dark:text-orange-400 text-xs";
+        statusBadge.textContent = "Pending";
+        statusBadge.className = "px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-orange-100 text-orange-600";
+        statusBadge.classList.remove('hidden');
+      } else if (transactionRequest.status === 'approved') {
+        // Request approved
+        card.className = "flex items-center gap-3 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-4 shadow-sm border border-green-200 dark:border-green-800 cursor-pointer hover:shadow-md transition-all";
+        iconDiv.className = "flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 text-green-500";
+        icon.textContent = "check_circle";
+        title.textContent = "Gaming Purchase Approved";
+        subtitle.textContent = "Guardian authorized this purchase";
+        subtitle.className = "text-green-500 dark:text-green-400 text-xs";
+        statusBadge.textContent = "Approved";
+        statusBadge.className = "px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-green-100 text-green-600";
+        statusBadge.classList.remove('hidden');
+      }
+    }
+
+    function handleTransactionCardClick() {
+      const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+      const transactionRequest = requests.find(r => r.type === 'transaction' && r.status !== 'deleted');
+
+      if (!transactionRequest) {
+        // No request yet - go to intercepted page
+        window.location.href = 'Transaction_intercepted.html';
+      } else if (transactionRequest.status === 'pending') {
+        // Pending - go to intercepted page (can't do much)
+        window.location.href = 'Transaction_intercepted.html';
+      } else if (transactionRequest.status === 'approved') {
+        // Approved - go to progress tracker
+        window.location.href = 'Transaction_Progress_Tracker.html';
+      }
     }
   </script>
   <script src="google_translate.js"></script>
