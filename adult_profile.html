@@ -559,15 +559,15 @@
                     }
                 });
 
-                // Check junior's additional/custom documents
-                const juniorCustomDocs = JSON.parse(sessionStorage.getItem('additional_docs') || '[]');
-                juniorCustomDocs.forEach(doc => {
-                    const status = sessionStorage.getItem(`${doc.name}_status`);
+                // Check junior's additional/custom documents (stored in custom_docs_list)
+                const juniorCustomDocs = JSON.parse(sessionStorage.getItem('custom_docs_list') || '[]');
+                juniorCustomDocs.forEach(docName => {
+                    const status = sessionStorage.getItem(`${docName}_status`);
                     if (status === 'verified') {
                         childDocs.push({
-                            key: doc.name,
-                            name: doc.name,
-                            icon: doc.icon || 'description',
+                            key: docName,
+                            name: docName,
+                            icon: 'description',
                             status: 'verified'
                         });
                     }
