@@ -83,11 +83,11 @@
     </div>
     <div class="flex flex-col items-center flex-grow p-4">
       <div class="flex flex-col items-center">
-        <img alt="Ali's avatar" class="h-[100px] w-[100px] rounded-full object-cover border-2 border-primary shadow-lg"
+        <img alt="User avatar" class="h-[100px] w-[100px] rounded-full object-cover border-2 border-primary shadow-lg"
           src="https://lh3.googleusercontent.com/aida-public/AB6AXuCsYcXFkFsFledf_qaRhclLFxukFFj7_RpSh9rCzy78mBo-x0GF7vKE_S91r-iJBE-H4ycYLv-s2-9Vd6p0huSFXTg-ZLbFHKzINUXDEDGq_OVHbTPMzOs96CZ7hMZnjsfA2bV37BrgOQxMb979KFt1kIb63ZoAJXZtE9VuJbAfDQ36MemKQbLx8DBjF5-mavhrhE7v7cyC2WNBEce6mmCCGVV7nOEznLYlcQIWdUOiqO4k_o1-JM8O8q7PhwPwc9EvnCu94vVXQss" />
         <div class="mt-6 text-center">
-          <p class="text-xl font-bold text-gray-900 dark:text-white">Ali</p>
-          <p class="text-sm text-gray-500 dark:text-gray-400">
+          <p id="userName" class="text-xl font-bold text-gray-900 dark:text-white">Ali</p>
+          <p id="userIC" class="text-sm text-gray-500 dark:text-gray-400">
             ******-**-1234
           </p>
         </div>
@@ -125,8 +125,25 @@
             </button>
           </div>
 
-          <!-- Container for Custom Documents - Now at the top -->
-          <div id="customDocsContainer"></div>
+          <!-- IC Card (MyKid) -->
+          <div id="icDocRow"
+            class="flex items-center justify-between border-b border-gray-100 dark:border-gray-700 pb-3">
+            <div class="flex items-center gap-3">
+              <div
+                class="w-10 h-10 rounded-full bg-indigo-50 dark:bg-indigo-900/20 flex items-center justify-center text-indigo-500">
+                <span class="material-symbols-outlined notranslate !text-xl">badge</span>
+              </div>
+              <div>
+                <p id="icTitle" class="text-sm font-semibold text-gray-900 dark:text-white">Identity Card (IC)</p>
+                <p class="text-xs text-gray-400 font-medium" id="icStatus">Not Uploaded</p>
+              </div>
+            </div>
+            <button id="icBtn"
+              class="bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors p-2 rounded-lg text-xs font-bold"
+              onclick="window.location.href='scan_document.html?type=ic'">
+              <span id="icBtnText">Scan</span>
+            </button>
+          </div>
 
           <!-- Birth Certificate -->
           <div
@@ -159,7 +176,7 @@
               </div>
               <div>
                 <p id="spmCertTitle" class="text-sm font-semibold text-gray-900 dark:text-white">SPM Certificate</p>
-                <p class="text-xs text-orange-500 font-medium" id="spmStatus">Required</p>
+                <p class="text-xs text-gray-400 font-medium" id="spmStatus">Optional</p>
               </div>
             </div>
             <button id="spmBtn"
@@ -178,7 +195,7 @@
               </div>
               <div>
                 <p id="coqCertTitle" class="text-sm font-semibold text-gray-900 dark:text-white">Co-Curriculum</p>
-                <p class="text-xs text-orange-500 font-medium" id="coqStatus">Required</p>
+                <p class="text-xs text-gray-400 font-medium" id="coqStatus">Optional</p>
               </div>
             </div>
             <button id="coqBtn"
@@ -187,6 +204,9 @@
               <span id="coqBtnText">Scan</span>
             </button>
           </div>
+
+          <!-- Container for Custom Documents - Added at the bottom -->
+          <div id="customDocsContainer"></div>
         </div>
         <!-- Settings Section -->
         <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm overflow-hidden">
@@ -274,6 +294,17 @@
     document.addEventListener('DOMContentLoaded', () => {
       // No manual reset needed - sessionStorage handles it automatically on tab close
 
+      // Load user profile from registration
+      const profile = JSON.parse(sessionStorage.getItem('junior_profile') || '{}');
+      if (profile.name) {
+        document.getElementById('userName').textContent = profile.name;
+      }
+      if (profile.ic) {
+        // Mask the IC for display
+        const maskedIC = profile.ic.substring(0, 6) + '-**-' + profile.ic.slice(-4);
+        document.getElementById('userIC').textContent = maskedIC;
+      }
+
       // Check localStorage first (persistent across sessions), then sessionStorage
       let guardianStatus = localStorage.getItem('guardian_status') || sessionStorage.getItem('guardian_status');
 
@@ -291,6 +322,12 @@
       } else if (guardianStatus === 'verified') {
         const statusText = document.getElementById('guardianStatusText');
         statusText.innerHTML = `<span class="text-green-500 font-medium flex items-center gap-1"><span class="material-symbols-outlined notranslate !text-sm">verified</span> Linked</span>`;
+      }
+
+      // Check IC Status (from registration)
+      const icStatus = sessionStorage.getItem('ic_status');
+      if (icStatus === 'verified') {
+        updateDocStatus('ic', 'Verified', 'text-green-500', true);
       }
 
       // Check SPM Status
@@ -320,7 +357,8 @@
         const keyMap = {
           'birthCert': 'birth',
           'spm': 'spm',
-          'coq': 'coq'
+          'coq': 'coq',
+          'ic': 'ic'
         };
         const storageKey = keyMap[type] || type;
 
@@ -366,7 +404,40 @@
 
       // === Add Document Modal Logic ===
       function addCustomDocument() {
-        // Open the modal instead of prompt
+        // Get list of already added documents
+        const list = JSON.parse(sessionStorage.getItem('custom_docs_list') || '[]');
+
+        // Document option mapping (name -> element ID)
+        const docOptions = {
+          'Car Licenses': 'docOption_CarLicenses',
+          'Passport Number': 'docOption_PassportNumber'
+        };
+
+        // Show/hide options based on what's already added
+        let visibleCount = 0;
+        Object.keys(docOptions).forEach(name => {
+          const optionEl = document.getElementById(docOptions[name]);
+          if (optionEl) {
+            if (list.includes(name)) {
+              optionEl.classList.add('hidden');
+            } else {
+              optionEl.classList.remove('hidden');
+              visibleCount++;
+            }
+          }
+        });
+
+        // Show "all added" message if no options left
+        const noMoreMsg = document.getElementById('noMoreDocsMsg');
+        if (noMoreMsg) {
+          if (visibleCount === 0) {
+            noMoreMsg.classList.remove('hidden');
+          } else {
+            noMoreMsg.classList.add('hidden');
+          }
+        }
+
+        // Open the modal
         const modal = document.getElementById('addDocModal');
         modal.classList.remove('hidden');
         // Animation entry
@@ -568,7 +639,7 @@
       <div class="p-4 space-y-3">
         <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">Select a document type to add:</p>
 
-        <button onclick="selectDocumentType('Car Licenses')"
+        <button id="docOption_CarLicenses" onclick="selectDocumentType('Car Licenses')"
           class="w-full flex items-center gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors text-left group">
           <div
             class="w-10 h-10 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center text-blue-500 group-hover:bg-blue-100">
@@ -577,7 +648,7 @@
           <span class="font-semibold text-gray-700 dark:text-gray-200">Car Licenses</span>
         </button>
 
-        <button onclick="selectDocumentType('Passport Number')"
+        <button id="docOption_PassportNumber" onclick="selectDocumentType('Passport Number')"
           class="w-full flex items-center gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors text-left group">
           <div
             class="w-10 h-10 rounded-full bg-red-50 dark:bg-red-900/20 flex items-center justify-center text-red-500 group-hover:bg-red-100">
@@ -585,6 +656,12 @@
           </div>
           <span class="font-semibold text-gray-700 dark:text-gray-200">Passport Number</span>
         </button>
+
+        <!-- No more documents available message -->
+        <p id="noMoreDocsMsg" class="hidden text-center text-gray-500 dark:text-gray-400 py-4">
+          <span class="material-symbols-outlined notranslate text-3xl text-gray-300 block mb-2">check_circle</span>
+          All documents have been added.
+        </p>
       </div>
     </div>
   </div>

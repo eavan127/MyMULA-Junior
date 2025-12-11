@@ -1,4 +1,30 @@
 {
+    "government_data": {
+        "children": [
+            {
+                "name": "Ali bin Abu",
+                "ic": "071215-14-1234",
+                "dob": "15 DEC 2007",
+                "birth_place": "Hospital Kuala Lumpur",
+                "birth_reg_no": "BC-2007-54321",
+                "guardian_ic": "850612-10-5234",
+                "address": "No 45, Taman Merdeka, 43000 Kajang, Selangor"
+            }
+        ],
+        "adults": [
+            {
+                "name": "Ahmad bin Abdullah",
+                "ic": "850612-10-5234",
+                "dob": "12 JUN 1985",
+                "address": "No 45, Taman Merdeka, 43000 Kajang, Selangor",
+                "children_ic": [
+                    "071215-14-1234"
+                ],
+                "spouse": "Sarah binti Ahmad",
+                "marital_status": "Married"
+            }
+        ]
+    },
     "user": {
         "name": "Ali",
         "id": "******-**-1234",
@@ -23,8 +49,8 @@
             "name": "SPM Certificate",
             "icon": "school",
             "iconColor": "text-purple-500 bg-purple-50 dark:bg-purple-900/20",
-            "status": "Required",
-            "statusColor": "text-orange-500",
+            "status": "Optional",
+            "statusColor": "text-gray-400",
             "isCustom": false
         },
         {
@@ -32,8 +58,8 @@
             "name": "Co-Curriculum",
             "icon": "sports_soccer",
             "iconColor": "text-orange-500 bg-orange-50 dark:bg-orange-900/20",
-            "status": "Required",
-            "statusColor": "text-orange-500",
+            "status": "Optional",
+            "statusColor": "text-gray-400",
             "isCustom": false
         }
     ]

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>MyMULA - Adult Registration</title>
+    <title>MyMULA Junior - Registration</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700;900&amp;display=swap"
         rel="stylesheet" />
@@ -17,7 +17,7 @@
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#0d7ff2",
+                        "primary": "#0054A6",
                         "accent": "#4CA9FF",
                         "background-light": "#F7F9FC",
                         "background-dark": "#0f1923",
@@ -53,19 +53,6 @@
             transition: transform 0.1s ease-in-out;
         }
 
-        /* Signature Pad Styles */
-        .signature-pad {
-            border: 2px dashed #cbd5e1;
-            border-radius: 12px;
-            background: #f8fafc;
-            cursor: crosshair;
-            touch-action: none;
-        }
-
-        .signature-pad:hover {
-            border-color: #0d7ff2;
-        }
-
         .document-card {
             transition: all 0.2s ease;
         }
@@ -80,20 +67,24 @@
             background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
         }
 
-        .status-badge {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-
-            0%,
-            100% {
+        @keyframes scan {
+            0% {
+                top: 0;
                 opacity: 1;
             }
 
             50% {
-                opacity: 0.7;
+                opacity: 0.5;
             }
+
+            100% {
+                top: calc(100% - 4px);
+                opacity: 1;
+            }
+        }
+
+        .animate-scan {
+            animation: scan 2s ease-in-out infinite;
         }
     </style>
 </head>
@@ -109,11 +100,11 @@
                 <span class="material-symbols-outlined notranslate text-[#333] dark:text-white">arrow_back</span>
             </button>
             <div class="flex-1">
-                <h1 class="text-xl font-bold text-[#111418] dark:text-white">MyMULA Registration</h1>
+                <h1 class="text-xl font-bold text-[#111418] dark:text-white">MyMULA Junior Registration</h1>
                 <p class="text-sm text-[#60758a] dark:text-gray-400">Complete your identity verification</p>
             </div>
             <div class="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                <span class="material-symbols-outlined notranslate text-primary">shield</span>
+                <span class="material-symbols-outlined notranslate text-primary">school</span>
             </div>
         </header>
 
@@ -121,7 +112,7 @@
         <div class="px-4 py-3 bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
             <div class="flex items-center justify-between mb-2">
                 <span class="text-sm font-medium text-[#333] dark:text-white">Verification Progress</span>
-                <span id="progressText" class="text-sm font-bold text-primary">0/6 Documents</span>
+                <span id="progressText" class="text-sm font-bold text-primary">0/2 Required</span>
             </div>
             <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
                 <div id="progressBar"
@@ -134,13 +125,13 @@
         <main class="flex-1 px-4 py-4 overflow-y-auto">
             <div class="flex flex-col gap-4">
 
-                <!-- Section: Document Scanning -->
+                <!-- Section: Required Documents -->
                 <div class="mb-2">
                     <h2 class="text-lg font-bold text-[#333] dark:text-white mb-1">📄 Required Documents</h2>
                     <p class="text-sm text-[#60758a] dark:text-gray-400">Tap each card to scan your documents</p>
                 </div>
 
-                <!-- 1. IC Card -->
+                <!-- 1. IC Card (MyKid) -->
                 <div id="icCard"
                     class="document-card flex items-center gap-4 rounded-xl bg-white dark:bg-gray-800 p-4 shadow-md cursor-pointer border-2 border-transparent"
                     onclick="scanDocument('ic')">
@@ -150,14 +141,13 @@
                             class="material-symbols-outlined notranslate text-3xl text-blue-600 dark:text-blue-400">badge</span>
                     </div>
                     <div class="flex-1">
-                        <p class="text-[#101418] dark:text-white text-base font-bold">Identity Card (IC / MyKad)</p>
+                        <p class="text-[#101418] dark:text-white text-base font-bold">Identity Card (MyKid / IC)</p>
                         <p class="text-[#5e758d] dark:text-gray-400 text-sm">Front and back of your IC</p>
                         <div id="icStatus" class="mt-1 hidden">
                             <span id="icStatusBadge"
                                 class="inline-flex items-center gap-1 text-xs font-medium text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">
                                 <span class="material-symbols-outlined notranslate text-sm animate-spin">sync</span>
-                                Awaiting
-                                Verification
+                                Awaiting Verification
                             </span>
                         </div>
                     </div>
@@ -181,8 +171,7 @@
                             <span id="birthStatusBadge"
                                 class="inline-flex items-center gap-1 text-xs font-medium text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">
                                 <span class="material-symbols-outlined notranslate text-sm animate-spin">sync</span>
-                                Awaiting
-                                Verification
+                                Awaiting Verification
                             </span>
                         </div>
                     </div>
@@ -190,24 +179,30 @@
                         class="material-symbols-outlined notranslate text-[#5e758d] dark:text-gray-400">photo_camera</span>
                 </div>
 
-                <!-- 3. Payslip -->
-                <div id="payslipCard"
+                <!-- Section: Optional Documents -->
+                <div class="mt-4 mb-2">
+                    <h2 class="text-lg font-bold text-[#333] dark:text-white mb-1">📋 Optional Documents</h2>
+                    <p class="text-sm text-[#60758a] dark:text-gray-400">Add these for enhanced profile (can be added
+                        later)</p>
+                </div>
+
+                <!-- 3. SPM Certificate (Optional) -->
+                <div id="spmCard"
                     class="document-card flex items-center gap-4 rounded-xl bg-white dark:bg-gray-800 p-4 shadow-md cursor-pointer border-2 border-transparent"
-                    onclick="scanDocument('payslip')">
+                    onclick="scanDocument('spm')">
                     <div
                         class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-green-100 dark:bg-green-900/30">
                         <span
-                            class="material-symbols-outlined notranslate text-3xl text-green-600 dark:text-green-400">payments</span>
+                            class="material-symbols-outlined notranslate text-3xl text-green-600 dark:text-green-400">school</span>
                     </div>
                     <div class="flex-1">
-                        <p class="text-[#101418] dark:text-white text-base font-bold">Payslip / Income Statement</p>
-                        <p class="text-[#5e758d] dark:text-gray-400 text-sm">Latest 3 months payslip</p>
-                        <div id="payslipStatus" class="mt-1 hidden">
-                            <span id="payslipStatusBadge"
+                        <p class="text-[#101418] dark:text-white text-base font-bold">SPM Certificate</p>
+                        <p class="text-[#5e758d] dark:text-gray-400 text-sm">Academic qualification (Optional)</p>
+                        <div id="spmStatus" class="mt-1 hidden">
+                            <span id="spmStatusBadge"
                                 class="inline-flex items-center gap-1 text-xs font-medium text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">
                                 <span class="material-symbols-outlined notranslate text-sm animate-spin">sync</span>
-                                Awaiting
-                                Verification
+                                Awaiting Verification
                             </span>
                         </div>
                     </div>
@@ -215,86 +210,28 @@
                         class="material-symbols-outlined notranslate text-[#5e758d] dark:text-gray-400">photo_camera</span>
                 </div>
 
-                <!-- 4. Income Tax -->
-                <div id="taxCard"
+                <!-- 4. Co-Curriculum (Optional) -->
+                <div id="coqCard"
                     class="document-card flex items-center gap-4 rounded-xl bg-white dark:bg-gray-800 p-4 shadow-md cursor-pointer border-2 border-transparent"
-                    onclick="scanDocument('tax')">
+                    onclick="scanDocument('coq')">
                     <div
                         class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-orange-100 dark:bg-orange-900/30">
                         <span
-                            class="material-symbols-outlined notranslate text-3xl text-orange-600 dark:text-orange-400">receipt_long</span>
+                            class="material-symbols-outlined notranslate text-3xl text-orange-600 dark:text-orange-400">sports_soccer</span>
                     </div>
                     <div class="flex-1">
-                        <p class="text-[#101418] dark:text-white text-base font-bold">Income Tax Statement (LHDN)</p>
-                        <p class="text-[#5e758d] dark:text-gray-400 text-sm">EA Form or tax assessment</p>
-                        <div id="taxStatus" class="mt-1 hidden">
-                            <span id="taxStatusBadge"
+                        <p class="text-[#101418] dark:text-white text-base font-bold">Co-Curriculum Certificate</p>
+                        <p class="text-[#5e758d] dark:text-gray-400 text-sm">Extracurricular activities (Optional)</p>
+                        <div id="coqStatus" class="mt-1 hidden">
+                            <span id="coqStatusBadge"
                                 class="inline-flex items-center gap-1 text-xs font-medium text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">
                                 <span class="material-symbols-outlined notranslate text-sm animate-spin">sync</span>
-                                Awaiting
-                                Verification
+                                Awaiting Verification
                             </span>
                         </div>
                     </div>
                     <span
                         class="material-symbols-outlined notranslate text-[#5e758d] dark:text-gray-400">photo_camera</span>
-                </div>
-
-                <!-- 5. Family Status -->
-                <div id="familyCard"
-                    class="document-card flex items-center gap-4 rounded-xl bg-white dark:bg-gray-800 p-4 shadow-md cursor-pointer border-2 border-transparent"
-                    onclick="scanDocument('family')">
-                    <div
-                        class="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-pink-100 dark:bg-pink-900/30">
-                        <span
-                            class="material-symbols-outlined notranslate text-3xl text-pink-600 dark:text-pink-400">family_restroom</span>
-                    </div>
-                    <div class="flex-1">
-                        <p class="text-[#101418] dark:text-white text-base font-bold">Family Status Document</p>
-                        <p class="text-[#5e758d] dark:text-gray-400 text-sm">Marriage cert / Single declaration</p>
-                        <div id="familyStatus" class="mt-1 hidden">
-                            <span id="familyStatusBadge"
-                                class="inline-flex items-center gap-1 text-xs font-medium text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full">
-                                <span class="material-symbols-outlined notranslate text-sm animate-spin">sync</span>
-                                Awaiting
-                                Verification
-                            </span>
-                        </div>
-                    </div>
-                    <span
-                        class="material-symbols-outlined notranslate text-[#5e758d] dark:text-gray-400">photo_camera</span>
-                </div>
-
-                <!-- Section: Signature -->
-                <div class="mt-4 mb-2">
-                    <h2 class="text-lg font-bold text-[#333] dark:text-white mb-1">✍️ Digital Signature</h2>
-                    <p class="text-sm text-[#60758a] dark:text-gray-400">Draw your signature in the box below</p>
-                </div>
-
-                <!-- 6. Signature Pad -->
-                <div id="signatureSection"
-                    class="rounded-xl bg-white dark:bg-gray-800 p-4 shadow-md border-2 border-transparent">
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="flex items-center gap-2">
-                            <div
-                                class="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100 dark:bg-indigo-900/30">
-                                <span
-                                    class="material-symbols-outlined notranslate text-2xl text-indigo-600 dark:text-indigo-400">draw</span>
-                            </div>
-                            <div>
-                                <p class="text-[#101418] dark:text-white text-base font-bold">Your Signature</p>
-                                <p id="signatureLabel" class="text-[#5e758d] dark:text-gray-400 text-xs">Not signed yet
-                                </p>
-                            </div>
-                        </div>
-                        <button onclick="clearSignature()"
-                            class="text-sm text-primary font-medium hover:underline flex items-center gap-1">
-                            <span class="material-symbols-outlined notranslate text-lg">refresh</span> Clear
-                        </button>
-                    </div>
-                    <canvas id="signaturePad" class="signature-pad w-full h-40"></canvas>
-                    <p class="text-xs text-center text-[#60758a] dark:text-gray-400 mt-2">Use your finger or stylus to
-                        sign above</p>
                 </div>
 
             </div>
@@ -321,7 +258,7 @@
             <button onclick="closeScanModal()" class="p-2 rounded-full bg-white/10 text-white">
                 <span class="material-symbols-outlined notranslate">close</span>
             </button>
-            <h3 id="modalTitle" class="text-white font-bold text-lg">Scan IC / MyKad</h3>
+            <h3 id="modalTitle" class="text-white font-bold text-lg">Scan Document</h3>
             <div class="w-10"></div>
         </div>
 
@@ -385,7 +322,7 @@
                     <div class="flex items-center gap-2">
                         <span id="step2Icon"
                             class="material-symbols-outlined notranslate text-gray-500 text-lg">radio_button_unchecked</span>
-                        <span id="step2Text" class="text-gray-400 text-sm">Analyzing document details...</span>
+                        <span id="step2Text" class="text-gray-400 text-sm">Verifying with government database...</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <span id="step3Icon"
@@ -397,7 +334,7 @@
 
             <!-- Extracted Data Preview -->
             <div id="extractedData" class="hidden bg-white/10 rounded-xl p-4 mb-4">
-                <p class="text-primary text-sm font-bold mb-2">✓ Data Extracted Successfully</p>
+                <p class="text-primary text-sm font-bold mb-2">✓ Verified with Government Database</p>
                 <div id="dataFields" class="space-y-1 text-sm">
                     <!-- Will be populated by JS -->
                 </div>
@@ -412,29 +349,6 @@
         </div>
     </div>
 
-    <style>
-        @keyframes scan {
-            0% {
-                top: 0;
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.5;
-            }
-
-            100% {
-                top: calc(100% - 4px);
-                opacity: 1;
-            }
-        }
-
-        .animate-scan {
-            animation: scan 2s ease-in-out infinite;
-        }
-    </style>
-
-
     <!-- Success Modal -->
     <div id="successModal"
         class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
@@ -445,174 +359,72 @@
                 </div>
                 <h3 class="text-2xl font-bold text-[#333] dark:text-white mb-2">Registration Complete!</h3>
                 <p class="text-[#60758a] dark:text-gray-400 text-sm mb-6">Your identity has been verified successfully.
-                    Welcome to MyMULA!</p>
-                <button onclick="window.location.href='adult_home.html'"
+                    Welcome to MyMULA Junior!</p>
+                <button onclick="window.location.href='mainpage_home.html'"
                     class="w-full rounded-xl bg-gradient-to-r from-green-500 to-green-600 py-3 font-bold text-white shadow-lg">
-                    Go to Dashboard
+                    Go to Home
                 </button>
             </div>
         </div>
     </div>
 
     <script>
-        // Track document states: null=not scanned, 'scanning'=in progress, 'awaiting'=awaiting verification, 'verified'=done
+        // Government mock data - will be loaded from JSON
+        let governmentData = null;
+
+        // Load government data
+        fetch('mock_profile_data.json')
+            .then(res => res.json())
+            .then(data => {
+                governmentData = data.government_data;
+                console.log('Government data loaded:', governmentData);
+            })
+            .catch(err => {
+                console.error('Failed to load government data:', err);
+                // Fallback data
+                governmentData = {
+                    children: [{
+                        name: "Ali bin Abu",
+                        ic: "071215-14-1234",
+                        dob: "15 DEC 2007",
+                        birth_place: "Hospital Kuala Lumpur",
+                        birth_reg_no: "BC-2007-54321",
+                        guardian_ic: "850612-10-5234"
+                    }]
+                };
+            });
+
+        // Track document states
         const docStates = {
             ic: null,
             birth: null,
-            payslip: null,
-            tax: null,
-            family: null,
-            signature: null
+            spm: null,
+            coq: null
         };
 
-        // Signature pad setup
-        const canvas = document.getElementById('signaturePad');
-        const ctx = canvas.getContext('2d');
-        let isDrawing = false;
-        let hasSignature = false;
+        // Required documents
+        const requiredDocs = ['ic', 'birth'];
 
-        // Set canvas size
-        function resizeCanvas() {
-            const rect = canvas.getBoundingClientRect();
-            canvas.width = rect.width;
-            canvas.height = rect.height;
-            ctx.strokeStyle = '#1e40af';
-            ctx.lineWidth = 3;
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-        }
-        resizeCanvas();
-        window.addEventListener('resize', resizeCanvas);
-
-        // Drawing functions
-        function getPos(e) {
-            const rect = canvas.getBoundingClientRect();
-            if (e.touches) {
-                return {
-                    x: e.touches[0].clientX - rect.left,
-                    y: e.touches[0].clientY - rect.top
-                };
-            }
-            return {
-                x: e.clientX - rect.left,
-                y: e.clientY - rect.top
-            };
-        }
-
-        function startDrawing(e) {
-            isDrawing = true;
-            const pos = getPos(e);
-            ctx.beginPath();
-            ctx.moveTo(pos.x, pos.y);
-            e.preventDefault();
-        }
-
-        function draw(e) {
-            if (!isDrawing) return;
-            const pos = getPos(e);
-            ctx.lineTo(pos.x, pos.y);
-            ctx.stroke();
-            hasSignature = true;
-            e.preventDefault();
-        }
-
-        function stopDrawing() {
-            if (isDrawing && hasSignature) {
-                docStates.signature = 'awaiting';
-                updateDocumentUI('signature', 'awaiting');
-                // Auto-verify signature after 5 seconds
-                setTimeout(() => {
-                    docStates.signature = 'verified';
-                    updateDocumentUI('signature', 'verified');
-                    updateProgress();
-                }, 5000);
-                updateProgress();
-            }
-            isDrawing = false;
-        }
-
-        canvas.addEventListener('mousedown', startDrawing);
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', stopDrawing);
-        canvas.addEventListener('mouseout', stopDrawing);
-        canvas.addEventListener('touchstart', startDrawing);
-        canvas.addEventListener('touchmove', draw);
-        canvas.addEventListener('touchend', stopDrawing);
-
-        function clearSignature() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            hasSignature = false;
-            docStates.signature = null;
-            document.getElementById('signatureLabel').textContent = 'Not signed yet';
-            document.getElementById('signatureLabel').classList.add('text-[#5e758d]');
-            document.getElementById('signatureLabel').classList.remove('text-green-600', 'text-orange-500');
-            document.getElementById('signatureSection').classList.remove('border-green-500', 'border-orange-400');
-            updateProgress();
-        }
-
-        // Update document UI based on state
-        function updateDocumentUI(docType, state) {
-            if (docType === 'signature') {
-                const label = document.getElementById('signatureLabel');
-                const section = document.getElementById('signatureSection');
-                if (state === 'awaiting') {
-                    label.innerHTML = '<span class="animate-pulse">⏳ Awaiting Verification...</span>';
-                    label.classList.remove('text-[#5e758d]', 'text-green-600');
-                    label.classList.add('text-orange-500');
-                    section.classList.add('border-orange-400');
-                } else if (state === 'verified') {
-                    label.innerHTML = '✓ Verified by Government';
-                    label.classList.remove('text-[#5e758d]', 'text-orange-500');
-                    label.classList.add('text-green-600');
-                    section.classList.remove('border-orange-400');
-                    section.classList.add('border-green-500');
-                }
-                return;
-            }
-
-            const statusEl = document.getElementById(docType + 'Status');
-            const badgeEl = document.getElementById(docType + 'StatusBadge');
-            const cardEl = document.getElementById(docType + 'Card');
-
-            if (!statusEl) return;
-            statusEl.classList.remove('hidden');
-
-            if (state === 'awaiting') {
-                badgeEl.className = 'inline-flex items-center gap-1 text-xs font-medium text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full';
-                badgeEl.innerHTML = '<span class="material-symbols-outlined notranslate text-sm animate-spin">sync</span> Awaiting Verification';
-                cardEl.classList.add('border-orange-400');
-                cardEl.classList.remove('border-green-500', 'border-transparent');
-            } else if (state === 'verified') {
-                badgeEl.className = 'inline-flex items-center gap-1 text-xs font-medium text-green-600 bg-green-100 px-2 py-0.5 rounded-full';
-                badgeEl.innerHTML = '<span class="material-symbols-outlined notranslate text-sm">verified</span> Verified by Government';
-                cardEl.classList.remove('border-orange-400');
-                cardEl.classList.add('border-green-500', 'scanned');
-            }
-        }
-
-        // Document data for AI extraction simulation
+        // Document data extracted from scanning (simulated from government database)
         const docData = {
-            ic: { name: 'AHMAD BIN ABDULLAH', ic: '850612-10-5234', dob: '12 JUN 1985', address: 'NO 123, TAMAN SRI...' },
-            birth: { name: 'AHMAD BIN ABDULLAH', regNo: 'BC-2023-12345', dob: '12 JUN 1985', birthPlace: 'HOSPITAL KUALA LUMPUR' },
-            payslip: { employer: 'SYARIKAT ABC SDN BHD', month: 'NOVEMBER 2024', gross: 'RM 4,500.00', net: 'RM 3,850.00' },
-            tax: { year: '2023', taxNo: 'SG-12345678', income: 'RM 54,000.00', taxPaid: 'RM 2,430.00' },
-            family: { status: 'MARRIED', spouse: 'SARAH BINTI AHMAD', children: '2', regDate: '15 MAR 2010' }
+            ic: null,
+            birth: null,
+            spm: null,
+            coq: null
         };
 
         let currentDocType = null;
 
-        // Document scanning - opens camera scanner
         function scanDocument(docType) {
             if (docStates[docType]) return; // Already processing
 
             currentDocType = docType;
             const modal = document.getElementById('scanModal');
             const titles = {
-                ic: 'Scan IC / MyKad',
+                ic: 'Scan IC / MyKid',
                 birth: 'Scan Birth Certificate',
-                payslip: 'Scan Payslip',
-                tax: 'Scan Tax Statement',
-                family: 'Scan Family Document'
+                spm: 'Scan SPM Certificate',
+                coq: 'Scan Co-Curriculum Certificate'
             };
 
             document.getElementById('modalTitle').textContent = titles[docType];
@@ -643,7 +455,6 @@
             currentDocType = null;
         }
 
-        // Start capture with AI detection simulation
         function startCapture() {
             const captureBtn = document.getElementById('captureBtn');
             captureBtn.classList.add('hidden');
@@ -662,11 +473,11 @@
                 document.getElementById('step1Text').textContent = 'Document type detected ✓';
             }, 800);
 
-            // AI Detection Step 2 - Analyzing details
+            // AI Detection Step 2 - Verifying with government database
             setTimeout(() => {
                 document.getElementById('step2Icon').textContent = 'check_circle';
                 document.getElementById('step2Icon').className = 'material-symbols-outlined text-green-500 text-lg';
-                document.getElementById('step2Text').textContent = 'Details analyzed ✓';
+                document.getElementById('step2Text').textContent = 'Verified with government database ✓';
             }, 1600);
 
             // AI Detection Step 3 - Extracting information
@@ -676,14 +487,53 @@
                 document.getElementById('step3Text').textContent = 'Information extracted ✓';
             }, 2400);
 
-            // Show extracted data
+            // Show extracted data from government database
             setTimeout(() => {
                 document.getElementById('aiProgress').classList.add('hidden');
                 document.getElementById('extractedData').classList.remove('hidden');
 
-                // Populate extracted data fields
-                const data = docData[currentDocType];
-                const fieldsHtml = Object.entries(data).map(([key, value]) =>
+                // Get data from government database
+                const childData = governmentData?.children?.[0] || {};
+                let extractedInfo = {};
+
+                switch (currentDocType) {
+                    case 'ic':
+                        extractedInfo = {
+                            name: childData.name || 'ALI BIN ABU',
+                            ic: childData.ic || '071215-14-1234',
+                            dob: childData.dob || '15 DEC 2007',
+                            address: childData.address || 'NO 45, TAMAN MERDEKA...'
+                        };
+                        break;
+                    case 'birth':
+                        extractedInfo = {
+                            name: childData.name || 'ALI BIN ABU',
+                            regNo: childData.birth_reg_no || 'BC-2007-54321',
+                            dob: childData.dob || '15 DEC 2007',
+                            birthPlace: childData.birth_place || 'HOSPITAL KUALA LUMPUR'
+                        };
+                        break;
+                    case 'spm':
+                        extractedInfo = {
+                            name: childData.name || 'ALI BIN ABU',
+                            year: '2024',
+                            school: 'SMK TAMAN MERDEKA',
+                            grade: '5A 3B 2C'
+                        };
+                        break;
+                    case 'coq':
+                        extractedInfo = {
+                            name: childData.name || 'ALI BIN ABU',
+                            activity: 'PENGAKAP / SCOUTS',
+                            level: 'STATE LEVEL',
+                            year: '2023'
+                        };
+                        break;
+                }
+
+                docData[currentDocType] = extractedInfo;
+
+                const fieldsHtml = Object.entries(extractedInfo).map(([key, value]) =>
                     `<div class="flex justify-between"><span class="text-gray-400">${key.toUpperCase()}:</span><span class="text-white font-medium">${value}</span></div>`
                 ).join('');
                 document.getElementById('dataFields').innerHTML = fieldsHtml;
@@ -691,42 +541,61 @@
 
             // Complete and close
             setTimeout(() => {
-                const docTypeToMark = currentDocType; // Save before closing
+                const docTypeToMark = currentDocType;
                 closeScanModal();
-                markAsScanned(docTypeToMark); // Use saved value
+                markAsScanned(docTypeToMark);
             }, 4000);
         }
 
         function markAsScanned(docType) {
-            // Set to awaiting verification
             docStates[docType] = 'awaiting';
             updateDocumentUI(docType, 'awaiting');
             updateProgress();
 
-            // Auto-verify after 5 seconds (simulating government verification)
+            // Auto-verify after 3 seconds (simulating government verification)
             setTimeout(() => {
                 docStates[docType] = 'verified';
                 updateDocumentUI(docType, 'verified');
                 updateProgress();
-            }, 5000);
+            }, 3000);
+        }
+
+        function updateDocumentUI(docType, state) {
+            const statusEl = document.getElementById(docType + 'Status');
+            const badgeEl = document.getElementById(docType + 'StatusBadge');
+            const cardEl = document.getElementById(docType + 'Card');
+
+            if (!statusEl) return;
+            statusEl.classList.remove('hidden');
+
+            if (state === 'awaiting') {
+                badgeEl.className = 'inline-flex items-center gap-1 text-xs font-medium text-orange-600 bg-orange-100 px-2 py-0.5 rounded-full';
+                badgeEl.innerHTML = '<span class="material-symbols-outlined notranslate text-sm animate-spin">sync</span> Verifying with Government...';
+                cardEl.classList.add('border-orange-400');
+                cardEl.classList.remove('border-green-500', 'border-transparent');
+            } else if (state === 'verified') {
+                badgeEl.className = 'inline-flex items-center gap-1 text-xs font-medium text-green-600 bg-green-100 px-2 py-0.5 rounded-full';
+                badgeEl.innerHTML = '<span class="material-symbols-outlined notranslate text-sm">verified</span> Verified by Government';
+                cardEl.classList.remove('border-orange-400');
+                cardEl.classList.add('border-green-500', 'scanned');
+            }
         }
 
         function updateProgress() {
-            const total = Object.keys(docStates).length;
-            const verified = Object.values(docStates).filter(v => v === 'verified').length;
-            const awaiting = Object.values(docStates).filter(v => v === 'awaiting').length;
-            const percentage = (verified / total) * 100;
+            const requiredVerified = requiredDocs.filter(doc => docStates[doc] === 'verified').length;
+            const requiredAwaiting = requiredDocs.filter(doc => docStates[doc] === 'awaiting').length;
+            const percentage = (requiredVerified / requiredDocs.length) * 100;
 
             document.getElementById('progressBar').style.width = percentage + '%';
-            document.getElementById('progressText').textContent = verified + '/' + total + ' Verified';
+            document.getElementById('progressText').textContent = requiredVerified + '/' + requiredDocs.length + ' Required';
 
-            // Enable submit button when all docs are verified
+            // Enable submit button when all required docs are verified
             const submitBtn = document.getElementById('submitBtn');
-            if (verified === total) {
+            if (requiredVerified === requiredDocs.length) {
                 submitBtn.disabled = false;
                 submitBtn.classList.add('animate-pulse');
                 submitBtn.innerHTML = '<span class="material-symbols-outlined notranslate">verified</span> Complete Registration';
-            } else if (awaiting > 0) {
+            } else if (requiredAwaiting > 0) {
                 submitBtn.disabled = true;
                 submitBtn.classList.remove('animate-pulse');
                 submitBtn.innerHTML = '<span class="material-symbols-outlined notranslate animate-spin">sync</span> Verifying with Government...';
@@ -738,42 +607,46 @@
         }
 
         function submitRegistration() {
-            const allVerified = Object.values(docStates).every(v => v === 'verified');
-            if (!allVerified) {
-                alert('Please wait for all documents to be verified.');
+            const requiredVerified = requiredDocs.filter(doc => docStates[doc] === 'verified').length;
+            if (requiredVerified < requiredDocs.length) {
+                alert('Please verify all required documents first.');
                 return;
             }
 
-            // Use expected adult IC from government data
-            const adultIC = '850612-10-5234';
+            // Save registration status
+            sessionStorage.setItem('junior_registered', 'true');
 
-            // Save registration status (sessionStorage clears when browser closes)
-            sessionStorage.setItem('adult_registered', 'true');
-            sessionStorage.setItem('adult_name', 'Ahmad');
-            sessionStorage.setItem('adult_ic', adultIC);
-            sessionStorage.setItem('adult_documents', JSON.stringify(docStates));
+            // Save user profile from scanned data
+            const userProfile = {
+                name: docData.ic?.name || 'Ali bin Abu',
+                ic: docData.ic?.ic || '071215-14-1234',
+                dob: docData.ic?.dob || '15 DEC 2007',
+                address: docData.ic?.address || 'No 45, Taman Merdeka, 43000 Kajang, Selangor'
+            };
+            sessionStorage.setItem('junior_profile', JSON.stringify(userProfile));
 
-            // Save signature image to LOCAL STORAGE for persistence across different apps
-            const canvas = document.getElementById('signaturePad');
-            if (hasSignature) {
-                const signatureImage = canvas.toDataURL('image/png');
-                localStorage.setItem('guardian_signature_image', signatureImage);
-            }
-
-            // Check if there's a pending guardian IC that matches the registered adult's IC
-            const pendingGuardianIC = sessionStorage.getItem('pending_guardian_ic');
-
-            if (pendingGuardianIC) {
-                // If the pending guardian IC matches the adult's IC (or for demo purposes, always verify)
-                if (pendingGuardianIC === adultIC || true) { // Demo: always verify
-                    sessionStorage.setItem('guardian_status', 'verified');
-                    localStorage.setItem('guardian_status', 'verified');
-                    sessionStorage.removeItem('pending_guardian_ic');
-                    // Set flag for notification on junior app login
-                    localStorage.setItem('guardian_just_verified', 'true');
+            // Save scanned documents with data
+            const scannedDocs = {};
+            Object.keys(docStates).forEach(docType => {
+                if (docStates[docType] === 'verified') {
+                    scannedDocs[docType] = {
+                        status: 'verified',
+                        data: docData[docType]
+                    };
+                    // Also save individual status for profile page
+                    sessionStorage.setItem(`${docType}_status`, 'verified');
+                    sessionStorage.setItem(`${docType}_data`, JSON.stringify(docData[docType]));
                 }
+            });
+            sessionStorage.setItem('junior_documents', JSON.stringify(scannedDocs));
+
+            // Save guardian IC from government data for linking
+            const childData = governmentData?.children?.[0];
+            if (childData?.guardian_ic) {
+                sessionStorage.setItem('expected_guardian_ic', childData.guardian_ic);
             }
 
+            // Show success modal
             document.getElementById('successModal').classList.remove('hidden');
             document.getElementById('successModal').classList.add('flex');
         }

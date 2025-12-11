@@ -129,7 +129,7 @@
       </div>
 
       <!-- CARD 3: DENTAL (Initially Hidden) -->
-      <div id="dental-card" onclick="window.location.href='Dental_Progress_Tracker.html'"
+      <div id="dental-card" onclick="handleDentalCardClick()"
         class="hidden flex flex-col gap-4 rounded-xl bg-white dark:bg-black/20 p-4 shadow-sm cursor-pointer">
         <div class="flex items-center gap-4">
           <div
@@ -140,7 +140,8 @@
             <p class="text-[#1E1E1E] dark:text-white text-base font-medium leading-normal line-clamp-1">Dental Checkup &
               Procedure
             </p>
-            <p class="text-[#6F7A85] dark:text-white/70 text-sm font-normal leading-normal line-clamp-2">Consent for
+            <p id="dental-description"
+              class="text-[#6F7A85] dark:text-white/70 text-sm font-normal leading-normal line-clamp-2">Consent for
               dental treatment at clinic.</p>
           </div>
         </div>
@@ -243,34 +244,93 @@
       if (text) text.innerText = "Processing";
     }
 
-    // 3. Check Dental (NEW CODE)
-    const isDentalSubmitted = localStorage.getItem('dental_application_submitted');
-    const dentalStatus = sessionStorage.getItem('dental_application_status');
-    const timerStarted = sessionStorage.getItem('dental_timer_started');
+    // 3. Check Dental - Check child_requests for accurate status
+    function checkDentalStatus() {
+      const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+      const dentalRequest = requests.find(r => r.type === 'dental');
+      const isDentalSubmitted = localStorage.getItem('dental_application_submitted');
+      const dentalDraft = localStorage.getItem('draft_dental');
 
-    if (isDentalSubmitted === 'true') {
-      const dentalCard = document.getElementById('dental-card');
-      if (dentalCard) {
-        dentalCard.classList.remove('hidden');
+      // Show card if there's a dental request in progress or submitted
+      if (dentalRequest || isDentalSubmitted === 'true' || dentalDraft) {
+        const dentalCard = document.getElementById('dental-card');
+        if (dentalCard) {
+          dentalCard.classList.remove('hidden');
+          const msg = document.getElementById('empty-msg');
+          if (msg) msg.classList.add('hidden');
+        }
 
-        // Hide empty message
-        const msg = document.getElementById('empty-msg');
-        if (msg) msg.classList.add('hidden');
-      }
-
-      // Check if already approved
-      if (dentalStatus === 'approved') {
-        updateDentalToSuccess();
-      } else if (!timerStarted) {
-        // Only start timer if not already started
-        sessionStorage.setItem('dental_timer_started', 'true');
-        // Start 5-second approval simulation
-        setTimeout(() => {
-          sessionStorage.setItem('dental_application_status', 'approved');
+        // Update status based on request status
+        if (dentalRequest) {
+          if (dentalRequest.status === 'approved') {
+            updateDentalToApproved();
+          } else if (dentalRequest.status === 'rejected') {
+            updateDentalToRejected();
+          } else if (dentalRequest.status === 'pending') {
+            updateDentalToPending();
+          }
+        } else if (isDentalSubmitted === 'true') {
           updateDentalToSuccess();
-          showApprovalNotification();
-        }, 5000);
+        } else if (dentalDraft) {
+          updateDentalToDraft();
+        }
       }
+    }
+
+    function updateDentalToDraft() {
+      const badge = document.getElementById('dental-status-badge');
+      if (badge) badge.className = "inline-flex items-center justify-center self-start rounded-full bg-gray-100 dark:bg-gray-900/20 px-3 py-1.5 text-xs font-medium text-gray-600 dark:text-gray-400";
+
+      const dot = document.getElementById('dental-status-dot');
+      if (dot) dot.className = "mr-1.5 size-2 rounded-full bg-gray-400";
+
+      const text = document.getElementById('dental-status-text');
+      if (text) text.innerText = "Draft - Continue";
+
+      const desc = document.getElementById('dental-description');
+      if (desc) desc.innerText = "Continue where you left off";
+    }
+
+    function updateDentalToPending() {
+      const badge = document.getElementById('dental-status-badge');
+      if (badge) badge.className = "inline-flex items-center justify-center self-start rounded-full bg-[#FFC107]/20 px-3 py-1.5 text-xs font-medium text-[#B8860B] dark:text-[#FFD700]";
+
+      const dot = document.getElementById('dental-status-dot');
+      if (dot) dot.className = "mr-1.5 size-2 rounded-full bg-[#FFC107]";
+
+      const text = document.getElementById('dental-status-text');
+      if (text) text.innerText = "Awaiting Guardian";
+
+      const desc = document.getElementById('dental-description');
+      if (desc) desc.innerText = "Waiting for parent/guardian approval";
+    }
+
+    function updateDentalToApproved() {
+      const badge = document.getElementById('dental-status-badge');
+      if (badge) badge.className = "inline-flex items-center justify-center self-start rounded-full bg-green-100 dark:bg-green-900/20 px-3 py-1.5 text-xs font-medium text-green-600 dark:text-green-400";
+
+      const dot = document.getElementById('dental-status-dot');
+      if (dot) dot.className = "mr-1.5 size-2 rounded-full bg-green-500";
+
+      const text = document.getElementById('dental-status-text');
+      if (text) text.innerText = "Ready to Submit";
+
+      const desc = document.getElementById('dental-description');
+      if (desc) desc.innerText = "Guardian approved - Click to continue";
+    }
+
+    function updateDentalToRejected() {
+      const badge = document.getElementById('dental-status-badge');
+      if (badge) badge.className = "inline-flex items-center justify-center self-start rounded-full bg-red-100 dark:bg-red-900/20 px-3 py-1.5 text-xs font-medium text-red-600 dark:text-red-400";
+
+      const dot = document.getElementById('dental-status-dot');
+      if (dot) dot.className = "mr-1.5 size-2 rounded-full bg-red-500";
+
+      const text = document.getElementById('dental-status-text');
+      if (text) text.innerText = "Rejected";
+
+      const desc = document.getElementById('dental-description');
+      if (desc) desc.innerText = "Guardian rejected - Click to try again";
     }
 
     function updateDentalToSuccess() {
@@ -281,8 +341,88 @@
       if (dot) dot.className = "mr-1.5 size-2 rounded-full bg-[#10B981]";
 
       const text = document.getElementById('dental-status-text');
-      if (text) text.innerText = "Successful";
+      if (text) text.innerText = "Submitted";
+
+      const desc = document.getElementById('dental-description');
+      if (desc) desc.innerText = "Application submitted successfully";
     }
+
+    // Handle dental card click - route to appropriate page
+    function handleDentalCardClick() {
+      const isDentalSubmitted = localStorage.getItem('dental_application_submitted');
+      if (isDentalSubmitted === 'true') {
+        // Already submitted - go to progress tracker
+        window.location.href = 'Dental_Progress_Tracker.html';
+      } else {
+        // Not submitted - go to requirements page
+        window.location.href = 'Dental_Application_Requirements.html';
+      }
+    }
+
+    // Delete Application Function
+    function deleteApplication(type) {
+      if (!confirm('Are you sure you want to delete this application? This action cannot be undone.')) {
+        return;
+      }
+
+      // Remove from child_requests
+      const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+      const updatedRequests = requests.filter(r => r.type !== type);
+      sessionStorage.setItem('child_requests', JSON.stringify(updatedRequests));
+
+      // Clear related storage items
+      if (type === 'dental') {
+        localStorage.removeItem('dental_application_submitted');
+        localStorage.removeItem('draft_dental');
+        sessionStorage.removeItem('dental_guardian_approved');
+        sessionStorage.removeItem('dental_medical_history');
+        sessionStorage.removeItem('dental_application_status');
+        sessionStorage.removeItem('dental_timer_started');
+
+        // Hide the card
+        const card = document.getElementById('dental-card');
+        if (card) card.classList.add('hidden');
+      } else if (type === 'sme') {
+        localStorage.removeItem('sme_application_submitted');
+        localStorage.removeItem('draft_sme');
+        sessionStorage.removeItem('sme_guardian_approved');
+
+        const card = document.getElementById('sme-card');
+        if (card) card.classList.add('hidden');
+      } else if (type === 'scholarship') {
+        localStorage.removeItem('application_submitted');
+        sessionStorage.removeItem('guardian_approved');
+
+        const card = document.getElementById('pesp-card');
+        if (card) card.classList.add('hidden');
+      }
+
+      // Check if any cards are still visible
+      checkEmptyState();
+
+      alert('Application deleted successfully.');
+    }
+
+    function checkEmptyState() {
+      const pespCard = document.getElementById('pesp-card');
+      const smeCard = document.getElementById('sme-card');
+      const dentalCard = document.getElementById('dental-card');
+      const gamingCard = document.getElementById('gaming-card');
+      const emptyMsg = document.getElementById('empty-msg');
+
+      const anyVisible =
+        (pespCard && !pespCard.classList.contains('hidden')) ||
+        (smeCard && !smeCard.classList.contains('hidden')) ||
+        (dentalCard && !dentalCard.classList.contains('hidden')) ||
+        (gamingCard && !gamingCard.classList.contains('hidden'));
+
+      if (!anyVisible && emptyMsg) {
+        emptyMsg.classList.remove('hidden');
+      }
+    }
+
+    // Run dental check
+    checkDentalStatus();
 
     function showApprovalNotification() {
       const popup = document.getElementById('approval-popup');

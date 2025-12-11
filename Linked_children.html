@@ -121,60 +121,8 @@
                     <a href="#" class="text-primary text-sm font-semibold hover:underline">View All</a>
                 </div>
 
-                <div class="flex flex-col gap-3">
-                    <!-- Item 1: SME -->
-                    <div
-                        class="glass-card rounded-3xl p-4 shadow-sm border border-white/50 dark:border-gray-800 flex items-center gap-4">
-                        <div
-                            class="size-12 rounded-2xl bg-green-50 dark:bg-green-900/20 flex items-center justify-center shrink-0">
-                            <span class="material-symbols-outlined text-green-600">business_center</span>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="text-[#111418] dark:text-white font-semibold mb-1 truncate text-sm sm:text-base">
-                                SME Sole Proprietorship
-                            </h3>
-                            <p class="text-[#60758a] dark:text-gray-400 text-xs sm:text-sm">21 Oct 2023, 10:15 AM</p>
-                        </div>
-                        <div class="px-2.5 py-1 bg-orange-50 dark:bg-orange-900/20 rounded-full">
-                            <span class="text-orange-600 text-xs font-bold uppercase tracking-wide">Pending</span>
-                        </div>
-                    </div>
-
-                    <!-- Item 2: Dental -->
-                    <div
-                        class="glass-card rounded-3xl p-4 shadow-sm border border-white/50 dark:border-gray-800 flex items-center gap-4">
-                        <div
-                            class="size-12 rounded-2xl bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center shrink-0">
-                            <span class="material-symbols-outlined text-blue-600">dentistry</span>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="text-[#111418] dark:text-white font-semibold mb-1 truncate text-sm sm:text-base">
-                                Dental Checkup
-                            </h3>
-                            <p class="text-[#60758a] dark:text-gray-400 text-xs sm:text-sm">15 Oct 2023, 03:30 PM</p>
-                        </div>
-                        <div class="px-2.5 py-1 bg-green-50 dark:bg-green-900/20 rounded-full">
-                            <span class="text-green-600 text-xs font-bold uppercase tracking-wide">Approved</span>
-                        </div>
-                    </div>
-
-                    <!-- Item 3: Gaming -->
-                    <div
-                        class="glass-card rounded-3xl p-4 shadow-sm border border-white/50 dark:border-gray-800 flex items-center gap-4">
-                        <div
-                            class="size-12 rounded-2xl bg-purple-50 dark:bg-purple-900/20 flex items-center justify-center shrink-0">
-                            <span class="material-symbols-outlined text-purple-600">sports_esports</span>
-                        </div>
-                        <div class="flex-1 min-w-0">
-                            <h3 class="text-[#111418] dark:text-white font-semibold mb-1 truncate text-sm sm:text-base">
-                                Mobile Legends Purchase
-                            </h3>
-                            <p class="text-[#60758a] dark:text-gray-400 text-xs sm:text-sm">12 Oct 2023, 08:00 PM</p>
-                        </div>
-                        <div class="px-2.5 py-1 bg-red-50 dark:bg-red-900/20 rounded-full">
-                            <span class="text-red-600 text-xs font-bold uppercase tracking-wide">Rejected</span>
-                        </div>
-                    </div>
+                <div id="historyContainer" class="flex flex-col gap-3">
+                    <!-- Dynamic content will be loaded here -->
                 </div>
             </div>
         </div>
@@ -212,6 +160,77 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            loadHistory();
+        });
+
+        function loadHistory() {
+            const container = document.getElementById('historyContainer');
+            const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+
+            if (requests.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 text-gray-400 bg-white/50 dark:bg-gray-800/50 rounded-3xl border border-white/50 dark:border-gray-800">
+                        <span class="material-symbols-outlined text-4xl mb-2 text-gray-300">history</span>
+                        <p class="text-sm">No request history yet</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Sort by timestamp (newest first)
+            const sortedRequests = requests.sort((a, b) => {
+                const timeA = new Date(a.timestamp || 0).getTime();
+                const timeB = new Date(b.timestamp || 0).getTime();
+                return timeB - timeA;
+            });
+
+            container.innerHTML = sortedRequests.map(req => {
+                const icons = {
+                    scholarship: 'school',
+                    sme: 'business_center',
+                    dental: 'dentistry',
+                    transaction: 'sports_esports'
+                };
+                const colors = {
+                    scholarship: 'blue',
+                    sme: 'green',
+                    dental: 'purple',
+                    transaction: 'pink'
+                };
+                const statusColors = {
+                    pending: { bg: 'bg-orange-50 dark:bg-orange-900/20', text: 'text-orange-600' },
+                    approved: { bg: 'bg-green-50 dark:bg-green-900/20', text: 'text-green-600' },
+                    rejected: { bg: 'bg-red-50 dark:bg-red-900/20', text: 'text-red-600' }
+                };
+
+                const icon = icons[req.type] || 'description';
+                const color = colors[req.type] || 'gray';
+                const statusStyle = statusColors[req.status] || statusColors.pending;
+                const timestamp = req.timestamp ? new Date(req.timestamp).toLocaleString('en-GB', {
+                    day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+                }) : 'Recently';
+
+                return `
+                    <div class="glass-card rounded-3xl p-4 shadow-sm border border-white/50 dark:border-gray-800 flex items-center gap-4">
+                        <div class="size-12 rounded-2xl bg-${color}-50 dark:bg-${color}-900/20 flex items-center justify-center shrink-0">
+                            <span class="material-symbols-outlined text-${color}-600">${icon}</span>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-[#111418] dark:text-white font-semibold mb-1 truncate text-sm sm:text-base">
+                                ${req.title}
+                            </h3>
+                            <p class="text-[#60758a] dark:text-gray-400 text-xs sm:text-sm">${timestamp}</p>
+                        </div>
+                        <div class="px-2.5 py-1 ${statusStyle.bg} rounded-full">
+                            <span class="${statusStyle.text} text-xs font-bold uppercase tracking-wide">${req.status}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+    </script>
     <script src="google_translate.js"></script>
 </body>
 

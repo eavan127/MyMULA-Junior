@@ -264,8 +264,7 @@
         <div class="flex w-full flex-1 gap-4 max-w-[480px] flex-col items-stretch">
 
           <!-- Button 1: Continue with Smart ID (With Loading Effect) -->
-          <button
-            onclick="this.innerHTML='<span class=\'material-symbols-outlined animate-spin\'>progress_activity</span> Verifying...'; this.classList.add('opacity-75', 'cursor-not-allowed'); setTimeout(() => { window.location.href='mainpage_home.html' }, 1500);"
+          <button onclick="handleContinue(this)"
             class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 px-5 bg-primary text-white text-base font-bold leading-normal tracking-[0.015em] w-full gap-2 transition hover:shadow-lg hover:shadow-primary/40 active:scale-[0.98]">
             <span class="material-symbols-outlined notranslate text-2xl fingerprint-icon">fingerprint</span>
             <span class="truncate">Continue with Smart ID</span>
@@ -277,6 +276,26 @@
       </div>
     </main>
   </div>
+
+  <script>
+    function handleContinue(btn) {
+      btn.innerHTML = '<span class="material-symbols-outlined animate-spin">progress_activity</span> Verifying...';
+      btn.classList.add('opacity-75', 'cursor-not-allowed');
+
+      setTimeout(() => {
+        // Check if user is already registered
+        const isRegistered = sessionStorage.getItem('junior_registered') === 'true';
+
+        if (isRegistered) {
+          // Already registered - go directly to home
+          window.location.href = 'mainpage_home.html';
+        } else {
+          // Not registered - go to registration page
+          window.location.href = 'junior_registration.html';
+        }
+      }, 1500);
+    }
+  </script>
 
   <script src="google_translate.js"></script>
 </body>

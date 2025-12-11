@@ -183,27 +183,8 @@
             const appType = currentRequest ? currentRequest.title : 'Application';
             alert(`${appType} approved! Your child can now submit their application.`);
 
-            // Redirect to appropriate summary page based on request type
-            let redirectUrl = 'adult_home.html'; // default fallback
-            if (currentRequest) {
-                switch (currentRequest.type) {
-                    case 'transaction':
-                        redirectUrl = 'Age_Approval_Details.html';
-                        break;
-                    case 'sme':
-                        redirectUrl = 'SME_view_document.html';
-                        break;
-                    case 'scholarship':
-                        redirectUrl = 'scholarship_view_document.html';
-                        break;
-                    case 'dental':
-                        redirectUrl = 'Dental_Progress_Tracker.html';
-                        break;
-                    default:
-                        redirectUrl = 'adult_home.html';
-                }
-            }
-            window.location.href = redirectUrl;
+            // Always redirect to adult home page - guardian stays in adult app
+            window.location.href = 'adult_home.html';
         }
 
         // Load dynamic content on page load

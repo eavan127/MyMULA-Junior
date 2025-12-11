@@ -172,6 +172,18 @@
     </style>
 
     <script>
+        // Load government data 
+        let governmentData = null;
+
+        fetch('mock_profile_data.json')
+            .then(res => res.json())
+            .then(data => {
+                governmentData = data.government_data;
+            })
+            .catch(err => {
+                console.error('Failed to load government data:', err);
+            });
+
         function startScan() {
             document.getElementById('scanOverlay').classList.remove('hidden');
             document.getElementById('scanOverlay').classList.add('flex');
@@ -196,40 +208,75 @@
 
             setTimeout(() => {
                 closeScan();
-                // Simulate reading value and setting pending status
-                // The mock data should include the adult details as requested
+
+                // Get expected guardian IC from government data or sessionStorage
+                const expectedGuardianIC = sessionStorage.getItem('expected_guardian_ic') ||
+                    governmentData?.children?.[0]?.guardian_ic || '850612-10-5234';
+
+                // Get guardian info from government data
+                const adultData = governmentData?.adults?.find(a => a.ic === expectedGuardianIC);
+
                 const mockGuardianData = {
-                    child: "Ali Bin Abu",
-                    guardian: "Abu Bakar",
-                    ic: "850214-10-5566",
+                    child: governmentData?.children?.[0]?.name || "Ali Bin Abu",
+                    guardian: adultData?.name || "Ahmad bin Abdullah",
+                    ic: expectedGuardianIC,
                     relation: "Father",
                     phone: "+6012-3456789"
                 };
 
-                // Store pending guardian IC for later verification by adult registration
-                sessionStorage.setItem('pending_guardian_ic', mockGuardianData.ic);
-                sessionStorage.setItem('guardian_status', 'waiting_verification');
+                // Store guardian data
+                sessionStorage.setItem('guardian_ic', mockGuardianData.ic);
                 sessionStorage.setItem('guardian_data', JSON.stringify(mockGuardianData));
 
-                // We also set the IC for consistency if used elsewhere
+                // Check if adult is already registered in the session
+                const adultRegistered = sessionStorage.getItem('adult_registered') === 'true';
+
+                if (adultRegistered) {
+                    // Adult is registered - verify immediately
+                    sessionStorage.setItem('guardian_status', 'verified');
+                    localStorage.setItem('guardian_status', 'verified');
+                    alert("Guardian verified! Your guardian is already registered in MyMULA.");
+                } else {
+                    // Adult not registered - set to pending
+                    sessionStorage.setItem('guardian_status', 'waiting_verification');
+                    sessionStorage.setItem('pending_guardian_ic', mockGuardianData.ic);
+                    alert("Birth Certificate Scanned! Guardian linking is pending. Status will be verified once guardian registers in MyMULA Adult.");
+                }
+
+                // Set the IC input for display
                 document.getElementById('icInput').value = mockGuardianData.ic;
 
-                // Create a brief pending feeling before redirecting
-                alert("Birth Certificate Scanned! Guardian linking is pending. Status will be verified once guardian registers in MyMULA Adult.");
                 window.location.href = 'mainpage_profile.html';
             }, 1500);
         }
 
         function submitManual() {
-            const ic = document.getElementById('icInput').value;
+            const ic = document.getElementById('icInput').value.trim();
             if (ic.length < 12) {
                 alert("Please enter a valid IC number");
                 return;
             }
-            // Simulate API call
-            // Save state to sessionStorage to update profile page (resets on tab close)
-            sessionStorage.setItem('guardian_status', 'waiting_verification');
+
+            // Get expected guardian IC from government data
+            const expectedGuardianIC = sessionStorage.getItem('expected_guardian_ic') ||
+                governmentData?.children?.[0]?.guardian_ic || '850612-10-5234';
+
+            // Store guardian data
             sessionStorage.setItem('guardian_ic', ic);
+
+            // Check if the entered IC matches expected and if adult is registered
+            const adultRegistered = sessionStorage.getItem('adult_registered') === 'true';
+
+            if (adultRegistered && ic === expectedGuardianIC) {
+                // Adult is registered and IC matches - verify immediately
+                sessionStorage.setItem('guardian_status', 'verified');
+                localStorage.setItem('guardian_status', 'verified');
+                alert("Guardian verified! IC matches registered guardian.");
+            } else {
+                // Set to pending
+                sessionStorage.setItem('guardian_status', 'waiting_verification');
+                sessionStorage.setItem('pending_guardian_ic', ic);
+            }
 
             // Redirect back to profile
             window.location.href = 'mainpage_profile.html';

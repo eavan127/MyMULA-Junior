@@ -132,28 +132,9 @@
                     </h2>
                 </div>
 
-                <!-- Child Card -->
-                <div
-                    class="glass-card rounded-3xl p-5 shadow-sm border border-white/50 dark:border-gray-800 flex items-center gap-4 hover:shadow-md transition-all">
-                    <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=100&h=100&fit=crop"
-                        alt="Ali profile"
-                        class="size-16 rounded-2xl object-cover ring-2 ring-gray-100 dark:ring-gray-800" />
-                    <div class="flex-1">
-                        <div class="flex items-center gap-2 mb-1">
-                            <h3 class="text-[#111418] dark:text-white text-lg font-bold">
-                                Ali
-                            </h3>
-                            <span
-                                class="px-2 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-primary text-[10px] font-bold uppercase tracking-wider rounded-full">Junior</span>
-                        </div>
-                        <p class="text-[#60758a] dark:text-gray-400 text-sm mb-2">
-                            Age 16
-                        </p>
-                        <div class="flex items-center gap-1.5 text-green-600">
-                            <span class="material-symbols-outlined text-[18px] fill">verified</span>
-                            <span class="text-xs font-semibold">Account Linked</span>
-                        </div>
-                    </div>
+                <!-- Children Cards Container -->
+                <div id="linkedChildrenContainer" class="space-y-3">
+                    <!-- Dynamic content will be loaded here -->
                 </div>
             </div>
 
@@ -212,8 +193,21 @@
     </div>
 
     <script>
+        // Government data
+        let governmentData = null;
+
         document.addEventListener("DOMContentLoaded", () => {
-            initDashboard();
+            // Load government data first
+            fetch('mock_profile_data.json')
+                .then(res => res.json())
+                .then(data => {
+                    governmentData = data.government_data;
+                    initDashboard();
+                })
+                .catch(err => {
+                    console.error('Failed to load government data:', err);
+                    initDashboard();
+                });
         });
 
         function initDashboard() {
@@ -240,8 +234,83 @@
                 badge.classList.add("hidden");
             }
 
-            // 3. Recent Activity
+            // 3. Load Linked Children
+            loadLinkedChildren();
+
+            // 4. Recent Activity
             updateRecentActivity(requests);
+        }
+
+        function loadLinkedChildren() {
+            const container = document.getElementById("linkedChildrenContainer");
+            const adultIC = sessionStorage.getItem('adult_ic') || '850612-10-5234';
+
+            // Get children linked to this adult from government data
+            const adultData = governmentData?.adults?.find(a => a.ic === adultIC);
+            const childrenICs = adultData?.children_ic || ['071215-14-1234'];
+
+            // Get children details
+            const linkedChildren = childrenICs.map(icNum => {
+                return governmentData?.children?.find(c => c.ic === icNum);
+            }).filter(Boolean);
+
+            if (linkedChildren.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 text-gray-400 bg-white/50 dark:bg-gray-800/50 rounded-3xl border border-white/50 dark:border-gray-800">
+                        <span class="material-symbols-outlined text-4xl mb-2 text-gray-300">person_off</span>
+                        <p class="text-sm">No linked children</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Check if junior is registered to determine status
+            const juniorRegistered = sessionStorage.getItem('junior_registered') === 'true';
+
+            container.innerHTML = linkedChildren.map(child => {
+                const isVerified = juniorRegistered;
+                const statusColor = isVerified ? 'text-green-600' : 'text-orange-500';
+                const statusIcon = isVerified ? 'verified' : 'pending';
+                const statusText = isVerified ? 'Account Linked' : 'Pending Registration';
+
+                // Calculate age from IC (first 6 digits are YYMMDD)
+                const icParts = child.ic.split('-');
+                const birthYear = parseInt('20' + icParts[0].substring(0, 2));
+                const currentYear = new Date().getFullYear();
+                const age = currentYear - birthYear;
+
+                return `
+                    <div onclick="window.location.href='Linked_children.html'"
+                        class="glass-card rounded-3xl p-5 shadow-sm border border-white/50 dark:border-gray-800 flex items-center gap-4 hover:shadow-md transition-all cursor-pointer">
+                        <div class="size-16 rounded-2xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-primary">
+                            <span class="material-symbols-outlined text-3xl">face</span>
+                        </div>
+                        <div class="flex-1">
+                            <div class="flex items-center gap-2 mb-1">
+                                <h3 class="text-[#111418] dark:text-white text-lg font-bold">
+                                    ${child.name.split(' ')[0]}
+                                </h3>
+                                <span
+                                    class="px-2 py-0.5 bg-blue-100 dark:bg-blue-900/30 text-primary text-[10px] font-bold uppercase tracking-wider rounded-full">Junior</span>
+                            </div>
+                            <p class="text-[#60758a] dark:text-gray-400 text-sm mb-2">
+                                Age ${age}
+                            </p>
+                            <div class="flex items-center gap-1.5 ${statusColor}">
+                                <span class="material-symbols-outlined text-[18px] ${isVerified ? 'fill' : ''}">${statusIcon}</span>
+                                <span class="text-xs font-semibold">${statusText}</span>
+                            </div>
+                        </div>
+                        <span class="material-symbols-outlined text-gray-400">chevron_right</span>
+                    </div>
+                `;
+            }).join('');
+
+            // Update stats card with linked children count
+            const linkedCountEl = document.querySelector('.text-3xl.font-bold');
+            if (linkedCountEl) {
+                linkedCountEl.textContent = linkedChildren.length;
+            }
         }
 
         function updateRecentActivity(requests) {

@@ -203,21 +203,27 @@
         <div class="bg-white dark:bg-gray-800 rounded-t-2xl w-full max-w-md p-6 animate-slide-up">
             <h3 class="text-lg font-bold text-[#333] dark:text-white mb-4">Add Document</h3>
             <div class="flex flex-col gap-3">
-                <button onclick="addDocument('Education Certificate')"
+                <button id="docOption_EducationCertificate" onclick="addDocument('Education Certificate')"
                     class="flex items-center gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 transition-colors">
                     <span class="material-symbols-outlined notranslate text-primary">school</span>
                     <span class="text-[#333] dark:text-white font-medium">Education Certificate</span>
                 </button>
-                <button onclick="addDocument('Bank Statement')"
+                <button id="docOption_BankStatement" onclick="addDocument('Bank Statement')"
                     class="flex items-center gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 transition-colors">
                     <span class="material-symbols-outlined notranslate text-primary">account_balance</span>
                     <span class="text-[#333] dark:text-white font-medium">Bank Statement</span>
                 </button>
-                <button onclick="addDocument('Property Document')"
+                <button id="docOption_PropertyDocument" onclick="addDocument('Property Document')"
                     class="flex items-center gap-3 p-4 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-gray-50 transition-colors">
                     <span class="material-symbols-outlined notranslate text-primary">home</span>
                     <span class="text-[#333] dark:text-white font-medium">Property Document</span>
                 </button>
+                <!-- No more documents message -->
+                <p id="noMoreDocsMsg" class="hidden text-center text-gray-500 dark:text-gray-400 py-4">
+                    <span
+                        class="material-symbols-outlined notranslate text-3xl text-gray-300 block mb-2">check_circle</span>
+                    All documents have been added.
+                </p>
             </div>
             <button onclick="closeAddDocModal()" class="w-full mt-4 py-3 text-gray-500 font-medium">Cancel</button>
         </div>
@@ -417,6 +423,41 @@
         }
 
         window.showAddDocModal = function () {
+            // Get list of already added documents
+            const docs = JSON.parse(sessionStorage.getItem('adult_additional_docs') || '[]');
+            const addedNames = docs.map(d => d.name);
+
+            // Document option mapping
+            const docOptions = {
+                'Education Certificate': 'docOption_EducationCertificate',
+                'Bank Statement': 'docOption_BankStatement',
+                'Property Document': 'docOption_PropertyDocument'
+            };
+
+            // Show/hide options based on what's already added
+            let visibleCount = 0;
+            Object.keys(docOptions).forEach(name => {
+                const optionEl = document.getElementById(docOptions[name]);
+                if (optionEl) {
+                    if (addedNames.includes(name)) {
+                        optionEl.classList.add('hidden');
+                    } else {
+                        optionEl.classList.remove('hidden');
+                        visibleCount++;
+                    }
+                }
+            });
+
+            // Show/hide "all added" message
+            const noMoreMsg = document.getElementById('noMoreDocsMsg');
+            if (noMoreMsg) {
+                if (visibleCount === 0) {
+                    noMoreMsg.classList.remove('hidden');
+                } else {
+                    noMoreMsg.classList.add('hidden');
+                }
+            }
+
             const modal = document.getElementById('addDocModal');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
