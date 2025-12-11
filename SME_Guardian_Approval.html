@@ -99,12 +99,17 @@
         </button>
         <div class="flex items-center justify-between p-4 pb-2">
           <div class="flex w-24 items-center justify-start">
-            <!-- Language toggle removed -->
+            <button
+              class="flex max-w-[480px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-full border border-neutral-300 dark:border-neutral-700 bg-transparent px-3 py-1.5 text-sm font-bold text-neutral-700 dark:text-neutral-300">
+              <span>EN</span>
+              <span class="material-symbols-outlined notranslate text-base">swap_horiz</span>
+              <span>BM</span>
+            </button>
           </div>
           <h2 class="flex-1 text-center text-lg font-bold tracking-tight text-[#1D1D1F] dark:text-neutral-100">Guardian
             Approval</h2>
           <div class="flex w-24 items-center justify-end">
-            <button onclick="handleCancel()"
+            <button
               class="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-transparent text-[#1D1D1F] dark:text-neutral-100">
               <span class="material-symbols-outlined notranslate">close</span>
             </button>
@@ -138,7 +143,7 @@
           <p class="text-base text-neutral-600 dark:text-neutral-400">Confirm with Face ID to continue</p>
         </div>
         <div class="flex flex-col items-center gap-4 px-4 pb-8 pt-2">
-          <button onclick="handleCancel()"
+          <button
             class="w-full max-w-sm cursor-pointer rounded-full bg-transparent p-3 text-sm font-bold text-primary">Cancel
             Request</button>
         </div>
@@ -156,45 +161,10 @@
       text.innerText = "Verifying...";
       text.classList.add('text-green-600');
 
-      // 2. Wait 1.5 seconds, then go to Signature Page (preserve source param)
+      // 2. Wait 1.5 seconds, then go to Signature Page
       setTimeout(() => {
-        const urlParams = new URLSearchParams(window.location.search);
-        const source = urlParams.get('source');
-        const nextUrl = source ? `SME_Digital_Signature.html?source=${source}` : 'SME_Digital_Signature.html';
-        window.location.href = nextUrl;
+        window.location.href = 'SME_Digital_Signature.html';
       }, 1500);
-    }
-
-    function handleCancel() {
-      // Mark the SME request as rejected
-      const requestId = sessionStorage.getItem('current_approval_request');
-      if (requestId) {
-        // Get requests from either storage
-        let requests = JSON.parse(localStorage.getItem('child_requests') || sessionStorage.getItem('child_requests') || '[]');
-
-        const updatedRequests = requests.map(req => {
-          if (req.id === requestId) {
-            return { ...req, status: 'rejected', rejectedAt: new Date().toISOString() };
-          }
-          return req;
-        });
-
-        // Sync to both storages
-        sessionStorage.setItem('child_requests', JSON.stringify(updatedRequests));
-        localStorage.setItem('child_requests', JSON.stringify(updatedRequests));
-
-        // Clear current request
-        sessionStorage.removeItem('current_approval_request');
-      }
-
-      // Navigate back based on source
-      const urlParams = new URLSearchParams(window.location.search);
-      const source = urlParams.get('source');
-      if (source === 'adult_home') {
-        window.location.href = 'adult_home.html';
-      } else {
-        window.location.href = 'mainpage_home.html';
-      }
     }
   </script>
   <script src="google_translate.js"></script>

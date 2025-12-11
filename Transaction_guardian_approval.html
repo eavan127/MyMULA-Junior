@@ -102,12 +102,17 @@
                 </button>
                 <div class="flex items-center justify-between p-4 pb-2">
                     <div class="flex w-24 items-center justify-start">
-                        <!-- Language toggle removed -->
+                        <button
+                            class="flex max-w-[480px] cursor-pointer items-center justify-center gap-2 overflow-hidden rounded-full border border-neutral-300 bg-transparent px-3 py-1.5 text-sm font-bold text-neutral-700">
+                            <span>EN</span>
+                            <span class="material-symbols-outlined text-base">swap_horiz</span>
+                            <span>BM</span>
+                        </button>
                     </div>
                     <h2 class="flex-1 text-center text-lg font-bold tracking-tight text-[#1D1D1F]">Real-Time Approval
                     </h2>
                     <div class="flex w-24 items-center justify-end">
-                        <button onclick="handleCancel()"
+                        <button
                             class="flex h-10 w-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-transparent text-[#1D1D1F]">
                             <span class="material-symbols-outlined">close</span>
                         </button>
@@ -139,7 +144,7 @@
                     <p class="text-base text-neutral-600">Tap Face ID to finalize decision</p>
                 </div>
                 <div class="flex flex-col items-center gap-4 px-4 pb-8 pt-2">
-                    <button onclick="handleCancel()"
+                    <button onclick="window.location.href='adult_home.html'"
                         class="w-full max-w-sm cursor-pointer rounded-full bg-transparent p-3 text-sm font-bold text-primary">Cancel
                         Request</button>
                 </div>
@@ -158,43 +163,9 @@
                 // Show success
                 alert('Face authenticated! Proceeding to digital signature...');
 
-                // Navigate to digital signature page (preserve source param)
-                const urlParams = new URLSearchParams(window.location.search);
-                const source = urlParams.get('source');
-                const nextUrl = source ? `Transaction_Digital_Signature.html?source=${source}` : 'Transaction_Digital_Signature.html';
-                window.location.href = nextUrl;
+                // Navigate to digital signature page
+                window.location.href = 'Transaction_Digital_Signature.html';
             }, 1500);
-        }
-
-        function handleCancel() {
-            // Mark the transaction request as rejected
-            const requestId = sessionStorage.getItem('current_approval_request');
-            if (requestId) {
-                let requests = JSON.parse(localStorage.getItem('child_requests') || sessionStorage.getItem('child_requests') || '[]');
-
-                const updatedRequests = requests.map(req => {
-                    if (req.id === requestId) {
-                        return { ...req, status: 'rejected', rejectedAt: new Date().toISOString() };
-                    }
-                    return req;
-                });
-
-                // Sync to both storages
-                sessionStorage.setItem('child_requests', JSON.stringify(updatedRequests));
-                localStorage.setItem('child_requests', JSON.stringify(updatedRequests));
-                sessionStorage.removeItem('current_approval_request');
-            }
-
-            // Navigate back based on source parameter
-            const urlParams = new URLSearchParams(window.location.search);
-            const source = urlParams.get('source');
-            if (source === 'adult_home') {
-                window.location.href = 'adult_home.html';
-            } else if (source === 'adult_requests') {
-                window.location.href = 'adult_requests.html';
-            } else {
-                window.location.href = 'mainpage_home.html';
-            }
         }
     </script>
 </body>

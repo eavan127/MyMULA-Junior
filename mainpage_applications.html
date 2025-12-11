@@ -226,66 +226,29 @@
     }
 
     // 2. Check SME (NEW CODE)
-    // 2. Check SME (Real-time)
-    function checkSmeStatus() {
-      const isSmeSubmitted = localStorage.getItem('sme_application_submitted');
+    const isSmeSubmitted = localStorage.getItem('sme_application_submitted');
+    if (isSmeSubmitted === 'true') {
       const smeCard = document.getElementById('sme-card');
+      if (smeCard) {
+        smeCard.classList.remove('hidden');
 
-      // Check child_requests for SME request status
-      const requests = JSON.parse(localStorage.getItem('child_requests') || sessionStorage.getItem('child_requests') || '[]');
-      const smeRequest = requests.find(r => r.type === 'sme' && r.status !== 'deleted');
-
-      if (isSmeSubmitted === 'true' && smeRequest) {
-        if (smeCard) {
-          smeCard.classList.remove('hidden');
-
-          // Hide empty message if SME card is shown
-          const msg = document.getElementById('empty-msg');
-          if (msg) msg.classList.add('hidden');
-
-          const badge = document.getElementById('sme-status-badge');
-          const dot = document.getElementById('sme-status-dot');
-          const text = document.getElementById('sme-status-text');
-
-          if (smeRequest.status === 'rejected') {
-            // Red for rejected - disable card
-            if (badge) badge.className = "inline-flex items-center justify-center self-start rounded-full bg-red-100 dark:bg-red-900/20 px-3 py-1.5 text-xs font-medium text-red-600 dark:text-red-400";
-            if (dot) dot.className = "mr-1.5 size-2 rounded-full bg-red-500";
-            if (text) text.innerText = "Guardian Rejected";
-            // Disable card - remove click and add visual disabled styling
-            smeCard.onclick = null;
-            smeCard.classList.add('opacity-50', 'pointer-events-none', 'grayscale');
-            smeCard.classList.remove('cursor-pointer');
-          } else if (smeRequest.status === 'approved' || localStorage.getItem('sme_guardian_approved') === 'true') {
-            // Green for approved - enable card
-            if (badge) badge.className = "inline-flex items-center justify-center self-start rounded-full bg-green-100 dark:bg-green-900/20 px-3 py-1.5 text-xs font-medium text-green-600 dark:text-green-400";
-            if (dot) dot.className = "mr-1.5 size-2 rounded-full bg-green-500";
-            if (text) text.innerText = "Guardian Approved";
-            // Enable card
-            smeCard.onclick = function () { window.location.href = 'SME_Application_Progress_Tracker.html'; };
-            smeCard.classList.remove('opacity-50', 'pointer-events-none', 'grayscale');
-            smeCard.classList.add('cursor-pointer');
-          } else {
-            // Yellow for pending - enable card
-            if (badge) badge.className = "inline-flex items-center justify-center self-start rounded-full bg-[#FFC107]/20 px-3 py-1.5 text-xs font-medium text-[#B8860B] dark:text-[#FFD700]";
-            if (dot) dot.className = "mr-1.5 size-2 rounded-full bg-[#FFC107]";
-            if (text) text.innerText = "Guardian Approval Needed";
-            // Enable card
-            smeCard.onclick = function () { window.location.href = 'SME_Application_Progress_Tracker.html'; };
-            smeCard.classList.remove('opacity-50', 'pointer-events-none', 'grayscale');
-            smeCard.classList.add('cursor-pointer');
-          }
-        }
-      } else {
-        // If not submitted or deleted, hide card
-        if (smeCard) smeCard.classList.add('hidden');
-        checkEmptyState(); // Check if we need to show empty message
+        // Hide empty message if SME card is shown
+        const msg = document.getElementById('empty-msg');
+        if (msg) msg.classList.add('hidden');
       }
-    }
 
-    // Call immediately and then poll
-    checkSmeStatus();
-    setInterval(checkSmeStatus, 2000);
+      // Change Badge Color to Yellow (Processing)
+      const badge = document.getElementById('sme-status-badge');
+      if (badge) badge.className = "inline-flex items-center justify-center self-start rounded-full bg-[#FFC107]/20 px-3 py-1.5 text-xs font-medium text-[#B8860B] dark:text-[#FFD700]";
+
+      // Change Dot Color
+      const dot = document.getElementById('sme-status-dot');
+      if (dot) dot.className = "mr-1.5 size-2 rounded-full bg-[#FFC107]";
+
+      // Change Text
+      const text = document.getElementById('sme-status-text');
+      if (text) text.innerText = "Processing";
+    }
 
     // 3. Check Gaming Transaction - show card when approved
     function checkGamingStatus() {

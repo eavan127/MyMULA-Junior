@@ -152,24 +152,18 @@
         function signAndApprove() {
             // Get the current request to determine type
             const requestId = sessionStorage.getItem('current_approval_request');
-            let requests = JSON.parse(localStorage.getItem('child_requests') || sessionStorage.getItem('child_requests') || '[]');
+            const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
             const currentRequest = requests.find(req => req.id === requestId);
 
-            // Set the correct approval flag based on request type (sync to both storages)
+            // Set the correct approval flag based on request type
             if (currentRequest) {
                 if (currentRequest.type === 'sme') {
                     sessionStorage.setItem('sme_guardian_approved', 'true');
-                    localStorage.setItem('sme_guardian_approved', 'true');
                 } else if (currentRequest.type === 'dental') {
                     sessionStorage.setItem('dental_guardian_approved', 'true');
-                    localStorage.setItem('dental_guardian_approved', 'true');
-                } else if (currentRequest.type === 'scholarship') {
-                    sessionStorage.setItem('scholarship_guardian_approved', 'true');
-                    localStorage.setItem('scholarship_guardian_approved', 'true');
                 } else {
-                    // default
+                    // scholarship or default
                     sessionStorage.setItem('guardian_approved', 'true');
-                    localStorage.setItem('guardian_approved', 'true');
                 }
             }
 
@@ -181,9 +175,7 @@
                     }
                     return req;
                 });
-                // Sync to both storages for cross-tab updates
                 sessionStorage.setItem('child_requests', JSON.stringify(updatedRequests));
-                localStorage.setItem('child_requests', JSON.stringify(updatedRequests));
                 sessionStorage.removeItem('current_approval_request');
             }
 

@@ -51,7 +51,7 @@
         <!-- Top App Bar -->
         <div
             class="flex items-center bg-white dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10 border-b border-gray-200 dark:border-gray-700">
-            <div onclick="handleBackNavigation()"
+            <div onclick="window.location.href='Dental_Progress_Tracker.html'"
                 class="text-[#111418] dark:text-white flex size-12 shrink-0 items-center -ml-4 cursor-pointer">
                 <span class="material-symbols-outlined text-2xl notranslate">arrow_back_ios_new</span>
             </div>
@@ -169,7 +169,7 @@
         <div
             class="fixed bottom-0 left-0 right-0 bg-white/80 dark:bg-background-dark/80 backdrop-blur-sm p-4 border-t border-gray-200 dark:border-gray-700">
             <div class="flex flex-col gap-3">
-                <button onclick="handleBackNavigation()"
+                <button onclick="window.location.href='mainpage_home.html'"
                     class="flex items-center justify-center w-full px-4 py-3 text-base font-bold text-white bg-primary rounded-lg shadow-lg shadow-primary/30">
                     Back to Home
                 </button>
@@ -220,18 +220,6 @@
             updateTimes();
             loadGuardianSignature();
         });
-
-        function handleBackNavigation() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const source = urlParams.get('source');
-            if (source === 'adult_home') {
-                window.location.href = 'adult_home.html';
-            } else if (source === 'adult_requests') {
-                window.location.href = 'adult_requests.html';
-            } else {
-                window.location.href = 'mainpage_home.html';
-            }
-        }
     </script>
 </body>
 

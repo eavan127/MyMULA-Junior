@@ -173,8 +173,6 @@
         <span id="transaction-card-status" class="hidden px-2 py-1 rounded-full text-[10px] font-bold uppercase"></span>
         <span class="material-symbols-outlined notranslate text-gray-400">chevron_right</span>
       </div>
-
-
     </div>
 
 
@@ -288,9 +286,6 @@
 
       container.innerHTML = ''; // Clear existing
 
-      // Get child_requests to check for rejected statuses
-      const requests = JSON.parse(localStorage.getItem('child_requests') || sessionStorage.getItem('child_requests') || '[]');
-
       // Check each application type for drafts
       Object.keys(APP_TYPES).forEach(type => {
         const draftKey = `draft_${type}`;
@@ -303,22 +298,6 @@
         if (draft) {
           try {
             const draftData = JSON.parse(draft);
-
-            // Check if this type has a rejected request - if so, don't show the draft
-            const typeRequest = requests.find(r => r.type === type && r.status !== 'deleted');
-            const isRejected = typeRequest && typeRequest.status === 'rejected';
-            const isApproved = typeRequest && typeRequest.status === 'approved';
-
-            // Also check for approval flags
-            const isApprovedByFlag = (type === 'sme' && (localStorage.getItem('sme_guardian_approved') === 'true' || sessionStorage.getItem('sme_guardian_approved') === 'true')) ||
-              (type === 'scholarship' && (localStorage.getItem('scholarship_guardian_approved') === 'true' || sessionStorage.getItem('scholarship_guardian_approved') === 'true')) ||
-              (type === 'dental' && (localStorage.getItem('dental_guardian_approved') === 'true' || sessionStorage.getItem('dental_guardian_approved') === 'true'));
-
-            // Don't show if rejected or approved
-            if (isRejected || isApproved || isApprovedByFlag) {
-              return; // Skip this draft
-            }
-
             hasDrafts = true;
             const card = createDraftCard(type, draftData);
             container.appendChild(card);
@@ -332,82 +311,7 @@
       if (hasDrafts) {
         section.classList.remove('hidden');
       } else {
-        // Also check for active applications before hiding
-        checkActiveApplications(section, container);
-      }
-    }
-
-    function checkActiveApplications(section, container) {
-      // Check for submitted SME application
-      const isSmeSubmitted = localStorage.getItem('sme_application_submitted') === 'true';
-
-      // Check if guardian has already approved
-      const isSmeApproved = localStorage.getItem('sme_guardian_approved') === 'true' || sessionStorage.getItem('sme_guardian_approved') === 'true';
-
-      // Get SME request from storage to check for rejection
-      const requests = JSON.parse(localStorage.getItem('child_requests') || sessionStorage.getItem('child_requests') || '[]');
-      const smeRequest = requests.find(r => r.type === 'sme' && r.status !== 'deleted');
-      const isRejected = smeRequest && smeRequest.status === 'rejected';
-
-      // Only show the card if submitted but NOT yet approved and NOT rejected
-      if (isSmeSubmitted && !isSmeApproved && !isRejected) {
-        // Render card
-        const card = document.createElement('div');
-        card.id = 'sme-status-card'; // Unique ID for real-time updates
-        // Use green theme for SME
-        card.className = 'flex items-center gap-3 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-4 border border-green-200 dark:border-green-800 shadow-sm';
-
-        card.innerHTML = `
-          <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 text-green-500">
-            <span class="material-symbols-outlined notranslate text-2xl">store</span>
-          </div>
-          <div class="flex-1 min-w-0">
-            <p class="text-[#101418] dark:text-white text-sm font-bold truncate">SME Registration</p>
-            <p id="sme-status-text" class="text-orange-600 dark:text-orange-400 text-xs font-medium">Awaiting Guardian Approval</p>
-            <p class="text-gray-500 dark:text-gray-400 text-xs">Application Submitted</p>
-          </div>
-          <div class="flex gap-2 shrink-0">
-             <button onclick="window.location.href='SME_Application_Progress_Tracker.html'" class="px-4 py-2 rounded-lg bg-primary text-white font-bold text-sm shadow-sm hover:bg-primary/90 transition-colors">
-              View Status
-            </button>
-          </div>
-        `;
-
-        container.appendChild(card);
-        section.classList.remove('hidden');
-      } else {
-        // If not submitted, approved, or rejected, we don't show the card
-        // Rely on loadDraftApplications logic for hiding section if empty
-      }
-    }
-
-    function updateSmeRealTime() {
-      const isSmeSubmitted = localStorage.getItem('sme_application_submitted') === 'true';
-      const isSmeApproved = localStorage.getItem('sme_guardian_approved') === 'true' || sessionStorage.getItem('sme_guardian_approved') === 'true';
-      const card = document.getElementById('sme-status-card');
-
-      // Get SME request from storage
-      const requests = JSON.parse(localStorage.getItem('child_requests') || sessionStorage.getItem('child_requests') || '[]');
-      const smeRequest = requests.find(r => r.type === 'sme' && r.status !== 'deleted');
-      const isRejected = smeRequest && smeRequest.status === 'rejected';
-
-      // If approved or rejected, remove the card
-      if (isSmeApproved || isRejected) {
-        if (card) {
-          // Card exists but should be removed (approved or rejected)
-          loadDraftApplications();
-        }
-      } else if (isSmeSubmitted && smeRequest) {
-        if (!card) {
-          // Card doesn't exist but should (e.g. just submitted in another tab)
-          loadDraftApplications();
-        }
-        // If card exists and still pending, no update needed
-      } else {
-        // Not submitted or deleted
-        if (card) {
-          loadDraftApplications();
-        }
+        section.classList.add('hidden');
       }
     }
 
@@ -486,22 +390,6 @@
           sessionStorage.removeItem('dental_medical_history');
           sessionStorage.removeItem('dental_application_status');
           sessionStorage.removeItem('dental_timer_started');
-        } else if (type === 'sme') {
-          // Remove from child_requests - mark as deleted
-          const requests = JSON.parse(localStorage.getItem('child_requests') || sessionStorage.getItem('child_requests') || '[]');
-          const updatedRequests = requests.map(r => {
-            if (r.type === 'sme') {
-              return { ...r, status: 'deleted', deletedAt: new Date().toISOString() };
-            }
-            return r;
-          });
-          sessionStorage.setItem('child_requests', JSON.stringify(updatedRequests));
-          localStorage.setItem('child_requests', JSON.stringify(updatedRequests));
-
-          // Clear all SME-related storage
-          localStorage.removeItem('sme_application_submitted');
-          sessionStorage.removeItem('sme_guardian_approved');
-          sessionStorage.removeItem('sme_application_submitted');
         }
 
         loadDraftApplications(); // Refresh the list
@@ -516,10 +404,6 @@
       setInterval(updateCurrentTime, 1000);
       // Check curfew settings every 2 seconds
       setInterval(updateRecentActivity, 2000);
-      // Check SME status every 2 seconds
-      setInterval(updateSmeRealTime, 2000);
-      // Check transaction status every 2 seconds
-      setInterval(updateTransactionCardStatus, 2000);
     });
 
     function updateRecentActivity() {
@@ -620,21 +504,15 @@
     });
 
     function updateTransactionCardStatus() {
-      // Check both localStorage and sessionStorage for real-time updates
-      const requests = JSON.parse(localStorage.getItem('child_requests') || sessionStorage.getItem('child_requests') || '[]');
+      const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
       const transactionRequest = requests.find(r => r.type === 'transaction' && r.status !== 'deleted');
 
       const card = document.getElementById('transaction-card');
       const title = document.getElementById('transaction-card-title');
       const subtitle = document.getElementById('transaction-card-subtitle');
       const statusBadge = document.getElementById('transaction-card-status');
-
-      if (!card || !title || !subtitle) return;
-
       const iconDiv = card.querySelector('.rounded-full');
-      const icon = iconDiv ? iconDiv.querySelector('.material-symbols-outlined') : null;
-
-      if (!iconDiv || !icon) return;
+      const icon = iconDiv.querySelector('.material-symbols-outlined');
 
       if (!transactionRequest) {
         // No transaction request - show default intercepted state
@@ -645,9 +523,6 @@
         subtitle.textContent = "A suspicious transaction was blocked";
         subtitle.className = "text-red-500 dark:text-red-400 text-xs";
         statusBadge.classList.add('hidden');
-        // Re-enable click
-        card.style.pointerEvents = 'auto';
-        card.classList.remove('opacity-50', 'grayscale');
       } else if (transactionRequest.status === 'pending') {
         // Request pending
         card.className = "flex items-center gap-3 rounded-xl bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 p-4 shadow-sm border border-orange-200 dark:border-orange-800 cursor-pointer hover:shadow-md transition-all";
@@ -659,9 +534,6 @@
         statusBadge.textContent = "Pending";
         statusBadge.className = "px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-orange-100 text-orange-600";
         statusBadge.classList.remove('hidden');
-        // Enable click
-        card.style.pointerEvents = 'auto';
-        card.classList.remove('opacity-50', 'grayscale');
       } else if (transactionRequest.status === 'approved') {
         // Request approved
         card.className = "flex items-center gap-3 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-4 shadow-sm border border-green-200 dark:border-green-800 cursor-pointer hover:shadow-md transition-all";
@@ -673,27 +545,11 @@
         statusBadge.textContent = "Approved";
         statusBadge.className = "px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-green-100 text-green-600";
         statusBadge.classList.remove('hidden');
-        // Enable click
-        card.style.pointerEvents = 'auto';
-        card.classList.remove('opacity-50', 'grayscale');
-      } else if (transactionRequest.status === 'rejected') {
-        // Request rejected
-        card.className = "flex items-center gap-3 rounded-xl bg-gradient-to-r from-red-50 to-gray-50 dark:from-red-900/20 dark:to-gray-900/20 p-4 shadow-sm border border-red-200 dark:border-red-800 cursor-not-allowed transition-all opacity-50 grayscale";
-        iconDiv.className = "flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 text-red-500";
-        icon.textContent = "cancel";
-        title.textContent = "Gaming Purchase Rejected";
-        subtitle.textContent = "Guardian rejected this request";
-        subtitle.className = "text-red-500 dark:text-red-400 text-xs";
-        statusBadge.textContent = "Rejected";
-        statusBadge.className = "px-2 py-1 rounded-full text-[10px] font-bold uppercase bg-red-100 text-red-600";
-        statusBadge.classList.remove('hidden');
-        // Disable click
-        card.style.pointerEvents = 'none';
       }
     }
 
     function handleTransactionCardClick() {
-      const requests = JSON.parse(localStorage.getItem('child_requests') || sessionStorage.getItem('child_requests') || '[]');
+      const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
       const transactionRequest = requests.find(r => r.type === 'transaction' && r.status !== 'deleted');
 
       if (!transactionRequest) {
@@ -705,9 +561,6 @@
       } else if (transactionRequest.status === 'approved') {
         // Approved - go to progress tracker
         window.location.href = 'Transaction_Progress_Tracker.html';
-      } else if (transactionRequest.status === 'rejected') {
-        // Rejected - show message, card is disabled anyway
-        alert('This request was rejected by the guardian.');
       }
     }
   </script>
