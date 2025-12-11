@@ -349,7 +349,32 @@
 
     function discardDraft(type) {
       if (confirm('Are you sure you want to discard this application? All saved progress will be lost.')) {
+        // Remove from both storage types
         sessionStorage.removeItem(`draft_${type}`);
+        localStorage.removeItem(`draft_${type}`);
+
+        // For dental, also clear related data
+        if (type === 'dental') {
+          // Remove from child_requests - mark as deleted
+          const requests = JSON.parse(sessionStorage.getItem('child_requests') || '[]');
+          const updatedRequests = requests.map(r => {
+            if (r.type === 'dental') {
+              return { ...r, status: 'deleted', deletedAt: new Date().toISOString() };
+            }
+            return r;
+          });
+          sessionStorage.setItem('child_requests', JSON.stringify(updatedRequests));
+
+          // Clear all dental-related storage
+          localStorage.removeItem('dental_application_submitted');
+          localStorage.removeItem('dental_clinic_approved');
+          localStorage.removeItem('dental_submitted_time');
+          sessionStorage.removeItem('dental_guardian_approved');
+          sessionStorage.removeItem('dental_medical_history');
+          sessionStorage.removeItem('dental_application_status');
+          sessionStorage.removeItem('dental_timer_started');
+        }
+
         loadDraftApplications(); // Refresh the list
       }
     }
