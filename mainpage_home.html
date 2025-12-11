@@ -156,9 +156,6 @@
         </div>
         <span id="home-update-time" class="text-xs text-gray-400">Just now</span>
       </div>
-
-      <!-- Transaction Status Card (Dynamic) -->
-      <div id="transaction-status-card"></div>
     </div>
 
 
@@ -361,57 +358,11 @@
     document.addEventListener('DOMContentLoaded', () => {
       updateRecentActivity();
       updateCurrentTime();
-      updateTransactionStatus();
       // Update every second for real-time clock
       setInterval(updateCurrentTime, 1000);
       // Check curfew settings every 2 seconds
       setInterval(updateRecentActivity, 2000);
     });
-
-    function updateTransactionStatus() {
-      const container = document.getElementById('transaction-status-card');
-      if (!container) return;
-
-      const isApproved = localStorage.getItem('gaming_purchase_approved') === 'true';
-
-      if (isApproved) {
-        // Show approved/success card
-        container.innerHTML = `
-          <a href="Transaction_Progress_Tracker.html"
-            class="flex items-center gap-3 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-4 shadow-sm border border-green-200 dark:border-green-800 cursor-pointer hover:shadow-md transition-shadow">
-            <div
-              class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 text-green-600">
-              <span class="material-symbols-outlined notranslate text-xl">check_circle</span>
-            </div>
-            <div class="flex-1">
-              <p class="text-[#101418] dark:text-white text-sm font-bold">Purchase Approved</p>
-              <p class="text-green-600 dark:text-green-400 text-xs">Gaming purchase was accepted by guardian</p>
-            </div>
-            <div class="text-green-500 dark:text-green-400">
-              <span class="material-symbols-outlined notranslate">chevron_right</span>
-            </div>
-          </a>
-        `;
-      } else {
-        // Show intercepted/pending card
-        container.innerHTML = `
-          <a href="Transaction_intercepted.html"
-            class="flex items-center gap-3 rounded-xl bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 p-4 shadow-sm border border-red-200 dark:border-red-800 cursor-pointer hover:shadow-md transition-shadow">
-            <div
-              class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 text-red-600">
-              <span class="material-symbols-outlined notranslate text-xl">block</span>
-            </div>
-            <div class="flex-1">
-              <p class="text-[#101418] dark:text-white text-sm font-bold">Transaction Intercepted</p>
-              <p class="text-red-600 dark:text-red-400 text-xs">A suspicious transaction was blocked</p>
-            </div>
-            <div class="text-red-500 dark:text-red-400">
-              <span class="material-symbols-outlined notranslate">chevron_right</span>
-            </div>
-          </a>
-        `;
-      }
-    }
 
     function updateRecentActivity() {
       const isEnabled = localStorage.getItem('curfew_enabled') === 'true';

@@ -182,9 +182,6 @@
             sessionStorage.setItem('child_requests', JSON.stringify(updatedRequests));
             sessionStorage.removeItem('current_approval_request');
 
-            // Set flag for child's home page to show approved status
-            localStorage.setItem('gaming_purchase_approved', 'true');
-
             // Show success feedback
             alert('Transaction approved! The gaming purchase has been authorized.');
 
